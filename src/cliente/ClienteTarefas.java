@@ -15,25 +15,54 @@ import java.util.Scanner;
  */
 public class ClienteTarefas {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         Socket socket = new Socket("localhost", 3000);
         System.out.println("Conexão estabelicida");
 
-        PrintStream saida = new PrintStream(socket.getOutputStream());
-        Scanner teclado = new Scanner(System.in);
-
-        while (teclado.hasNextLine()) {
-            String linha = teclado.nextLine();
-            if (linha.trim().equals("")) {
-                break;
+        Thread threadEnviaComando = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    PrintStream saida = new PrintStream(socket.getOutputStream());
+                    Scanner teclado = new Scanner(System.in);
+                    while (teclado.hasNextLine()) {
+                        String linha = teclado.nextLine();
+                        if (linha.trim().equals("")) {
+                            break;
+                        }
+                        saida.println(linha);
+                    }
+                    teclado.close();
+                    saida.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
-            saida.println(linha);
+        });
 
-        }
+        Thread threadRecebeResposta = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Scanner resportaServidor = new Scanner(socket.getInputStream());
+                    while (resportaServidor.hasNextLine()) {
+                        String linha = resportaServidor.nextLine();
+                        System.out.println(linha);
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
 
-        teclado.close();
-        saida.close();
+        });
+
+        threadEnviaComando.start();
+        threadRecebeResposta.start();
+
+        threadEnviaComando.join();
+        System.out.println("Fechando socket do cliente.");
+
         socket.close();
     }
 

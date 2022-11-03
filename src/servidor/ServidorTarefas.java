@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
-package servidortarefas;
+package servidor;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -22,27 +22,30 @@ public class ServidorTarefas {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws Exception {
+        AppServidor app = new AppServidor();
+        app.setVisible(true);
+        app.imprime("--- Iniciando servidor ---");
         System.out.println("--- Iniciando servidor ---");
         ServerSocket servidor = new ServerSocket(3000);
-
+        app.imprime("--- Iniciando threadPool ---");
+        System.out.println("--- Iniciando threadPool ---");
         ExecutorService threadPool = Executors.newCachedThreadPool();
-
         while (true) {
+            app.imprime("--- Iniciando socket e aguardando conexão ---");
+            System.out.println("--- Iniciando socket e aguardando conexão ---");
             Socket socket = servidor.accept();
-            DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
-            DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
-            System.out.println("Aceitando novo cliente na porta " + socket.getPort());
-
-            ClientHandler clientHandler = new ClientHandler(socket, dataInputStream, dataOutputStream);
+            app.setSaida(socket);
+            app.imprime("--- Conexão aceita ---");
+            System.out.println("--- Conexão aceita ---");
+            ClientHandler clientHandler = new ClientHandler(socket);
             threadPool.execute(clientHandler);
 
             Set<Thread> todasAsThreads = Thread.getAllStackTraces().keySet();
 
             for (Thread thread : todasAsThreads) {
+                app.imprime(thread.getName());
                 System.out.println(thread.getName());
             }
         }
-
     }
-
 }

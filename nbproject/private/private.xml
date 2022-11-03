@@ -3,9 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Bruno/Documents/NetBeansProjects/ServidorTarefas/src/servidortarefas/ClientHandler.java</file>
+            <file>file:/C:/Users/Bruno/Documents/NetBeansProjects/ServidorTarefas/src/servidor/ServidorTarefas.java</file>
+            <file>file:/C:/Users/Bruno/Documents/NetBeansProjects/ServidorTarefas/src/servidor/AppServidor.java</file>
+            <file>file:/C:/Users/Bruno/Documents/NetBeansProjects/ServidorTarefas/src/cliente/RodaAplicacao.java</file>
+            <file>file:/C:/Users/Bruno/Documents/NetBeansProjects/ServidorTarefas/src/cliente/TarefaRecebeResposta.java</file>
             <file>file:/C:/Users/Bruno/Documents/NetBeansProjects/ServidorTarefas/src/cliente/ClienteTarefas.java</file>
-            <file>file:/C:/Users/Bruno/Documents/NetBeansProjects/ServidorTarefas/src/servidortarefas/ServidorTarefas.java</file>
+            <file>file:/C:/Users/Bruno/Documents/NetBeansProjects/ServidorTarefas/src/servidor/InterfaceGrafica.java</file>
         </group>
     </open-files>
 </project-private>

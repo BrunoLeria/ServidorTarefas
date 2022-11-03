@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package servidortarefas;
+package servidor;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -17,23 +17,21 @@ import java.util.Scanner;
 class ClientHandler implements Runnable {
 
     Socket socket;
-    DataInputStream dataInputStream;
-    DataOutputStream dataOutputStream;
 
-    public ClientHandler(Socket socket, DataInputStream dataInputStream, DataOutputStream dataOutputStream) {
+    public ClientHandler(Socket socket) {
         this.socket = socket;
-        this.dataInputStream = dataInputStream;
-        this.dataOutputStream = dataOutputStream;
     }
 
     @Override
     public void run() {
         try {
-            System.out.println("servidortarefas.ClientHandler.run()");
+            System.out.println("Iniciando servidor:");
             Scanner entradaCliente = new Scanner(socket.getInputStream());
             PrintStream saidaCliente = new PrintStream(socket.getOutputStream());
 
             while (entradaCliente.hasNextLine()) {
+                System.out.println("Recebendo dados dos clientes: ");
+
                 String comando = entradaCliente.nextLine();
                 System.out.println(comando);
                 switch (comando) {

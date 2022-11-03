@@ -68,6 +68,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
         });
 
         stopButton.setText("Stop");
+        stopButton.setEnabled(false);
         stopButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 stopButtonMouseClicked(evt);
@@ -78,12 +79,10 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
         serverTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         serverTitle.setText("Server");
 
-        ipAdressField.setEditable(false);
         ipAdressField.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         ipAdressField.setText("127.0.0.1");
         ipAdressField.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "IP Address:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 11))); // NOI18N
 
-        portField.setEditable(false);
         portField.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         portField.setText("8000");
         portField.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Port:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 11))); // NOI18N
@@ -169,8 +168,13 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
 
     private void stopButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_stopButtonMouseClicked
         // TODO add your handling code here:
-        this.isOnline = false; //set boolean false to stop the startServer method on thread
-        closeServer();
+        if (stopButton.isEnabled()) {
+            this.isOnline = false; //set boolean false to stop the startServer method on thread
+            closeServer();
+        }
+        else {
+            logArea.append("Doesn't have a server running. \n");
+        } 
     }//GEN-LAST:event_stopButtonMouseClicked
 
     private void portFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_portFieldActionPerformed
@@ -179,7 +183,12 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
 
     private void sendButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sendButtonMouseClicked
         // TODO add your handling code here:
-        sendServerMessages();
+        if(sendButton.isEnabled()) {
+            sendServerMessages();
+        }
+        else {
+            logArea.append("Doesn't have a server running. \n");
+        }
     }//GEN-LAST:event_sendButtonMouseClicked
 
     public void run() {
@@ -208,8 +217,15 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
         try {
             if (serverSocket == null || serverSocket.isClosed()) { //Instance the socket server
                 int port = Integer.parseInt(portField.getText());
-                serverSocket = new ServerSocket(port);
+                String hostAddress = ipAdressField.getText();
+                InetAddress address = InetAddress.getByName(hostAddress);
+                serverSocket = new ServerSocket(port, ERROR, address);
+                
                 sendButton.setEnabled(true);
+                stopButton.setEnabled(true);
+                startButton.setEnabled(false);
+                portField.setEditable(false);
+                ipAdressField.setEditable(false);
                 logArea.append("Server started! Waiting for connection... \n");
             }
 
@@ -233,6 +249,10 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                 serverSocket.close();
             }
             sendButton.setEnabled(false);
+            stopButton.setEnabled(false);
+            startButton.setEnabled(true);
+            portField.setEditable(true);
+            ipAdressField.setEditable(true);
             logArea.append("Server stopped. \n");
         } catch (Exception e) {
             System.out.println(e.toString());

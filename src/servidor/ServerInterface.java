@@ -263,12 +263,14 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
 
     public void closeServer() { // close all the sockets and buffers to stop the server
         try {
-            if (clientSocket != null) {
-                clientSocket.close();
+            serverSocket.close();
+            
+            for (Socket socket : clients) { //loop to disconnect all client threads
+                logArea.append("Client#" + socket.getPort() + " disconnected. \n");
+                socket.close();
             }
-            if (serverSocket != null) {
-                serverSocket.close();
-            }
+            clients.removeAll(clients); //clear the client list
+            
             sendButton.setEnabled(false);
             stopButton.setEnabled(false);
             startButton.setEnabled(true);
@@ -316,26 +318,29 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
         }
 
         public void run() {
-            try {
-                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream())); // buffer
-                                                                                                              // to read
-                                                                                                              // from
-                                                                                                              // client
+            try { // buffer to read from client
+                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream())); 
                 try {
                     while (true) { // print input from client
                         String clientInput = in.readLine();
                         if (clientInput.equals("Stop")) {
                             logArea.append("Client#" + clientSocket.getPort() + " disconnected. \n");
+                            clientSocket.close(); //Close client connection
+                            clients.remove(clientSocket); //remove the client socket from ArrayList
+                            in.close();
                             break;
                         }
                         logArea.append("Client#" + clientSocket.getPort() + " Says: " + clientInput + "\n");
                     }
                 } catch (Exception e) {
                     System.out.println(e.toString());
+                    
+                    logArea.append("Client#" + clientSocket.getPort() + " disconnected. \n");
+                    clientSocket.close(); //Close client connection
+                    clients.remove(clientSocket); //remove the client socket from ArrayList
+                    in.close();
                 }
 
-                clientSocket.close();
-                in.close();
             } catch (Exception e) {
                 System.out.println(e.toString());
             }

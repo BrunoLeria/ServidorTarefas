@@ -323,7 +323,8 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                 try {
                     while (true) { // print input from client
                         String clientInput = in.readLine();
-                        if (clientInput.equals("Stop")) {
+                        
+                        if (clientInput.equalsIgnoreCase("Stop")) {
                             logArea.append("Client#" + clientSocket.getPort() + " disconnected. \n");
                             clientSocket.close(); //Close client connection
                             clients.remove(clientSocket); //remove the client socket from ArrayList
@@ -331,6 +332,11 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                             break;
                         }
                         logArea.append("Client#" + clientSocket.getPort() + " Says: " + clientInput + "\n");
+                        
+                        for (Socket socket : clients) { // loop to send messages between all clients
+                            PrintStream saidaCliente = new PrintStream(socket.getOutputStream());
+                            saidaCliente.println(clientInput);
+                        }
                     }
                 } catch (Exception e) {
                     System.out.println(e.toString());

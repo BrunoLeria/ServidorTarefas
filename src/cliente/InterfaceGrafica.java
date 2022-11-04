@@ -94,12 +94,12 @@ public class InterfaceGrafica {
 			botoes.add(botao);
 		}
 
-		JButton botao = new JButton("Terminar servidor (fim)");
+		JButton botao = new JButton("Encerrar conexão");
 		botao.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				saida.println("fim");
+				saida.println("stop");
 			}
 		});
 		botoes.add(botao);

@@ -13,7 +13,7 @@ public class RodaAplicacao {
 			ig.montaTela();
 			ig.imprime("Conexão estabelicada com sucesso");
 			initializaThreadQueRecebeAResposta(socket, ig);
-			ig.imprime("Servidor fechado");
+			ig.imprime("Conexão encerrada");
 
 		} catch (IOException | InterruptedException e) {
 			throw new RuntimeException(e);

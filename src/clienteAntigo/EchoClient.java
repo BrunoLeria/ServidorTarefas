@@ -16,9 +16,10 @@ public class EchoClient {
 
     public static void main(String[] args) {
         try {
-            //InetAddress address = InetAddress.getLocalHost();
+            // InetAddress address = InetAddress.getLocalHost();
             try (Socket cs = new Socket("localhost", 8000)) {
-                //System.out.println("Connected! Server ip address: " + address.getHostAddress());
+                // System.out.println("Connected! Server ip address: " +
+                // address.getHostAddress());
                 String inputClient;
                 String serverMessage;
                 PrintWriter out;

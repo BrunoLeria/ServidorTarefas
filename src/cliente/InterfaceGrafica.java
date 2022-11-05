@@ -1,5 +1,6 @@
 package cliente;
 
+import com.google.gson.Gson;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -84,6 +85,7 @@ public class InterfaceGrafica {
 			final int numeroComando = i + 1;
 			final JButton botao = new JButton("Enviar c" + numeroComando);
 			final String comando = "c" + numeroComando;
+			final Gson gson = new Gson();
 
 			botao.addActionListener(new ActionListener() {
 				@Override

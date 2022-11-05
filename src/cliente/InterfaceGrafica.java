@@ -90,7 +90,7 @@ public class InterfaceGrafica {
 			botao.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					saida.println(comando);
+					saida.println(gson.toJson(comando).toString());
 				}
 			});
 			botoes.add(botao);

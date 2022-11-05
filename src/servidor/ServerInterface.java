@@ -8,6 +8,8 @@ import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
+
 /**
  *
  * @author Drey
@@ -17,7 +19,6 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
     private ServerSocket serverSocket;
     private Socket clientSocket;
     private static ArrayList<Socket> clients = new ArrayList<>();
-    private PrintWriter out;
 
     /**
      * Creates new form ServerInterface
@@ -319,6 +320,8 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 try {
                     while (true) { // print input from client
+                        Gson gson = new Gson();
+
                         String clientInput = in.readLine();
 
                         if (clientInput.equalsIgnoreCase("Stop")) {

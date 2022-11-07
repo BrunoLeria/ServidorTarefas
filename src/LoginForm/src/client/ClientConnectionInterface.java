@@ -141,7 +141,7 @@ public class ClientConnectionInterface extends javax.swing.JFrame {
             clientSocket = new Socket(address, port);
             
             JOptionPane.showMessageDialog(this, "Connected to server!");
-            new ClientLoginInterface().setVisible(true);
+            new ClientLoginInterface(clientSocket).setVisible(true);
             this.dispose();
         } catch(Exception e) {
             JOptionPane.showMessageDialog(this, "Failed to connect to server.");

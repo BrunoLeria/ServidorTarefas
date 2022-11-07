@@ -11,7 +11,10 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import javax.swing.JOptionPane;
 import client.ClientConnectionInterface;
+import java.io.IOException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,13 +23,18 @@ import java.util.Scanner;
 public class ClientLoginInterface extends javax.swing.JFrame {
     private PrintWriter out;
     private BufferedReader in;
-    private Socket clientSocket = ClientConnectionInterface.clientSocket;
+    private Socket clientSocket;
     
     /**
      * Creates new form ClientLoginInterface
      */
     public ClientLoginInterface() {
         initComponents();
+    }
+    
+    public ClientLoginInterface(Socket clientSocket) {
+        initComponents();
+        this.clientSocket = clientSocket;
     }
 
     /**
@@ -134,7 +142,6 @@ public class ClientLoginInterface extends javax.swing.JFrame {
 
     private void loginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseClicked
         // TODO add your handling code here:
-            System.out.println(clientSocket.getPort());
             try {
                 String inputClient;
                 String serverMessage;
@@ -167,10 +174,15 @@ public class ClientLoginInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_logoutButtonActionPerformed
 
     private void logoutButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutButtonMouseClicked
-        // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this, "Disconnected from server.");
-        new ClientConnectionInterface().setVisible(true);
-        this.dispose();
+        try {
+            // TODO add your handling code here:
+            clientSocket.close();
+            JOptionPane.showMessageDialog(this, "Disconnected from server.");
+            new ClientConnectionInterface().setVisible(true);
+            this.dispose();
+        } catch (IOException ex) {
+            System.out.println(ex.toString());
+        }
     }//GEN-LAST:event_logoutButtonMouseClicked
 
     /**

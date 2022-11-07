@@ -259,22 +259,25 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
         public void run() {
             try { // buffer to read from client
                 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                PrintWriter out = new PrintWriter(clientSocket.getOutputStream());
                 try {                  
                     while (true) { // print input from client
                         //Gson gson = new Gson();
                         
                         Operations operations = new Operations();
                         String clientInput = in.readLine();
+                        String serverResponse;
                         String[] loginInput = clientInput.split("#");
-
+                        PrintStream out = new PrintStream(clientSocket.getOutputStream());
+                        
                         if(operations.isLogin(loginInput[0], loginInput[1], frame)) {
                             logArea.append("Client#" + clientSocket.getPort() + " successfully logged in! \n");
-                            out.println("true");
+                            serverResponse = "true";
+                            out.println(serverResponse);
                         }
                         else {
                             logArea.append("This CPF isn't registred. \n");
-                            out.println("false");
+                            serverResponse = "false";
+                            out.println(serverResponse);
                         }
                     }
                 } catch (Exception e) {

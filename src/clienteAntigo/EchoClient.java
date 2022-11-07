@@ -27,17 +27,18 @@ public class EchoClient {
 
                 do {
                     out = new PrintWriter(cs.getOutputStream(), true);
-                    /*System.out.println("Waiting for server messages...");
-
-                    in = new BufferedReader(new InputStreamReader(cs.getInputStream()));
-                    serverMessage = in.readLine();
-                    System.out.println("Server says: " + serverMessage);*/
 
                     System.out.println("Type your message: ");
                     Scanner input = new Scanner(System.in);
                     inputClient = input.nextLine();
-
+                    
                     out.println(inputClient);
+
+                    System.out.println("Waiting for server messages...");
+
+                    in = new BufferedReader(new InputStreamReader(cs.getInputStream()));
+                    serverMessage = in.readLine();
+                    System.out.println("Server says: " + serverMessage);                     
 
                 } while (!inputClient.equalsIgnoreCase("Stop")); // Type stop to disconnect
 

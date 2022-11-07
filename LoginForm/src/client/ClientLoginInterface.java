@@ -128,42 +128,18 @@ public class ClientLoginInterface extends javax.swing.JFrame {
                 in = new BufferedReader(new InputStreamReader(ClientConnectionInterface.clientSocket.getInputStream()));
                 String serverResponse = in.readLine();
 
-                System.out.println(serverResponse);
-
-                /*if (serverResponse.equals(true)) {
+                if (serverResponse.equals("true")) {
                     JOptionPane.showMessageDialog(this, "Successfully logged in!");
                 }
 
                 else {
                     JOptionPane.showMessageDialog(this, "This CPF isn't registred.");
                 }
-                */
 
-                //out.close();
+                out.close();
             } catch(Exception e){
-                
+                JOptionPane.showMessageDialog(this, "Error: " + e.toString());
             }    
-        /*try {
-            out = new PrintWriter(ClientConnectionInterface.clientSocket.getOutputStream(), true);
-            //String cpf = cpfField.getText();
-            //String password = passwordField.getText();
-            
-            out.println("a");
-            System.out.println(ClientConnectionInterface.clientSocket.getPort());
-            
-            /*in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            String serverResponse = in.readLine();
-            
-            if (serverResponse.equals(true)) {
-                JOptionPane.showMessageDialog(this, "Successfully logged in!");
-            }
-            else {
-                JOptionPane.showMessageDialog(this, "This CPF isn't registred.");
-            }*/
-            
-        /*} catch(Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.toString());
-        }*/
     }//GEN-LAST:event_loginButtonMouseClicked
 
     /**

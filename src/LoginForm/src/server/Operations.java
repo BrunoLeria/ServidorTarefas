@@ -1,7 +1,5 @@
 package server;
 
-import com.mysql.cj.jdbc.PreparedStatementWrapper;
-import com.mysql.cj.jdbc.result.ResultSetImpl;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import java.sql.*;

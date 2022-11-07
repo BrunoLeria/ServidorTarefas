@@ -236,6 +236,12 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
         try {
             serverSocket.close();
 
+            for (Socket socket : clients) { // loop to disconnect all client threads
+                logArea.append("Client#" + socket.getPort() + " disconnected. \n");
+                socket.close();
+            }
+            clients.removeAll(clients); // clear the client list            
+            
             stopButton.setEnabled(false);
             startButton.setEnabled(true);
             portField.setEditable(true);
@@ -265,20 +271,24 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                         
                         Operations operations = new Operations();
                         String clientInput = in.readLine();
-                        String serverResponse;
-                        String[] loginInput = clientInput.split("#");
-                        PrintStream out = new PrintStream(clientSocket.getOutputStream());
+                        String serverResponse = "";
                         
-                        if(operations.isLogin(loginInput[0], loginInput[1], frame)) {
-                            logArea.append("Client#" + clientSocket.getPort() + " successfully logged in! \n");
-                            serverResponse = "true";
-                            out.println(serverResponse);
-                        }
-                        else {
-                            logArea.append("This CPF isn't registred. \n");
-                            serverResponse = "false";
-                            out.println(serverResponse);
-                        }
+                        if (clientInput != null) {
+                            PrintStream out = new PrintStream(clientSocket.getOutputStream());
+
+                            String[] loginInput = clientInput.split("#");
+
+                            if(operations.isLogin(loginInput[0], loginInput[1], frame)) {
+                                logArea.append("Client#" + clientSocket.getPort() + " successfully logged in! \n");
+                                serverResponse = "true";
+                                out.println(serverResponse);
+                            }
+                            else {
+                                logArea.append("This CPF isn't registred. \n");
+                                serverResponse = "false";
+                                out.println(serverResponse);
+                            }
+                        }   
                     }
                 } catch (Exception e) {
                     System.out.println(e.toString());

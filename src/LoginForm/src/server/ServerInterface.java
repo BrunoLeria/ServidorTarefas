@@ -118,8 +118,8 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     .addComponent(ipLabel)
                                     .addComponent(portLabel))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(ipField, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(ipField, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
                                     .addComponent(portField))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -134,7 +134,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                 .addContainerGap()
                 .addComponent(serverLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(ipLabel)
                     .addComponent(startButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(ipField))
@@ -146,7 +146,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(portField))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -228,7 +228,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
             ct.start(); // client thread started          
             
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.toString());
+            System.out.println(e.toString());
         }       
     }
     
@@ -248,7 +248,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
             ipField.setEditable(true);
             logArea.append("Server stopped. \n");
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.toString());
+            logArea.append(e.toString());
         }
     }
     
@@ -292,7 +292,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                 out.println(serverResponse);
                             }
                             else {
-                                logArea.append("This CPF isn't registred. \n");
+                                logArea.append("This CPF/password isn't registred. \n");
                                 serverResponse = "false";
                                 out.println(serverResponse);
                             }

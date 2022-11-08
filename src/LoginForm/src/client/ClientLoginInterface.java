@@ -21,9 +21,9 @@ import java.util.logging.Logger;
  * @author Drey
  */
 public class ClientLoginInterface extends javax.swing.JFrame {
-    private PrintWriter out;
-    private BufferedReader in;
-    private Socket clientSocket;
+    private PrintWriter out; //buffer to print output
+    private BufferedReader in; //buffer to read input
+    private Socket clientSocket; //socket from client
     
     /**
      * Creates new form ClientLoginInterface
@@ -34,7 +34,7 @@ public class ClientLoginInterface extends javax.swing.JFrame {
     
     public ClientLoginInterface(Socket clientSocket) {
         initComponents();
-        this.clientSocket = clientSocket;
+        this.clientSocket = clientSocket; //bind the socket client from the other interface
     }
 
     /**
@@ -50,9 +50,10 @@ public class ClientLoginInterface extends javax.swing.JFrame {
         cpfLabel = new javax.swing.JLabel();
         cpfField = new javax.swing.JTextField();
         passwordLabel = new javax.swing.JLabel();
-        passwordField = new javax.swing.JTextField();
         loginButton = new javax.swing.JButton();
         logoutButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        passwordField = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -68,8 +69,6 @@ public class ClientLoginInterface extends javax.swing.JFrame {
         passwordLabel.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         passwordLabel.setText("Password:");
 
-        passwordField.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
-
         loginButton.setText("Login");
         loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -79,6 +78,7 @@ public class ClientLoginInterface extends javax.swing.JFrame {
 
         logoutButton.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         logoutButton.setText("Disconnect");
+        logoutButton.setEnabled(false);
         logoutButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 logoutButtonMouseClicked(evt);
@@ -90,51 +90,68 @@ public class ClientLoginInterface extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 11)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("First login? Register now");
+
+        passwordField.setToolTipText("");
+        passwordField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passwordFieldActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(clientLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(passwordLabel)
-                            .addComponent(cpfLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cpfField, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(57, 57, 57)
+                .addGap(58, 58, 58)
                 .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addComponent(logoutButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(57, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(clientLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(passwordLabel)
+                            .addComponent(cpfLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(cpfField, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                            .addComponent(passwordField))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+                .addContainerGap()
                 .addComponent(clientLabel)
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(cpfLabel)
                     .addComponent(cpfField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(passwordLabel)
-                    .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(passwordLabel))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(passwordField)))
+                .addGap(27, 27, 27)
+                .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(loginButton)
                     .addComponent(logoutButton))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addGap(20, 20, 20))
         );
 
         pack();
@@ -142,30 +159,42 @@ public class ClientLoginInterface extends javax.swing.JFrame {
 
     private void loginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseClicked
         // TODO add your handling code here:
-            try {
-                String inputClient;
-                String serverMessage;
+            if(loginButton.isEnabled()) {
+                try {
+                    String inputClient;
+                    String serverMessage;
 
-                out = new PrintWriter(clientSocket.getOutputStream(), true);
-                String cpf = cpfField.getText();
-                String password = passwordField.getText();
-                out.println(cpf + "#" + password);
+                    out = new PrintWriter(clientSocket.getOutputStream(), true); //instance the output
+                    String cpf = cpfField.getText(); //get cpf from interface
+                    String password = passwordField.getText(); //get password from interface
+                    
+                    if(cpf.equalsIgnoreCase("") || password.equalsIgnoreCase("")) {
+                        JOptionPane.showMessageDialog(this, "Insert your login and password.");
+                    }
+                    else {
+                        out.println(cpf + "#" + password); //character "#" is used to split cpf and password on the server side
 
-                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                String serverResponse = in.readLine();
+                        in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                        String serverResponse = in.readLine(); //get the response from server
 
-                if (serverResponse.equals("true")) {
-                    JOptionPane.showMessageDialog(this, "Successfully logged in!");
-                    loginButton.setEnabled(false);
-                }
+                        if (serverResponse.equals("true")) { //check the server response
+                            JOptionPane.showMessageDialog(this, "Successfully logged in!");
+                            logoutButton.setEnabled(true);
+                            loginButton.setEnabled(false);
+                        }
 
-                else {
-                    JOptionPane.showMessageDialog(this, "This CPF isn't registred.");
-                }
+                        else { //check the server response
+                            JOptionPane.showMessageDialog(this, "This CPF/password isn't registred.");
+                        }
+                    }
 
-            } catch(Exception e){
-                JOptionPane.showMessageDialog(this, "Error: " + e.toString());
-            }    
+                } catch(Exception e){
+                    JOptionPane.showMessageDialog(this, "Error: " + e.toString());
+                }   
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "You're already logged in!");
+            }
     }//GEN-LAST:event_loginButtonMouseClicked
 
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
@@ -174,23 +203,32 @@ public class ClientLoginInterface extends javax.swing.JFrame {
 
     private void logoutButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutButtonMouseClicked
         try {
-            // TODO add your handling code here:
-            out = new PrintWriter(clientSocket.getOutputStream(), true);
-            out.println("stop");
-            
-            clientSocket.close();
-            out.close();
-            if (in != null) {
-                in.close();
-            }    
+            if(logoutButton.isEnabled()) {
+                // TODO add your handling code here:
+                out = new PrintWriter(clientSocket.getOutputStream(), true);
+                out.println("stop");
 
-            JOptionPane.showMessageDialog(this, "Disconnected from server.");
-            new ClientConnectionInterface().setVisible(true);
-            this.dispose();
+                clientSocket.close(); //close all the sockets from client
+                out.close();
+                if (in != null) {
+                    in.close();
+                }    
+
+                JOptionPane.showMessageDialog(this, "Disconnected from server.");
+                new ClientConnectionInterface().setVisible(true); //go back to connection page
+                this.dispose(); //dispose this interface
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "You aren't connected on any server.");
+            }
         } catch (IOException ex) {
             System.out.println(ex.toString());
         }
     }//GEN-LAST:event_logoutButtonMouseClicked
+
+    private void passwordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_passwordFieldActionPerformed
 
     /**
      * @param args the command line arguments
@@ -231,9 +269,10 @@ public class ClientLoginInterface extends javax.swing.JFrame {
     private javax.swing.JLabel clientLabel;
     private javax.swing.JTextField cpfField;
     private javax.swing.JLabel cpfLabel;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JButton loginButton;
     private javax.swing.JButton logoutButton;
-    private javax.swing.JTextField passwordField;
+    private javax.swing.JPasswordField passwordField;
     private javax.swing.JLabel passwordLabel;
     // End of variables declaration//GEN-END:variables
 }

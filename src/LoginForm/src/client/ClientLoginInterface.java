@@ -163,7 +163,6 @@ public class ClientLoginInterface extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "This CPF isn't registred.");
                 }
 
-                out.close();
             } catch(Exception e){
                 JOptionPane.showMessageDialog(this, "Error: " + e.toString());
             }    
@@ -176,7 +175,15 @@ public class ClientLoginInterface extends javax.swing.JFrame {
     private void logoutButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutButtonMouseClicked
         try {
             // TODO add your handling code here:
+            out = new PrintWriter(clientSocket.getOutputStream(), true);
+            out.println("stop");
+            
             clientSocket.close();
+            out.close();
+            if (in != null) {
+                in.close();
+            }    
+
             JOptionPane.showMessageDialog(this, "Disconnected from server.");
             new ClientConnectionInterface().setVisible(true);
             this.dispose();

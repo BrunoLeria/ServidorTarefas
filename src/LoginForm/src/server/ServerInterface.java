@@ -273,6 +273,14 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                         String clientInput = in.readLine();
                         String serverResponse = "";
                         
+                        if (clientInput.equals("stop")) {
+                            logArea.append("Client#" + clientSocket.getPort() + " disconnected. \n");
+                            clientSocket.close(); // Close client connection
+                            clients.remove(clientSocket); // remove the client socket from ArrayList
+                            in.close();
+                            break;
+                        }
+                        
                         if (clientInput != null) {
                             PrintStream out = new PrintStream(clientSocket.getOutputStream());
 

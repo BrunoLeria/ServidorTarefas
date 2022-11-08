@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import javax.swing.JOptionPane;
 import client.ClientConnectionInterface;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -163,16 +164,18 @@ public class ClientLoginInterface extends javax.swing.JFrame {
                 try {
                     String inputClient;
                     String serverMessage;
-
+                    Gson gson = new Gson();
+                    
                     out = new PrintWriter(clientSocket.getOutputStream(), true); //instance the output
                     String cpf = cpfField.getText(); //get cpf from interface
                     String password = passwordField.getText(); //get password from interface
+                    Person person = new Person(cpf, password);
                     
                     if(cpf.equalsIgnoreCase("") || password.equalsIgnoreCase("")) {
                         JOptionPane.showMessageDialog(this, "Insert your login and password.");
                     }
                     else {
-                        out.println(cpf + "#" + password); //character "#" is used to split cpf and password on the server side
+                        out.println(gson.toJson(person)); //parse from string to json
 
                         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                         String serverResponse = in.readLine(); //get the response from server

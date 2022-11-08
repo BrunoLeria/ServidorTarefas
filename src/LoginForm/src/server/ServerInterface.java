@@ -5,6 +5,7 @@
 package server;
 
 import client.ClientConnectionInterface;
+import com.google.gson.Gson;
 import static java.awt.image.ImageObserver.ERROR;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -263,14 +264,16 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
         }
 
         public void run() {
-            try { // buffer to read from client
+            try { // buffer to read 231rom client
                 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 try {                  
                     while (true) { // print input from client
-                        //Gson gson = new Gson();
-                        
+                        Gson gson = new Gson();
                         Operations operations = new Operations();
                         String clientInput = in.readLine();
+                        Person person = new Person();
+                        person = gson.fromJson(clientInput, Person.class); //parse from json to string
+                        System.out.println("JSON input: " + clientInput);
                         String serverResponse = "";
                         
                         if (clientInput.equals("stop")) {
@@ -283,10 +286,8 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                         
                         if (clientInput != null) {
                             PrintStream out = new PrintStream(clientSocket.getOutputStream());
-
-                            String[] loginInput = clientInput.split("#");
-
-                            if(operations.isLogin(loginInput[0], loginInput[1], frame)) {
+                            
+                            if(operations.isLogin(person.getCpf(), person.getPassword(), frame)) {
                                 logArea.append("Client#" + clientSocket.getPort() + " successfully logged in! \n");
                                 serverResponse = "true";
                                 out.println(serverResponse);
@@ -296,7 +297,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                 serverResponse = "false";
                                 out.println(serverResponse);
                             }
-                        }   
+                        }  
                     }
                 } catch (Exception e) {
                     System.out.println(e.toString());

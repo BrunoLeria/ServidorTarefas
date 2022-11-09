@@ -2,13 +2,27 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package servidor;
+package server;
 
-import java.net.*;
-import java.io.*;
-import java.util.ArrayList;
-
+import client.ClientConnectionInterface;
 import com.google.gson.Gson;
+
+import classes.Person;
+
+import static java.awt.image.ImageObserver.ERROR;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Map;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -25,8 +39,8 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
      */
     public ServerInterface() {
         initComponents();
-        this.setVisible(true); // Set frame on
-        this.isClosed = false; // boolean to loop the run method from thread
+        this.setVisible(true);
+        this.isClosed = false;
     }
 
     /**
@@ -36,41 +50,51 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        logArea = new javax.swing.JTextArea();
+        serverLabel = new javax.swing.JLabel();
+        ipLabel = new javax.swing.JLabel();
+        ipField = new javax.swing.JTextField();
+        portLabel = new javax.swing.JLabel();
+        portField = new javax.swing.JTextField();
         startButton = new javax.swing.JButton();
         stopButton = new javax.swing.JButton();
-        serverTitle = new javax.swing.JLabel();
-        ipAdressField = new javax.swing.JTextField();
-        portField = new javax.swing.JTextField();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        inputTextArea = new javax.swing.JTextArea();
-        sendButton = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        logArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        logArea.setColumns(20);
-        logArea.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
-        logArea.setLineWrap(true);
-        logArea.setRows(5);
-        logArea.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Server log:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 11))); // NOI18N
-        jScrollPane1.setViewportView(logArea);
+        serverLabel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        serverLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        serverLabel.setText("Server");
 
+        ipLabel.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        ipLabel.setText("IP address:");
+
+        ipField.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        ipField.setText("127.0.0.1");
+        ipField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ipFieldActionPerformed(evt);
+            }
+        });
+
+        portLabel.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        portLabel.setText("Port:");
+
+        portField.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        portField.setText("8000");
+
+        startButton.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         startButton.setText("Start");
         startButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 startButtonMouseClicked(evt);
             }
         });
-        startButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                startButtonActionPerformed(evt);
-            }
-        });
 
+        stopButton.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         stopButton.setText("Stop");
         stopButton.setEnabled(false);
         stopButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -79,91 +103,81 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
             }
         });
 
-        serverTitle.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        serverTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        serverTitle.setText("Server");
-
-        ipAdressField.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
-        ipAdressField.setText("127.0.0.1");
-        ipAdressField.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "IP Address:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 11))); // NOI18N
-
-        portField.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
-        portField.setText("8000");
-        portField.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Port:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 11))); // NOI18N
-        portField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                portFieldActionPerformed(evt);
-            }
-        });
-
-        inputTextArea.setColumns(20);
-        inputTextArea.setRows(5);
-        jScrollPane2.setViewportView(inputTextArea);
-
-        sendButton.setText("Send");
-        sendButton.setEnabled(false);
-        sendButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                sendButtonMouseClicked(evt);
-            }
-        });
+        logArea.setColumns(20);
+        logArea.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        logArea.setRows(5);
+        logArea.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Server log:",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                new java.awt.Font("Segoe UI", 0, 11))); // NOI18N
+        logArea.setDragEnabled(true);
+        jScrollPane1.setViewportView(logArea);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(stopButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(startButton, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ipAdressField, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(portField, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(242, 242, 242)
-                .addComponent(serverTitle)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(serverLabel, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addContainerGap()
+                                                .addGroup(layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addGroup(layout.createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(ipLabel)
+                                                                        .addComponent(portLabel))
+                                                                .addPreferredGap(
+                                                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(layout.createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(ipField,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                234, Short.MAX_VALUE)
+                                                                        .addComponent(portField))
+                                                                .addPreferredGap(
+                                                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(layout.createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(startButton,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                Short.MAX_VALUE)
+                                                                        .addComponent(stopButton,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                Short.MAX_VALUE)))
+                                                        .addComponent(jScrollPane1,
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE, 376,
+                                                                Short.MAX_VALUE))))
+                                .addContainerGap()));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(serverTitle)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(ipAdressField, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(portField, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(startButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(stopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
-                .addContainerGap())
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(serverLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(ipLabel)
+                                        .addComponent(startButton, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(ipField))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(stopButton, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(portLabel)
+                                                .addGap(0, 0, Short.MAX_VALUE))
+                                        .addComponent(portField))
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+                                .addContainerGap()));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_startButtonActionPerformed
 
     private void startButtonMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_startButtonMouseClicked
         // TODO add your handling code here:
@@ -173,6 +187,10 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
             logArea.append("Server already online! \n"); // if the server's already online
         }
     }// GEN-LAST:event_startButtonMouseClicked
+
+    private void ipFieldActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_ipFieldActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_ipFieldActionPerformed
 
     private void stopButtonMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_stopButtonMouseClicked
         // TODO add your handling code here:
@@ -184,63 +202,57 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
         }
     }// GEN-LAST:event_stopButtonMouseClicked
 
-    private void portFieldActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_portFieldActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_portFieldActionPerformed
-
-    private void sendButtonMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_sendButtonMouseClicked
-        // TODO add your handling code here:
-        if (sendButton.isEnabled()) {
-            sendServerMessages();
-        } else {
-            logArea.append("Doesn't have a server running. \n");
-        }
-    }// GEN-LAST:event_sendButtonMouseClicked
-
     public void run() {
         while (!isClosed) {
-            sleep(100); // add a small timeout to free up the processor
+            sleep(100);
             if (isOnline) {
-                startServer(); // start server
+                startServer();
             }
         }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextArea inputTextArea;
-    private javax.swing.JTextField ipAdressField;
+    private javax.swing.JTextField ipField;
+    private javax.swing.JLabel ipLabel;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea logArea;
     private javax.swing.JTextField portField;
-    private javax.swing.JButton sendButton;
-    private javax.swing.JLabel serverTitle;
+    private javax.swing.JLabel portLabel;
+    private javax.swing.JLabel serverLabel;
     private javax.swing.JButton startButton;
     private javax.swing.JButton stopButton;
     // End of variables declaration//GEN-END:variables
 
-    public void startServer() {
+    private void sleep(int milliseconds) { // Adjust the sleep method from thread
+        try {
+            Thread.sleep(milliseconds);
+        } catch (Exception e) {
+            System.exit(1);
+        }
+    }
+
+    private void startServer() {
         try {
             if (serverSocket == null || serverSocket.isClosed()) { // Instance the socket server
                 int port = Integer.parseInt(portField.getText());
-                String hostAddress = ipAdressField.getText();
+                String hostAddress = ipField.getText();
                 InetAddress address = InetAddress.getByName(hostAddress);
                 serverSocket = new ServerSocket(port, ERROR, address);
 
-                sendButton.setEnabled(true);
                 stopButton.setEnabled(true);
                 startButton.setEnabled(false);
                 portField.setEditable(false);
-                ipAdressField.setEditable(false);
-                logArea.append("Server started! Waiting for connection... \n");
+                ipField.setEditable(false);
+                logArea.append("Server started!\n");
             }
 
             clientSocket = serverSocket.accept(); // accept connection from a new client
-            logArea.append("Client#" + clientSocket.getPort() + " connected! \n");
+            logArea.append("A new login from Client#" + clientSocket.getPort() + ".\n");
 
             clients.add(clientSocket); // new client added to the ArrayList
-            ClientThread ct = new ClientThread(clientSocket); // Create a thread for a new client
+            ClientThread ct = new ClientThread(clientSocket, this); // Create a thread for a new client
             ct.start(); // client thread started
+
         } catch (Exception e) {
             System.out.println(e.toString());
         }
@@ -256,73 +268,97 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
             }
             clients.removeAll(clients); // clear the client list
 
-            sendButton.setEnabled(false);
             stopButton.setEnabled(false);
             startButton.setEnabled(true);
             portField.setEditable(true);
-            ipAdressField.setEditable(true);
+            ipField.setEditable(true);
             logArea.append("Server stopped. \n");
         } catch (Exception e) {
-            System.out.println(e.toString());
-        }
-    }
-
-    private void sleep(int milliseconds) { // Adjust the sleep method from thread
-        try {
-            Thread.sleep(milliseconds);
-        } catch (Exception e) {
-            System.exit(1);
-        }
-    }
-
-    private void sendServerMessages() {
-        try {
-            String serverInput = "";
-            serverInput = inputTextArea.getText();
-
-            for (Socket socket : clients) { // loop to send server messages to all client threads
-                PrintStream saidaCliente = new PrintStream(socket.getOutputStream());
-                saidaCliente.println(serverInput);
-            }
-
-            logArea.append("Server says: " + serverInput + "\n");
-            inputTextArea.setText("");
-
-            // out.close();
-        } catch (Exception e) {
-            System.out.println(e.toString());
+            logArea.append(e.toString());
         }
     }
 
     public class ClientThread extends Thread {
 
         private Socket clientSocket = null;
+        private JFrame frame;
 
-        public ClientThread(Socket clientSocket) {
+        public ClientThread(Socket clientSocket, JFrame frame) {
             this.clientSocket = clientSocket;
+            this.frame = frame;
         }
 
         public void run() {
-            try { // buffer to read from client
+            try { // buffer to read 231rom client
                 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 try {
                     while (true) { // print input from client
-                        //Gson gson = new Gson();
-
+                        Gson gson = new Gson();
+                        Operations operations = new Operations();
+                        Person person;
                         String clientInput = in.readLine();
+                        if (clientInput != null) {
+                            logArea.append("Client#" + clientSocket.getPort() + ": " + clientInput + "\n");
+                            Map map = gson.fromJson(clientInput, Map.class);// parse from json to string
+                            switch (map.get("funcao").toString()) {
+                                case "1":
+                                    person = new Person(map.get("Cpf").toString(), map.get("Senha").toString());
+                                    break;
+                                case "2":
+                                    person = new Person(map.get("Nome").toString(), map.get("Cpf").toString(),
+                                            map.get("Senha").toString(), map.get("Data").toString(),
+                                            map.get("Sexo").toString(),
+                                            Boolean.parseBoolean(map.get("Status").toString()));
 
-                        if (clientInput.equalsIgnoreCase("Stop")) {
+                                    break;
+                                case "3":
+
+                                    break;
+                                case "4":
+
+                                    break;
+                                case "5":
+
+                                    break;
+                                default:
+                                    break;
+                            }
+                            // if (operations.getOperation().equals("add")) {
+                            // operations.setResult(operations.getA() + operations.getB());
+                            // } else if (operations.getOperation().equals("sub")) {
+                            // operations.setResult(operations.getA() - operations.getB());
+                            // } else if (operations.getOperation().equals("mul")) {
+                            // operations.setResult(operations.getA() * operations.getB());
+                            // } else if (operations.getOperation().equals("div")) {
+                            // operations.setResult(operations.getA() / operations.getB());
+                            // }
+                            String json = gson.toJson(operations);
+                            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+                            out.println(json);
+                        }
+                        System.out.println("JSON input: " + clientInput);
+                        String serverResponse = "";
+
+                        if (clientInput.equals("stop")) {
                             logArea.append("Client#" + clientSocket.getPort() + " disconnected. \n");
                             clientSocket.close(); // Close client connection
                             clients.remove(clientSocket); // remove the client socket from ArrayList
                             in.close();
                             break;
                         }
-                        logArea.append("Client#" + clientSocket.getPort() + " Says: " + clientInput + "\n");
 
-                        for (Socket socket : clients) { // loop to send messages between all clients
-                            PrintStream saidaCliente = new PrintStream(socket.getOutputStream());
-                            saidaCliente.println(clientInput);
+                        if (clientInput != null) {
+                            PrintStream out = new PrintStream(clientSocket.getOutputStream());
+
+                            if (operations.isLogin(person.getCpf(), person.getSenha(), frame)) {
+                                logArea.append("Client#" + clientSocket.getPort() + " successfully logged in! \n");
+                                serverResponse = "true";
+                                out.println(serverResponse);
+                            } else {
+                                logArea.append("This CPF/senha isn't registred. \n");
+                                serverResponse = "false";
+                                out.println(serverResponse);
+                            }
                         }
                     }
                 } catch (Exception e) {
@@ -341,6 +377,6 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
 
     }
 
-    private boolean isOnline = false;
+    boolean isOnline = false;
     private boolean isClosed = true;
 }

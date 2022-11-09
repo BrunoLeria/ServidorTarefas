@@ -2,6 +2,9 @@ package server;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
+import model.Person;
+
 import java.sql.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,13 +44,14 @@ public class Operations {
         return false;
     }
 
-    public boolean isRegister(String cpf, String senha, JFrame frame) {
+    public boolean isRegister(Person pessoa, JFrame frame) {
         try {
             Connection myConn = MySQLConnection.getConnection();
-            String mySqlQuery = "INSERT INTO loginForm (cpf, senha) VALUES (?, ?)";
+            String mySqlQuery = "INSERT INTO db_hospital.pessoa (nome, cpf, senha, data_nascimento, sexo,status) values ("
+                    + pessoa.getNome() + ", " + pessoa.getCpf() + ", " + pessoa.getSenha() + ", " + pessoa.getData()
+                    + ", "
+                    + pessoa.getSexo() + ", " + pessoa.getStatus() + ")";
             PreparedStatement preparedStatement = myConn.prepareStatement(mySqlQuery);
-            preparedStatement.setString(1, cpf);
-            preparedStatement.setString(2, senha);
             preparedStatement.executeUpdate();
 
             return true;

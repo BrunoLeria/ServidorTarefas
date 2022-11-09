@@ -82,12 +82,12 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
                         jFormattedTextFieldCPF.setFormatterFactory(
                                         new javax.swing.text.DefaultFormatterFactory(
                                                         new javax.swing.text.MaskFormatter("###.###.###-##")));
+                        jFormattedTextFieldDataNascimento
+                                        .setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                                                        new javax.swing.text.MaskFormatter("##/##/####")));
                 } catch (java.text.ParseException ex) {
                         ex.printStackTrace();
                 }
-
-                jFormattedTextFieldDataNascimento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
-                                new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd/MM/yyyy"))));
 
                 buttonGroup.add(jRadioButtonFeminino);
                 jRadioButtonFeminino.setSelected(true);
@@ -196,7 +196,6 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
                 jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
                 jButtonSalvar.setText("Salvar");
-                jButtonSalvar.setEnabled(false);
                 jButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 jButtonSalvarActionPerformed(evt);
@@ -270,32 +269,34 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
         }// </editor-fold>//GEN-END:initComponents
 
         private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//
-                if (jButtonSalvar.isEnabled()) {
-                        try {
-                                out = new PrintWriter(clientSocket.getOutputStream(), true); // instance the output
-                                String nome = jFormattedTextFieldCPF.getText().replace("-", "").replace(".", "");
-                                String cpf = jFormattedTextFieldDataNascimento.getText().replace("/", "");
-                                String senha = jTextFieldNome.getText();
-                                String data = jTextFieldSenha.getText();
-                                String sexo = "F";
-                                if (jRadioButtonMasculino.isSelected()) {
-                                        sexo = "M";
-                                }
-                                Boolean status = false;
-                                String jsonString = "{ \"Funcao\": 2, \"Cpf\": \"" + cpf + "\", \"Senha\": \"" + senha
-                                                + "\", \"Nome\": \""
-                                                + nome
-                                                + "\", \"Data\": \"" + data + "\", \"Sexo\": \"" + sexo
-                                                + "\", \"Status\": " + status + " }";
-                                out.println(jsonString); // parse from string to json
-                        } catch (Exception e) {
-                                JOptionPane.showMessageDialog(this, "Error: " + e.toString());
-                        } finally {
-                                this.dispose();
+                try {
+                        out = new PrintWriter(clientSocket.getOutputStream(), true); // instance the output
+                        String nome = jTextFieldNome.getText();
+                        String cpf = jFormattedTextFieldCPF.getText().replace("-", "").replace(".", "");
+                        String senha = jTextFieldSenha.getText();
+                        String data = jFormattedTextFieldDataNascimento.getText().replace("/", "");
+                        String sexo = "F";
+                        if (jRadioButtonMasculino.isSelected()) {
+                                sexo = "M";
                         }
-                } else {
-                        JOptionPane.showMessageDialog(this, "Preencha todos os campos!");
+                        Boolean status = false;
+                        if (nome.equals("") || cpf.equals("") || senha.equals("") || data.equals("")) {
+                                JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
+                                return;
+                        }
+                        String jsonString = "{ \"Funcao\": 2, \"Cpf\": \"" + cpf + "\", \"Senha\": \"" + senha
+                                        + "\", \"Nome\": \""
+                                        + nome
+                                        + "\", \"Data\": \"" + data + "\", \"Sexo\": \"" + sexo
+                                        + "\", \"Status\": " + status + " }";
+                        out.println(jsonString);
+                        JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!");
+                        clientLoginInterface.setVisible(true);
+                        this.setVisible(false);// parse from string to json
+                } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, "Error: " + e.toString());
                 }
+
         }// GEN-LAST:event_jButtonSalvarActionPerformed
 
         private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//

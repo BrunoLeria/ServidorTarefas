@@ -3,14 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package serverForm;
+package model;
 
 /**
  *
  * @author Drey
  */
 public class LoginSession {
-    
+
     public static int UID;
     public static String CPF;
     public static String NAME;
@@ -19,5 +19,5 @@ public class LoginSession {
     public static boolean DOCTOR;
     public static boolean STATUS;
     public static boolean isLoggedIn = false;
-    
+
 }

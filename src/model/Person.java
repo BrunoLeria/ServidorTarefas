@@ -85,4 +85,24 @@ public class Person {
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
+
+    public boolean checkAllFields() {
+        return !(this.nome == null
+                || this.nome.equals("")
+                || this.cpf == null
+                || this.cpf.equals("")
+                || this.senha == null
+                || this.senha.equals("")
+                || this.data == null
+                || this.data.equals("")
+                || this.sexo == null
+                || this.sexo.equals("")
+                || this.status == null);
+    }
+
+    public void convertDateToMySql() {
+        char[] dateArray = this.data.toCharArray();
+        this.data = dateArray[0] + dateArray[1] + "-" + dateArray[2] + dateArray[3] + "-" + dateArray[4] + dateArray[5]
+                + dateArray[6] + dateArray[7];
+    }
 }

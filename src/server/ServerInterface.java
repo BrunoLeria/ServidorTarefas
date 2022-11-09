@@ -302,11 +302,12 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                         if (clientInput != null) {
                             logArea.append("Client#" + clientSocket.getPort() + ": " + clientInput + "\n");
                             Map map = gson.fromJson(clientInput, Map.class);// parse from json to string
-                            switch (map.get("funcao").toString()) {
+                            PrintStream out = new PrintStream(clientSocket.getOutputStream());
+                            logArea.append(
+                                    "Client#" + clientSocket.getPort() + ": " + map.get("Funcao").toString() + "\n");
+                            switch (map.get("Funcao").toString()) {
                                 case "1":
                                     person = new Person(map.get("Cpf").toString(), map.get("Senha").toString());
-                                    PrintStream out = new PrintStream(clientSocket.getOutputStream());
-
                                     if (operations.isLogin(person.getCpf(), person.getSenha(), frame)) {
                                         logArea.append(
                                                 "Client#" + clientSocket.getPort() + " successfully logged in! \n");
@@ -319,11 +320,23 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     }
                                     break;
                                 case "2":
+                                    logArea.append("Client#" + clientSocket.getPort() + ": Starting register.\n");
+
                                     person = new Person(map.get("Nome").toString(), map.get("Cpf").toString(),
                                             map.get("Senha").toString(), map.get("Data").toString(),
                                             map.get("Sexo").toString(),
                                             Boolean.parseBoolean(map.get("Status").toString()));
-
+                                    if (person.checkAllFields()) {
+                                        person.convertDateToMySql();
+                                        operations.isRegister(person, frame);
+                                        logArea.append(
+                                                "Client#" + clientSocket.getPort() + " successfully register!\n");
+                                        serverResponse = "true";
+                                    } else {
+                                        logArea.append("Missing a field. \n");
+                                        serverResponse = "Faltou algum campo!";
+                                    }
+                                    out.println(serverResponse);
                                     break;
                                 case "3":
 
@@ -342,7 +355,6 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     break;
                             }
                             String json = gson.toJson(operations);
-                            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                             out.println(json);
                         }
 

@@ -297,12 +297,26 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                         Operations operations = new Operations();
                         Person person;
                         String clientInput = in.readLine();
+                        System.out.println("JSON input: " + clientInput);
+                        String serverResponse = "";
                         if (clientInput != null) {
                             logArea.append("Client#" + clientSocket.getPort() + ": " + clientInput + "\n");
                             Map map = gson.fromJson(clientInput, Map.class);// parse from json to string
                             switch (map.get("funcao").toString()) {
                                 case "1":
                                     person = new Person(map.get("Cpf").toString(), map.get("Senha").toString());
+                                    PrintStream out = new PrintStream(clientSocket.getOutputStream());
+
+                                    if (operations.isLogin(person.getCpf(), person.getSenha(), frame)) {
+                                        logArea.append(
+                                                "Client#" + clientSocket.getPort() + " successfully logged in! \n");
+                                        serverResponse = "true";
+                                        out.println(serverResponse);
+                                    } else {
+                                        logArea.append("This CPF/senha isn't registred. \n");
+                                        serverResponse = "false";
+                                        out.println(serverResponse);
+                                    }
                                     break;
                                 case "2":
                                     person = new Person(map.get("Nome").toString(), map.get("Cpf").toString(),
@@ -317,49 +331,21 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                 case "4":
 
                                     break;
-                                case "5":
-
+                                case "14": // responsável por fechar a conexão do cliente
+                                    logArea.append("Client#" + clientSocket.getPort() + " disconnected. \n");
+                                    clientSocket.close(); // Close client connection
+                                    clients.remove(clientSocket); // remove the client socket from ArrayList
+                                    in.close();
                                     break;
                                 default:
+
                                     break;
                             }
-                            // if (operations.getOperation().equals("add")) {
-                            // operations.setResult(operations.getA() + operations.getB());
-                            // } else if (operations.getOperation().equals("sub")) {
-                            // operations.setResult(operations.getA() - operations.getB());
-                            // } else if (operations.getOperation().equals("mul")) {
-                            // operations.setResult(operations.getA() * operations.getB());
-                            // } else if (operations.getOperation().equals("div")) {
-                            // operations.setResult(operations.getA() / operations.getB());
-                            // }
                             String json = gson.toJson(operations);
                             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                             out.println(json);
                         }
-                        System.out.println("JSON input: " + clientInput);
-                        String serverResponse = "";
 
-                        if (clientInput.equals("stop")) {
-                            logArea.append("Client#" + clientSocket.getPort() + " disconnected. \n");
-                            clientSocket.close(); // Close client connection
-                            clients.remove(clientSocket); // remove the client socket from ArrayList
-                            in.close();
-                            break;
-                        }
-
-                        if (clientInput != null) {
-                            PrintStream out = new PrintStream(clientSocket.getOutputStream());
-
-                            if (operations.isLogin(person.getCpf(), person.getSenha(), frame)) {
-                                logArea.append("Client#" + clientSocket.getPort() + " successfully logged in! \n");
-                                serverResponse = "true";
-                                out.println(serverResponse);
-                            } else {
-                                logArea.append("This CPF/senha isn't registred. \n");
-                                serverResponse = "false";
-                                out.println(serverResponse);
-                            }
-                        }
                     }
                 } catch (Exception e) {
                     System.out.println(e.toString());

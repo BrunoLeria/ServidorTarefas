@@ -17,7 +17,7 @@ import java.sql.ResultSet;
  */
 public class Operations {
 
-    public static boolean isLogin(String cpf, String senha, JFrame frame) {
+    public boolean isLogin(String cpf, String senha, JFrame frame) {
         try {
             Connection myConn = MySQLConnection.getConnection();
             String mySqlQuery = "SELECT UID, cpf FROM loginForm WHERE cpf = '" +
@@ -34,6 +34,23 @@ public class Operations {
 
                 return true;
             }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(frame, "Database error: " + e.getMessage());
+        }
+
+        return false;
+    }
+
+    public boolean isRegister(String cpf, String senha, JFrame frame) {
+        try {
+            Connection myConn = MySQLConnection.getConnection();
+            String mySqlQuery = "INSERT INTO loginForm (cpf, senha) VALUES (?, ?)";
+            PreparedStatement preparedStatement = myConn.prepareStatement(mySqlQuery);
+            preparedStatement.setString(1, cpf);
+            preparedStatement.setString(2, senha);
+            preparedStatement.executeUpdate();
+
+            return true;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame, "Database error: " + e.getMessage());
         }

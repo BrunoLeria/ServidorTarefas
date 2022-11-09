@@ -9,10 +9,10 @@ package client;
  * @author Drey
  */
 public class Main {
-    
+
     public static void main(String[] args) {
         ClientConnectionInterface frame = new ClientConnectionInterface();
         frame.setVisible(true);
     }
-    
+
 }

@@ -11,9 +11,9 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import javax.swing.JOptionPane;
 import client.ClientConnectionInterface;
-import com.google.gson.Gson;
+import model.Person;
 
-import classes.Person;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.Scanner;

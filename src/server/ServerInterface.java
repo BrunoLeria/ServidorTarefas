@@ -5,9 +5,9 @@
 package server;
 
 import client.ClientConnectionInterface;
-import com.google.gson.Gson;
+import model.Person;
 
-import classes.Person;
+import com.google.gson.Gson;
 
 import static java.awt.image.ImageObserver.ERROR;
 import java.io.BufferedReader;

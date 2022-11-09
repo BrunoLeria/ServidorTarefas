@@ -1,4 +1,4 @@
-package cliente;
+package clienteAntigo;
 
 import java.io.IOException;
 import java.net.Socket;

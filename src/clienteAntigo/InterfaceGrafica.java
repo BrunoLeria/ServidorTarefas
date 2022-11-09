@@ -1,4 +1,4 @@
-package cliente;
+package clienteAntigo;
 
 import com.google.gson.Gson;
 import java.awt.Dimension;

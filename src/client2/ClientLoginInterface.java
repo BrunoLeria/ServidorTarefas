@@ -220,9 +220,9 @@ public class ClientLoginInterface extends javax.swing.JFrame {
                         String serverResponse = in.readLine(); //get the response from server
                         Map map = gson.fromJson(serverResponse, Map.class); // parse from json to string
                         
-                        System.out.println("JSON from server: " + serverResponse);
+                        System.out.println("JSON from server: " + map);
                         
-                        if (map.get("status").toString() == "true") { //check the server response
+                        if (map.get("Status").toString().equals("true")) { //check the server response
                             JOptionPane.showMessageDialog(this, "Successfully logged in!");
                             logoutButton.setEnabled(true);
                             loginButton.setEnabled(false);
@@ -251,7 +251,7 @@ public class ClientLoginInterface extends javax.swing.JFrame {
             if (logoutButton.isEnabled()) {
                 // TODO add your handling code here:
                 out = new PrintWriter(clientSocket.getOutputStream(), true);
-                out.println("stop");
+                out.println("14.0");
 
                 clientSocket.close(); // close all the sockets from client
                 out.close();

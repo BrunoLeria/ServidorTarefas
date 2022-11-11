@@ -17,7 +17,10 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 import javax.swing.JFrame;
@@ -281,27 +284,48 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                         Person person = new Person();
                         Map map = gson.fromJson(clientInput, Map.class); // parse from json to string
                         System.out.println("JSON input: " + clientInput);
+                        PrintStream out = new PrintStream(clientSocket.getOutputStream());
                         String serverResponse = "";
                         
                         if (clientInput != null) {
                             System.out.println(map.get("Funcao"));
                             switch (map.get("Funcao").toString()) {
+                                case "1.0":
+                                    logArea.append("Client#" + clientSocket.getPort() + ": Starting register.\n");
+
+                                    person = new Person(map.get("Nome").toString(), map.get("Cpf").toString(),
+                                            map.get("Senha").toString(), map.get("Data").toString(),
+                                            map.get("Sexo").toString(), Boolean.parseBoolean(map.get("Doutor").toString()),
+                                            Boolean.parseBoolean(map.get("Status").toString()));
+                                    
+                                    if (person.checkAllFields()) {                                      
+                                        operations.isRegister(person, frame);
+                                        logArea.append(
+                                                "Client#" + clientSocket.getPort() + " successfully register!\n");
+                                        serverResponse = "true";
+                                    } else {
+                                        logArea.append("Missing a field. \n");
+                                        serverResponse = "Faltou algum campo!";
+                                    }
+                                    out.println(serverResponse);
+                                    break;
+                                    
                                 case "3.0":
-                                    PrintStream out = new PrintStream(clientSocket.getOutputStream());
                                     person = new Person(map.get("Cpf").toString(), map.get("Senha").toString());
 
                                     if (operations.isLogin(person.getCpf(), person.getSenha(), frame)) {
                                         logArea.append("Client#" + clientSocket.getPort() + " successfully logged in! \n");
 
-                                        person.setStatus(true);
+                                        LoginSession.STATUS = true;
                                         
+                                        person.setStatus(LoginSession.STATUS);
                                         person.setNome(LoginSession.NAME);
                                         person.setData(LoginSession.DATE);
                                         person.setSexo(LoginSession.SEX);
                                         person.setDoutor(LoginSession.DOCTOR);
                                         person.setStatus(LoginSession.STATUS);
                                         
-                                        String jsonString = "{ \"Funcao\": 3,"
+                                        String jsonString = "{ \"Funcao\": 103,"
                                                 + " \"Status\": \"" + person.getStatus() +"\","
                                                 + " \"Name\": \"" + person.getNome() +"\","
                                                 + " \"Cpf\": \"" + person.getCpf() +"\","
@@ -314,75 +338,28 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     } else {
                                         logArea.append("This CPF/password isn't registred. \n");
                                         person.setStatus(false);
-                                        out.println(gson.toJson(person));
+                                         String jsonString = "{ \"Funcao\": 103,"
+                                                + " \"Status\": \"" + person.getStatus() +"\","
+                                                + " \"Name\": \"" + person.getNome() +"\","
+                                                + " \"Cpf\": \"" + person.getCpf() +"\","
+                                                + " \"Birthday\": \"" + person.getData()+"\", "
+                                                + "\"Sex\": \"" + person.getSexo() +"\",  "
+                                                + "\"Doctor\": \"" + person.getDoutor() + "\" }";
+                                        out.println(jsonString);
                                         System.out.println("JSON to client: " + gson.toJson(person));
                                     }
                                     break;
-                                default:
-                            }
-                        }
-                        
-                        /*if (clientInput != null) {
-                            logArea.append("Client#" + clientSocket.getPort() + ": " + clientInput + "\n");
-                            Map map = gson.fromJson(clientInput, Map.class);// parse from json to string
-                            
-                            PrintStream out = new PrintStream(clientSocket.getOutputStream());
-                            logArea.append("Client#" + clientSocket.getPort() + ": " + map.get("Funcao").toString() + "\n");
-                            
-                            switch (map.get("Funcao").toString()) {
-                                case "1.0":
-                                    logArea.append("Client#" + clientSocket.getPort() + ": Starting register.\n");
-
-                                    person = new Person(map.get("Nome").toString(), map.get("Cpf").toString(),
-                                            map.get("Senha").toString(), map.get("Data").toString(),
-                                            map.get("Sexo").toString(),
-                                            Boolean.parseBoolean(map.get("Status").toString()));
                                     
-                                    if (person.checkAllFields()) {
-                                        person.convertDateToMySql();
-                                        operations.isRegister(person, frame);
-                                        logArea.append(
-                                                "Client#" + clientSocket.getPort() + " successfully register!\n");
-                                        serverResponse = "true";
-                                    } else {
-                                        logArea.append("Missing a field. \n");
-                                        serverResponse = "Faltou algum campo!";
-                                    }
-                                    out.println(serverResponse);
-                                    break;
-                                case "2":
-
-                                case "3.0":
-                                    person = new Person(map.get("Cpf").toString(), map.get("Senha").toString());
-                                    
-                                    if (operations.isLogin(person.getCpf(), person.getSenha(), frame)) {
-                                        logArea.append(
-                                                "Client#" + clientSocket.getPort() + " successfully logged in! \n");
-                                        serverResponse = "true";
-                                        out.println(serverResponse);
-                                    } else {
-                                        logArea.append("This CPF/senha isn't registred. \n");
-                                        serverResponse = "false";
-                                        out.println(serverResponse);
-                                    }
-                                    break;
-                                case "4":
-
-                                    break;
-                                case "14": // responsável por fechar a conexão do cliente
+                                case "14.0": // responsável por fechar a conexão do cliente
                                     logArea.append("Client#" + clientSocket.getPort() + " disconnected. \n");
                                     clientSocket.close(); // Close client connection
                                     clients.remove(clientSocket); // remove the client socket from ArrayList
                                     in.close();
-                                    break;
+                                    break;  
+                                    
                                 default:
-
-                                    break;
                             }
-                            String json = gson.toJson(operations);
-                            out.println(json);
-                        }*/
-
+                        }
                     }
                 } catch (Exception e) {
                     System.out.println(e.toString());

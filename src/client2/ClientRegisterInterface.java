@@ -55,11 +55,13 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
         jLabelSenha = new javax.swing.JLabel();
         jLabelSexo = new javax.swing.JLabel();
         jFormattedTextFieldCPF = new javax.swing.JFormattedTextField();
-        jFormattedTextFieldDataNascimento = new javax.swing.JFormattedTextField();
         jTextFieldNome = new javax.swing.JTextField();
         jTextFieldSenha = new javax.swing.JTextField();
-        jRadioButtonFeminino = new javax.swing.JRadioButton();
         jRadioButtonMasculino = new javax.swing.JRadioButton();
+        jRadioButtonFeminino = new javax.swing.JRadioButton();
+        jLabel1 = new javax.swing.JLabel();
+        jRadioButtonDoctor = new javax.swing.JRadioButton();
+        jFormattedTextFieldDataNascimento = new javax.swing.JFormattedTextField();
         jPanel2 = new javax.swing.JPanel();
         jButtonSalvar = new javax.swing.JButton();
         jButtonCancelar = new javax.swing.JButton();
@@ -83,25 +85,28 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
-
-        jFormattedTextFieldDataNascimento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd/MM/yyyy"))));
-
-        buttonGroup.add(jRadioButtonFeminino);
-        jRadioButtonFeminino.setSelected(true);
-        jRadioButtonFeminino.setText("Feminino");
-        jRadioButtonFeminino.addActionListener(new java.awt.event.ActionListener() {
+        jFormattedTextFieldCPF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonFemininoActionPerformed(evt);
+                jFormattedTextFieldCPFActionPerformed(evt);
             }
         });
 
-        buttonGroup.add(jRadioButtonMasculino);
         jRadioButtonMasculino.setText("Masculino");
         jRadioButtonMasculino.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonMasculinoActionPerformed(evt);
             }
         });
+
+        jRadioButtonFeminino.setText("Feminino");
+
+        jLabel1.setText("Doutor:");
+
+        try {
+            jFormattedTextFieldDataNascimento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("####/##/##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -124,14 +129,17 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
                         .addComponent(jTextFieldSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabelDataNascimento)
-                        .addGap(18, 18, 18)
-                        .addComponent(jFormattedTextFieldDataNascimento, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jFormattedTextFieldDataNascimento, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabelSexo)
-                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jRadioButtonMasculino)
-                            .addComponent(jRadioButtonFeminino))))
+                            .addComponent(jLabelSexo)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jRadioButtonDoctor)
+                            .addComponent(jRadioButtonFeminino)
+                            .addComponent(jRadioButtonMasculino))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -156,16 +164,19 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelSexo)
-                    .addComponent(jRadioButtonFeminino))
+                    .addComponent(jRadioButtonMasculino))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jRadioButtonFeminino)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jRadioButtonMasculino)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jRadioButtonDoctor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jButtonSalvar.setText("Salvar");
-        jButtonSalvar.setEnabled(false);
         jButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonSalvarActionPerformed(evt);
@@ -202,15 +213,15 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -218,26 +229,39 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jRadioButtonMasculinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMasculinoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButtonMasculinoActionPerformed
+
+    private void jFormattedTextFieldCPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextFieldCPFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jFormattedTextFieldCPFActionPerformed
+
         private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//
                 try {
                         out = new PrintWriter(clientSocket.getOutputStream(), true); // instance the output
                         String nome = jTextFieldNome.getText();
                         String cpf = jFormattedTextFieldCPF.getText().replace("-", "").replace(".", "");
                         String senha = jTextFieldSenha.getText();
-                        String data = jFormattedTextFieldDataNascimento.getText().replace("/", "");
+                        String data = jFormattedTextFieldDataNascimento.getText().replace("/", "-");
                         String sexo = "F";
+                        Boolean doctor = false;
                         if (jRadioButtonMasculino.isSelected()) {
                                 sexo = "M";
+                        }
+                        if (jRadioButtonDoctor.isSelected()) {
+                            doctor = true;
                         }
                         Boolean status = false;
                         if (nome.equals("") || cpf.equals("") || senha.equals("") || data.equals("")) {
                                 JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
                                 return;
                         }
-                        String jsonString = "{ \"Funcao\": 2, \"Cpf\": \"" + cpf + "\", \"Senha\": \"" + senha
+                        String jsonString = "{ \"Funcao\": 1, \"Cpf\": \"" + cpf + "\", \"Senha\": \"" + senha
                                         + "\", \"Nome\": \""
                                         + nome
                                         + "\", \"Data\": \"" + data + "\", \"Sexo\": \"" + sexo
+                                        +  "\", \"Doutor\": \"" + doctor
                                         + "\", \"Status\": " + status + " }";
                         out.println(jsonString);
                         JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!");
@@ -304,6 +328,7 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
     private javax.swing.JButton jButtonSalvar;
     private javax.swing.JFormattedTextField jFormattedTextFieldCPF;
     private javax.swing.JFormattedTextField jFormattedTextFieldDataNascimento;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelCPF;
     private javax.swing.JLabel jLabelDataNascimento;
     private javax.swing.JLabel jLabelNome;
@@ -311,6 +336,7 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelSexo;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JRadioButton jRadioButtonDoctor;
     private javax.swing.JRadioButton jRadioButtonFeminino;
     private javax.swing.JRadioButton jRadioButtonMasculino;
     private javax.swing.JTextField jTextFieldNome;

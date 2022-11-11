@@ -23,7 +23,7 @@ public class Operations {
     public static boolean isLogin(String cpf, String password, JFrame frame) {
         try {
             Connection myConn = MySQLConnection.getConnection();
-            String mySqlQuery = "SELECT id, nome, cpf, data_nascimento, sexo, status FROM pessoa WHERE cpf = '" +
+            String mySqlQuery = "SELECT id, nome, cpf, data_nascimento, sexo, doutor, status FROM pessoa WHERE cpf = '" +
                     cpf +
                     "' AND senha = '" +
                     password +
@@ -37,7 +37,7 @@ public class Operations {
                 LoginSession.CPF = resultSet.getString("cpf");
                 LoginSession.DATE = resultSet.getString("data_nascimento");
                 LoginSession.SEX = resultSet.getString("sexo");
-                //LoginSession.DOCTOR = resultSet.getBoolean("doctor");
+                LoginSession.DOCTOR = resultSet.getBoolean("doutor");
                 LoginSession.STATUS = resultSet.getBoolean("status");
 
                 return true;
@@ -52,11 +52,23 @@ public class Operations {
     public boolean isRegister(Person pessoa, JFrame frame) {
         try {
             Connection myConn = MySQLConnection.getConnection();
-            String mySqlQuery = "INSERT INTO db_hospital.pessoa (nome, cpf, senha, data_nascimento, sexo,status) values ("
+            /*String mySqlQuery = "INSERT INTO db_hospital.pessoa (nome, cpf, senha, data_nascimento, sexo, doutor, status) values ("
                     + pessoa.getNome() + ", " + pessoa.getCpf() + ", " + pessoa.getSenha() + ", " + pessoa.getData()
                     + ", "
-                    + pessoa.getSexo() + ", " + pessoa.getStatus() + ")";
+                    + pessoa.getSexo() + ", " + pessoa.getDoutor() + ", " + pessoa.getStatus() + ")";*/
+            System.out.println(pessoa.getData());
+            String mySqlQuery = "INSERT INTO db_hospital.pessoa (nome, cpf, senha, data_nascimento, sexo, doutor, status) "
+                    + "values (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = myConn.prepareStatement(mySqlQuery);
+            
+            preparedStatement.setString(1, pessoa.getNome());
+            preparedStatement.setString(2, pessoa.getCpf());
+            preparedStatement.setString(3, pessoa.getSenha());
+            preparedStatement.setString(4, pessoa.getData());
+            preparedStatement.setString(5, pessoa.getSexo());
+            preparedStatement.setBoolean(6, pessoa.getDoutor());
+            preparedStatement.setBoolean(7, pessoa.getStatus());
+            
             preparedStatement.executeUpdate();
 
             return true;

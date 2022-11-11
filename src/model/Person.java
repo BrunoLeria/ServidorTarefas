@@ -18,6 +18,7 @@ public class Person {
     private String senha;
     private String data;
     private String sexo;
+    private Boolean doutor;
     private Boolean status;
 
     public Person() {
@@ -30,6 +31,16 @@ public class Person {
         this.senha = senha;
         this.data = data;
         this.sexo = sexo;
+        this.status = status;
+    }
+    
+    public Person(String nome, String cpf, String senha, String data, String sexo, Boolean doutor, Boolean status) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.senha = senha;
+        this.data = data;
+        this.sexo = sexo;
+        this.doutor = doutor;
         this.status = status;
     }
 
@@ -78,6 +89,14 @@ public class Person {
         this.status = status;
     }
 
+    public Boolean getDoutor() {
+        return doutor;
+    }
+
+    public void setDoutor(Boolean doutor) {
+        this.doutor = doutor;
+    }
+    
     public String getCpf() {
         return cpf;
     }

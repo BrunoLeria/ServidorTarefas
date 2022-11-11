@@ -4,10 +4,13 @@
  */
 package client2;
 
+import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
 
@@ -240,6 +243,8 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
         private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//
                 try {
                         out = new PrintWriter(clientSocket.getOutputStream(), true); // instance the output
+                        BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                        Gson gson = new Gson();
                         String nome = jTextFieldNome.getText();
                         String cpf = jFormattedTextFieldCPF.getText().replace("-", "").replace(".", "");
                         String senha = jTextFieldSenha.getText();
@@ -264,9 +269,18 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
                                         +  "\", \"Doutor\": \"" + doctor
                                         + "\", \"Status\": " + status + " }";
                         out.println(jsonString);
-                        JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!");
-                        clientLoginInterface.setVisible(true);
-                        this.setVisible(false);// parse from string to json
+                        
+                        String serverResponse = in.readLine();
+                        Map map = gson.fromJson(serverResponse, Map.class);
+                        
+                        if (map.get("Status").toString().equals("true")) {
+                            JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!");
+                            clientLoginInterface.setVisible(true);
+                            this.setVisible(false);// parse from string to json
+                        }
+                        else {
+                            JOptionPane.showMessageDialog(null, "Falha ao realizar cadastro.");
+                        }
                 } catch (Exception e) {
                         JOptionPane.showMessageDialog(this, "Error: " + e.toString());
                 }

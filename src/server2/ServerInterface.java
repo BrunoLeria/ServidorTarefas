@@ -300,9 +300,11 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     
                                     if (person.checkAllFields()) {                                      
                                         operations.isRegister(person, frame);
-                                        logArea.append(
-                                                "Client#" + clientSocket.getPort() + " successfully register!\n");
-                                        serverResponse = "true";
+                                        logArea.append("Client#" + clientSocket.getPort() + " successfully register!\n");
+                                        String jsonString = "{ \"Funcao\": 101,"
+                                                + "\"Status\": \"" + true + "\" }";
+                                        serverResponse = jsonString;
+                                        System.out.println(jsonString);
                                     } else {
                                         logArea.append("Missing a field. \n");
                                         serverResponse = "Faltou algum campo!";

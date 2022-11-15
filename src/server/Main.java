@@ -4,18 +4,16 @@
  */
 package server;
 
-import javax.swing.JFrame;
-
 /**
  *
  * @author Drey
  */
 public class Main {
-    
+
     public static void main(String[] args) {
         ServerInterface frame = new ServerInterface();
         Thread thread = new Thread(frame);
         thread.start();
     }
-    
+
 }

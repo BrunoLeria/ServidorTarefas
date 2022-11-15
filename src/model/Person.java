@@ -4,8 +4,6 @@
  */
 package model;
 
-import client.*;
-
 /**
  *
  * @author Drey
@@ -33,7 +31,7 @@ public class Person {
         this.sexo = sexo;
         this.status = status;
     }
-    
+
     public Person(String nome, String cpf, String senha, String data, String sexo, Boolean doutor, Boolean status) {
         this.nome = nome;
         this.cpf = cpf;
@@ -96,7 +94,7 @@ public class Person {
     public void setDoutor(Boolean doutor) {
         this.doutor = doutor;
     }
-    
+
     public String getCpf() {
         return cpf;
     }

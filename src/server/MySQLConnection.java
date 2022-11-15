@@ -16,7 +16,7 @@ public class MySQLConnection {
     public static Connection getConnection() throws Exception {
         String dbRoot = "jdbc:mysql://";
         String hostName = "localhost:3306/";
-        String dbName = "loginForm";
+        String dbName = "db_hospital";
         String dbUrl = dbRoot + hostName + dbName;
 
         String hostUsername = "root";

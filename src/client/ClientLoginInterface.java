@@ -5,20 +5,17 @@
 package client;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import javax.swing.JOptionPane;
-import client.ClientConnectionInterface;
+
 import model.Person;
 
 import com.google.gson.Gson;
 
 import java.io.IOException;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Map;
 
 /**
  *
@@ -49,18 +46,19 @@ public class ClientLoginInterface extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         clientLabel = new javax.swing.JLabel();
         cpfLabel = new javax.swing.JLabel();
-        cpfField = new javax.swing.JTextField();
         senhaLabel = new javax.swing.JLabel();
         registerButton1 = new javax.swing.JButton();
         loginButton = new javax.swing.JButton();
         logoutButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         senhaField = new javax.swing.JPasswordField();
+        jFormattedcpfField = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,8 +68,6 @@ public class ClientLoginInterface extends javax.swing.JFrame {
 
         cpfLabel.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         cpfLabel.setText("CPF:");
-
-        cpfField.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
 
         senhaLabel.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         senhaLabel.setText("senha:");
@@ -120,6 +116,18 @@ public class ClientLoginInterface extends javax.swing.JFrame {
             }
         });
 
+        try {
+            jFormattedcpfField.setFormatterFactory(
+                    new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        jFormattedcpfField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jFormattedcpfFieldActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -140,9 +148,9 @@ public class ClientLoginInterface extends javax.swing.JFrame {
                                                 .addGroup(layout
                                                         .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
                                                                 false)
-                                                        .addComponent(cpfField, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        .addComponent(senhaField, javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                 190, Short.MAX_VALUE)
-                                                        .addComponent(senhaField))
+                                                        .addComponent(jFormattedcpfField))
                                                 .addGap(0, 0, Short.MAX_VALUE)))
                                 .addContainerGap())
                         .addGroup(layout.createSequentialGroup()
@@ -161,14 +169,14 @@ public class ClientLoginInterface extends javax.swing.JFrame {
                                 .addContainerGap(57, Short.MAX_VALUE)));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(clientLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34,
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35,
                                         Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(cpfLabel)
-                                        .addComponent(cpfField, javax.swing.GroupLayout.PREFERRED_SIZE, 28,
+                                        .addComponent(jFormattedcpfField, javax.swing.GroupLayout.PREFERRED_SIZE, 27,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addGroup(layout.createSequentialGroup()
@@ -190,6 +198,10 @@ public class ClientLoginInterface extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jFormattedcpfFieldActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jFormattedcpfFieldActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_jFormattedcpfFieldActionPerformed
+
     private void registerButton1MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_registerButton1MouseClicked
         new ClientRegisterInterface(clientSocket, this).setVisible(true); // change to another interface
         this.setVisible(false);
@@ -203,27 +215,38 @@ public class ClientLoginInterface extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (loginButton.isEnabled()) {
             try {
-                out = new PrintWriter(clientSocket.getOutputStream(), true); // instance the output
-                String cpf = cpfField.getText(); // get cpf from interface
-                String senha = senhaField.getPassword().toString(); // get senha from interface
+                String inputClient;
+                String serverMessage;
+                Gson gson = new Gson();
 
-                if (cpf.equalsIgnoreCase("") || senha.equalsIgnoreCase("")) {
-                    JOptionPane.showMessageDialog(this, "Insert your login and senha.");
+                out = new PrintWriter(clientSocket.getOutputStream(), true); // instance the output
+                String cpf = jFormattedcpfField.getText().replace("-", "").replace(".", ""); // get cpf from interface
+                String password = senhaField.getText(); // get password from interface
+                Person person = new Person(cpf, password);
+
+                if (cpf.equalsIgnoreCase("") || password.equalsIgnoreCase("")) {
+                    JOptionPane.showMessageDialog(this, "Insert your login and password.");
                 } else {
-                    String jsonString = "{ \"Funcao\": 1, \"Cpf\": \"" + cpf + "\", \"Senha\": \"" + senha + "\" }";
+                    String jsonString = "{ \"Funcao\": 3,"
+                            + " \"Cpf\": \"" + cpf + "\","
+                            + " \"Senha\": \"" + password + "\" }";
                     out.println(jsonString); // send to the server
+                    System.out.println("JSON to server: " + jsonString);
 
                     in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                     String serverResponse = in.readLine(); // get the response from server
+                    Map map = gson.fromJson(serverResponse, Map.class); // parse from json to string
 
-                    if (serverResponse.equals("true")) { // check the server response
+                    System.out.println("JSON from server: " + map);
+
+                    if (map.get("Status").toString().equals("true")) { // check the server response
                         JOptionPane.showMessageDialog(this, "Successfully logged in!");
                         logoutButton.setEnabled(true);
                         loginButton.setEnabled(false);
                     }
 
                     else { // check the server response
-                        JOptionPane.showMessageDialog(this, "This CPF/senha isn't registred.");
+                        JOptionPane.showMessageDialog(this, "This CPF/password isn't registred.");
                     }
                 }
 
@@ -244,7 +267,7 @@ public class ClientLoginInterface extends javax.swing.JFrame {
             if (logoutButton.isEnabled()) {
                 // TODO add your handling code here:
                 out = new PrintWriter(clientSocket.getOutputStream(), true);
-                out.println("stop");
+                out.println("14.0");
 
                 clientSocket.close(); // close all the sockets from client
                 out.close();
@@ -312,8 +335,8 @@ public class ClientLoginInterface extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel clientLabel;
-    private javax.swing.JTextField cpfField;
     private javax.swing.JLabel cpfLabel;
+    private javax.swing.JFormattedTextField jFormattedcpfField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JButton loginButton;
     private javax.swing.JButton logoutButton;

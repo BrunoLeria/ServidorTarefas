@@ -335,9 +335,6 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     person = new Person(map.get("cpf").toString(), map.get("password").toString());
 
                                     if (Operations.isLogin(person.getCpf(), person.getSenha(), frame)) {
-                                        logArea.append(
-                                                "Client#" + clientSocket.getPort() + " successfully logged in! \n");
-
                                         LoginSession.STATUS = true;
 
                                         person.setStatus(LoginSession.STATUS);
@@ -357,15 +354,12 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                                 + " \"doctor\": \"" + person.getDoutor() + "\" }"
                                                 + " }";
                                         serverResponse = jsonString;
-                                        logArea.append("Server:#" + serverResponse + "\n");
                                         out.println(serverResponse);
                                     } else {
-                                        logArea.append("This CPF/password isn't registred. \n");
                                         person.setStatus(false);
                                         String jsonString = "{ \"code\": 103,"
                                                 + "\"status\": \"" + false + "\" }";
                                         serverResponse = jsonString;
-                                        logArea.append("Server:#" + serverResponse + "\n");
                                         out.println(serverResponse);
                                     }
                                     break;

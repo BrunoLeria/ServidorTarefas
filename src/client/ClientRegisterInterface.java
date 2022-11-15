@@ -348,7 +348,16 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
                                         + "\" }";
                         out.println(jsonString);
                         System.out.println("Enviado: " + jsonString);
-
+                        String serverResponse = in.readLine();
+                        System.out.println("Recebido: " + serverResponse);
+                        Map map = gson.fromJson(serverResponse, Map.class);
+                        if (map.get("sucess").toString().equals("true")) {
+                                JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!");
+                                clientLoginInterface.setVisible(true);
+                                this.setVisible(false);// parse from string to json
+                        } else {
+                                JOptionPane.showMessageDialog(null, "Falha ao realizar cadastro.");
+                        }
                 } catch (Exception e) {
                         JOptionPane.showMessageDialog(this, "Error: " + e.toString());
                 }

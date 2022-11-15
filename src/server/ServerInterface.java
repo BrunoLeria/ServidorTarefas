@@ -301,70 +301,86 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                         String serverResponse = "";
 
                         if (clientInput != null) {
-                            System.out.println(map.get("code"));
                             switch (map.get("code").toString()) {
                                 case "1.0":
-                                    logArea.append("Client#" + clientSocket.getPort() + ": Starting register.\n");
+                                    try {
 
-                                    person = new Person(map.get("name").toString(), map.get("cpf").toString(),
-                                            map.get("password").toString(), map.get("birthday").toString(),
-                                            map.get("sex").toString(),
-                                            Boolean.parseBoolean(map.get("doctor").toString()), true);
-
-                                    if (person.checkAllFields()) {
-                                        operations.isRegister(person, frame);
-                                        logArea.append(
-                                                "Client#" + clientSocket.getPort() + " successfully register!\n");
-                                        String jsonString = "{ \"code\": 101,"
-                                                + "\"success\": \"" + true + "\" }";
-                                        serverResponse = jsonString;
-                                        logArea.append("Server:#" + serverResponse + "\n");
-                                    } else {
-                                        logArea.append("Missing a field. \n");
-                                        String jsonString = "{ \"code\": 101,"
-                                                + "\"success\": \"" + false + "\" }";
-                                        serverResponse = jsonString;
-                                        logArea.append("Server:#" + serverResponse + "\n");
+                                        System.out
+                                                .println("Client#" + clientSocket.getPort() + ": Starting register.\n");
+                                        person = new Person(map.get("name").toString(), map.get("cpf").toString(),
+                                                map.get("password").toString(), map.get("birthday").toString(),
+                                                map.get("sex").toString(),
+                                                Boolean.parseBoolean(map.get("doctor").toString()), true);
+                                        System.out.println(
+                                                "Client#" + clientSocket.getPort() + ": Creating new person.\n");
+                                        if (person.checkAllFields()) {
+                                            person.convertDateToMySql();
+                                            System.out
+                                                    .println("Client#" + clientSocket.getPort()
+                                                            + ": Fields are valid.\n");
+                                            System.out.println("Client#" + clientSocket.getPort()
+                                                    + ": Registering user on database.\n");
+                                            operations.isRegister(person, frame);
+                                            logArea.append(
+                                                    "Client#" + clientSocket.getPort() + " successfully register!\n");
+                                            String jsonString = "{ \"code\": 101,"
+                                                    + "\"success\": \"" + true + "\" }";
+                                            serverResponse = jsonString;
+                                            logArea.append("Server:#" + serverResponse + "\n");
+                                        } else {
+                                            logArea.append("Missing a field. \n");
+                                            String jsonString = "{ \"code\": 101,"
+                                                    + "\"success\": \"" + false + "\" }";
+                                            serverResponse = jsonString;
+                                            logArea.append("Server:#" + serverResponse + "\n");
+                                        }
+                                        out.println(serverResponse);
+                                    } catch (Exception e) {
+                                        logArea.append("Server: Error on register." + e.toString() + " \n");
+                                        System.out.println("Server: Error on register." + e.toString());
                                     }
-                                    out.println(serverResponse);
                                     break;
-
                                 case "3.0":
-                                    person = new Person(map.get("cpf").toString(), map.get("password").toString());
+                                    try {
+                                        person = new Person(map.get("cpf").toString(), map.get("password").toString());
 
-                                    if (operations.isLogin(person.getCpf(), person.getSenha(), frame)) {
-                                        logArea.append(
-                                                "Client#" + clientSocket.getPort() + " successfully logged in! \n");
+                                        if (operations.isLogin(person.getCpf(), person.getSenha(), frame)) {
+                                            logArea.append(
+                                                    "Client#" + clientSocket.getPort() + " successfully logged in! \n");
 
-                                        LoginSession.STATUS = true;
+                                            LoginSession.STATUS = true;
 
-                                        person.setStatus(LoginSession.STATUS);
-                                        person.setNome(LoginSession.NAME);
-                                        person.setData(LoginSession.DATE);
-                                        person.setSexo(LoginSession.SEX);
-                                        person.setDoutor(LoginSession.DOCTOR);
-                                        person.setStatus(LoginSession.STATUS);
+                                            person.setStatus(LoginSession.STATUS);
+                                            person.setNome(LoginSession.NAME);
+                                            person.setData(LoginSession.DATE);
+                                            person.setSexo(LoginSession.SEX);
+                                            person.setDoutor(LoginSession.DOCTOR);
+                                            person.setStatus(LoginSession.STATUS);
 
-                                        String jsonString = "{ \"code\": 103,"
-                                                + " \"status\": \"" + person.getStatus() + "\","
-                                                + " \"user\": {"
-                                                + " \"name\": \"" + person.getNome() + "\","
-                                                + " \"cpf\": \"" + person.getCpf() + "\","
-                                                + " \"birthday\": \"" + person.getData() + "\", "
-                                                + " \"sex\": \"" + person.getSexo() + "\",  "
-                                                + " \"doctor\": \"" + person.getDoutor() + "\" }"
-                                                + " }";
-                                        serverResponse = jsonString;
-                                        logArea.append("Server:#" + serverResponse + "\n");
-                                        out.println(serverResponse);
-                                    } else {
-                                        logArea.append("This CPF/password isn't registred. \n");
-                                        person.setStatus(false);
-                                        String jsonString = "{ \"code\": 103,"
-                                                + "\"status\": \"" + false + "\" }";
-                                        serverResponse = jsonString;
-                                        logArea.append("Server:#" + serverResponse + "\n");
-                                        out.println(serverResponse);
+                                            String jsonString = "{ \"code\": 103,"
+                                                    + " \"status\": \"" + person.getStatus() + "\","
+                                                    + " \"user\": {"
+                                                    + " \"name\": \"" + person.getNome() + "\","
+                                                    + " \"cpf\": \"" + person.getCpf() + "\","
+                                                    + " \"birthday\": \"" + person.getData() + "\", "
+                                                    + " \"sex\": \"" + person.getSexo() + "\",  "
+                                                    + " \"doctor\": \"" + person.getDoutor() + "\" }"
+                                                    + " }";
+                                            serverResponse = jsonString;
+                                            logArea.append("Server:#" + serverResponse + "\n");
+                                            out.println(serverResponse);
+                                        } else {
+                                            logArea.append("This CPF/password isn't registred. \n");
+                                            person.setStatus(false);
+                                            String jsonString = "{ \"code\": 103,"
+                                                    + "\"status\": \"" + false + "\" }";
+                                            serverResponse = jsonString;
+                                            logArea.append("Server:#" + serverResponse + "\n");
+                                            out.println(serverResponse);
+                                        }
+                                    } catch (Exception e) {
+                                        logArea.append("Server: Error on register." + e.toString() + " \n");
+                                        System.out.println("Server: Error on register." + e.toString());
                                     }
                                     break;
 

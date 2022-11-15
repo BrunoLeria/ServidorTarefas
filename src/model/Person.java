@@ -117,9 +117,8 @@ public class Person {
                 || this.status == null);
     }
 
-    public void convertDateToMySql() {
-        char[] dateArray = this.data.toCharArray();
-        this.data = dateArray[0] + dateArray[1] + "-" + dateArray[2] + dateArray[3] + "-" + dateArray[4] + dateArray[5]
-                + dateArray[6] + dateArray[7];
+    public void convertDateToMySql() throws Exception {
+        this.data = this.data.substring(4) + "-" + this.data.subSequence(2, 4) + "-" + this.data.subSequence(0, 2);
+        System.out.println(this.data);
     }
 }

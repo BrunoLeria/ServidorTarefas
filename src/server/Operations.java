@@ -47,21 +47,27 @@ public class Operations {
 
     }
 
-    public void isRegister(Person pessoa, JFrame frame) throws Exception {
-        Connection myConn = MySQLConnection.getConnection();
+    public void isRegister(Person pessoa, JFrame frame) {
+        try {
+            Connection myConn = MySQLConnection.getConnection();
 
-        String mySqlQuery = "INSERT INTO db_hospital.pessoa (nome, cpf, senha, data_nascimento, sexo, doutor, status) "
-                + "values (?, ?, ?, ?, ?, ?, ?)";
-        PreparedStatement preparedStatement = myConn.prepareStatement(mySqlQuery);
+            String mySqlQuery = "INSERT INTO db_hospital.pessoa (nome, cpf, senha, data_nascimento, sexo, doutor, status) "
+                    + "values (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement preparedStatement = myConn.prepareStatement(mySqlQuery);
 
-        preparedStatement.setString(1, pessoa.getNome());
-        preparedStatement.setString(2, pessoa.getCpf());
-        preparedStatement.setString(3, pessoa.getSenha());
-        preparedStatement.setString(4, pessoa.getData());
-        preparedStatement.setString(5, pessoa.getSexo());
-        preparedStatement.setBoolean(6, pessoa.getDoutor());
-        preparedStatement.setBoolean(7, pessoa.getStatus());
-        preparedStatement.executeUpdate();
+            preparedStatement.setString(1, pessoa.getNome());
+            preparedStatement.setString(2, pessoa.getCpf());
+            preparedStatement.setString(3, pessoa.getSenha());
+            preparedStatement.setString(4, pessoa.getData());
+            preparedStatement.setString(5, pessoa.getSexo());
+            preparedStatement.setBoolean(6, pessoa.getDoutor());
+            preparedStatement.setBoolean(7, pessoa.getStatus());
+            System.out.println(preparedStatement.toString());
+            preparedStatement.executeUpdate();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(frame, "Erro ao cadastrar usuário" + e.getMessage());
+        }
 
     }
 

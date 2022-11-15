@@ -227,9 +227,9 @@ public class ClientLoginInterface extends javax.swing.JFrame {
                 if (cpf.equalsIgnoreCase("") || password.equalsIgnoreCase("")) {
                     JOptionPane.showMessageDialog(this, "Insert your login and password.");
                 } else {
-                    String jsonString = "{ \"Funcao\": 3,"
-                            + " \"Cpf\": \"" + cpf + "\","
-                            + " \"Senha\": \"" + password + "\" }";
+                    String jsonString = "{ \"code\": 3,"
+                            + " \"cpf\": \"" + cpf + "\","
+                            + " \"password\": \"" + password + "\" }";
                     out.println(jsonString); // send to the server
                     System.out.println("JSON to server: " + jsonString);
 
@@ -239,7 +239,7 @@ public class ClientLoginInterface extends javax.swing.JFrame {
 
                     System.out.println("JSON from server: " + map);
 
-                    if (map.get("Status").toString().equals("true")) { // check the server response
+                    if (map.get("status").toString().equals("true")) { // check the server response
                         JOptionPane.showMessageDialog(this, "Successfully logged in!");
                         logoutButton.setEnabled(true);
                         loginButton.setEnabled(false);

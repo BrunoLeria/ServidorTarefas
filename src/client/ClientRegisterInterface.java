@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
 import java.util.Map;
 
 import javax.swing.JOptionPane;
@@ -84,6 +85,13 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
         try {
             jFormattedTextFieldCPF.setFormatterFactory(
                     new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        try {
+            jFormattedTextFieldDataNascimento.setFormatterFactory(
+                    new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
@@ -263,11 +271,12 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
         try {
             out = new PrintWriter(clientSocket.getOutputStream(), true); // instance the output
             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
             Gson gson = new Gson();
             String nome = jTextFieldNome.getText();
             String cpf = jFormattedTextFieldCPF.getText().replace("-", "").replace(".", "");
             String senha = jTextFieldSenha.getText();
-            String data = jFormattedTextFieldDataNascimento.getText().replace("/", "-");
+            String data = df.parse(jFormattedTextFieldDataNascimento.getText()).toString().replace("/", "");
             String sexo = "F";
             Boolean doctor = false;
             if (jRadioButtonMasculino.isSelected()) {
@@ -276,23 +285,27 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
             if (jRadioButtonDoctor.isSelected()) {
                 doctor = true;
             }
-            Boolean status = false;
             if (nome.equals("") || cpf.equals("") || senha.equals("") || data.equals("")) {
                 JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
                 return;
             }
-            String jsonString = "{ \"Funcao\": 1, \"Cpf\": \"" + cpf + "\", \"Senha\": \"" + senha
-                    + "\", \"Nome\": \""
-                    + nome
-                    + "\", \"Data\": \"" + data + "\", \"Sexo\": \"" + sexo
-                    + "\", \"Doutor\": \"" + doctor
-                    + "\", \"Status\": " + status + " }";
+            if (senha.length() != 6) {
+                JOptionPane.showMessageDialog(null, "A senha deve ter 6 caracteres!");
+                return;
+            }
+            String jsonString = "{ \"code\": 1, \"cpf\": \"" + cpf
+                    + "\", \"password\": \"" + senha
+                    + "\", \"name\": \"" + nome
+                    + "\", \"birthday\": \"" + data
+                    + "\", \"sex\": \"" + sexo
+                    + "\", \"doctor\": \"" + doctor
+                    + "\" }";
             out.println(jsonString);
-
+            System.out.println("Enviado: " + jsonString);
             String serverResponse = in.readLine();
+            System.out.println("Recebido: " + serverResponse);
             Map map = gson.fromJson(serverResponse, Map.class);
-
-            if (map.get("Status").toString().equals("true")) {
+            if (map.get("sucess").toString().equals("true")) {
                 JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!");
                 clientLoginInterface.setVisible(true);
                 this.setVisible(false);// parse from string to json

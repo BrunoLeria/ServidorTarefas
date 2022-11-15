@@ -296,38 +296,41 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                         Person person = new Person();
                         Map map = gson.fromJson(clientInput, Map.class); // parse from json to string
                         System.out.println("JSON input: " + clientInput);
+                        logArea.append("Client:#" + clientInput + "\n");
                         PrintStream out = new PrintStream(clientSocket.getOutputStream());
                         String serverResponse = "";
 
                         if (clientInput != null) {
-                            System.out.println(map.get("Funcao"));
-                            switch (map.get("Funcao").toString()) {
+                            System.out.println(map.get("code"));
+                            switch (map.get("code").toString()) {
                                 case "1.0":
                                     logArea.append("Client#" + clientSocket.getPort() + ": Starting register.\n");
 
-                                    person = new Person(map.get("Nome").toString(), map.get("Cpf").toString(),
-                                            map.get("Senha").toString(), map.get("Data").toString(),
-                                            map.get("Sexo").toString(),
-                                            Boolean.parseBoolean(map.get("Doutor").toString()),
-                                            Boolean.parseBoolean(map.get("Status").toString()));
+                                    person = new Person(map.get("name").toString(), map.get("cpf").toString(),
+                                            map.get("password").toString(), map.get("birthday").toString(),
+                                            map.get("sex").toString(),
+                                            Boolean.parseBoolean(map.get("doctor").toString()), true);
 
                                     if (person.checkAllFields()) {
                                         operations.isRegister(person, frame);
                                         logArea.append(
                                                 "Client#" + clientSocket.getPort() + " successfully register!\n");
-                                        String jsonString = "{ \"Funcao\": 101,"
-                                                + "\"Status\": \"" + true + "\" }";
+                                        String jsonString = "{ \"code\": 101,"
+                                                + "\"success\": \"" + true + "\" }";
                                         serverResponse = jsonString;
-                                        System.out.println(jsonString);
+                                        logArea.append("Server:#" + serverResponse + "\n");
                                     } else {
                                         logArea.append("Missing a field. \n");
-                                        serverResponse = "Faltou algum campo!";
+                                        String jsonString = "{ \"code\": 101,"
+                                                + "\"success\": \"" + false + "\" }";
+                                        serverResponse = jsonString;
+                                        logArea.append("Server:#" + serverResponse + "\n");
                                     }
                                     out.println(serverResponse);
                                     break;
 
                                 case "3.0":
-                                    person = new Person(map.get("Cpf").toString(), map.get("Senha").toString());
+                                    person = new Person(map.get("cpf").toString(), map.get("password").toString());
 
                                     if (operations.isLogin(person.getCpf(), person.getSenha(), frame)) {
                                         logArea.append(
@@ -342,28 +345,26 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                         person.setDoutor(LoginSession.DOCTOR);
                                         person.setStatus(LoginSession.STATUS);
 
-                                        String jsonString = "{ \"Funcao\": 103,"
-                                                + " \"Status\": \"" + person.getStatus() + "\","
-                                                + " \"Name\": \"" + person.getNome() + "\","
-                                                + " \"Cpf\": \"" + person.getCpf() + "\","
-                                                + " \"Birthday\": \"" + person.getData() + "\", "
-                                                + "\"Sex\": \"" + person.getSexo() + "\",  "
-                                                + "\"Doctor\": \"" + person.getDoutor() + "\" }";
-
-                                        System.out.println("JSON to client: " + jsonString);
-                                        out.println(jsonString);
+                                        String jsonString = "{ \"code\": 103,"
+                                                + " \"status\": \"" + person.getStatus() + "\","
+                                                + " \"user\": {"
+                                                + " \"name\": \"" + person.getNome() + "\","
+                                                + " \"cpf\": \"" + person.getCpf() + "\","
+                                                + " \"birthday\": \"" + person.getData() + "\", "
+                                                + " \"sex\": \"" + person.getSexo() + "\",  "
+                                                + " \"doctor\": \"" + person.getDoutor() + "\" }"
+                                                + " }";
+                                        serverResponse = jsonString;
+                                        logArea.append("Server:#" + serverResponse + "\n");
+                                        out.println(serverResponse);
                                     } else {
                                         logArea.append("This CPF/password isn't registred. \n");
                                         person.setStatus(false);
-                                        String jsonString = "{ \"Funcao\": 103,"
-                                                + " \"Status\": \"" + person.getStatus() + "\","
-                                                + " \"Name\": \"" + person.getNome() + "\","
-                                                + " \"Cpf\": \"" + person.getCpf() + "\","
-                                                + " \"Birthday\": \"" + person.getData() + "\", "
-                                                + "\"Sex\": \"" + person.getSexo() + "\",  "
-                                                + "\"Doctor\": \"" + person.getDoutor() + "\" }";
-                                        out.println(jsonString);
-                                        System.out.println("JSON to client: " + gson.toJson(person));
+                                        String jsonString = "{ \"code\": 103,"
+                                                + "\"status\": \"" + false + "\" }";
+                                        serverResponse = jsonString;
+                                        logArea.append("Server:#" + serverResponse + "\n");
+                                        out.println(serverResponse);
                                     }
                                     break;
 
@@ -380,7 +381,6 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                     }
                 } catch (Exception e) {
                     System.out.println(e.toString());
-
                     logArea.append("Client#" + clientSocket.getPort() + " disconnected. \n");
                     clientSocket.close(); // Close client connection
                     clients.remove(clientSocket); // remove the client socket from ArrayList

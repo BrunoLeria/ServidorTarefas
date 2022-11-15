@@ -147,11 +147,14 @@ public class ClientConnectionInterface extends javax.swing.JFrame {
             String address = ipField.getText(); // get ip from interface
             int port = Integer.parseInt(portField.getText()); // convert the string from interface to int
             clientSocket = new Socket(address, port); // bind a new socket
+            System.out.println(clientSocket.toString());
+            System.out.println("Connected to server");
             JOptionPane.showMessageDialog(this, "Connected to server!");
             new ClientLoginInterface(clientSocket).setVisible(true); // change to another interface
             this.dispose(); // dispose this interface
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Failed to connect to server.");
+            System.out.println("Failed to connect to server.");
         }
     }// GEN-LAST:event_connectButtonMouseClicked
 

@@ -17,6 +17,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Scanner;
 
 import javax.swing.JFrame;
 
@@ -285,18 +286,19 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
             this.frame = frame;
         }
 
+        @Override
         public void run() {
             try { // buffer to read 231rom client
-                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                Scanner in = new Scanner(clientSocket.getInputStream());
                 try {
-                    while (true) { // print input from client
+                    while (in.hasNextLine()) { // print input from client
                         Gson gson = new Gson();
                         Operations operations = new Operations();
-
-                        String clientInput = in.readLine();
+                        String clientInput = in.nextLine();
                         Person person;
                         Map map = gson.fromJson(clientInput, Map.class); // parse from json to string
                         System.out.println("JSON input: " + clientInput);
+                        logArea.append("Client#" + clientSocket.getPort() + ": " + clientInput + "\n");
                         PrintStream out = new PrintStream(clientSocket.getOutputStream());
                         String serverResponse;
 
@@ -309,8 +311,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                             map.get("password").toString(), map.get("birthday").toString(),
                                             map.get("sex").toString(),
                                             Boolean.valueOf(map.get("doctor").toString()), true);
-                                    System.out.println(
-                                            "Client#" + clientSocket.getPort() + ": Creating new person.\n");
+                                    System.out.println("Client#" + clientSocket.getPort() + ": Creating new person.\n");
                                     if (person.checkAllFields()) {
                                         person.convertDateToMySql();
                                         System.out
@@ -329,7 +330,6 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     }
                                     out.println(serverResponse);
                                     System.out.println(serverResponse);
-
                                     break;
                                 case "3.0":
                                     person = new Person(map.get("cpf").toString(), map.get("password").toString());

@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 09-Nov-2022 às 17:34
--- Versão do servidor: 10.4.25-MariaDB
--- versão do PHP: 8.1.10
+-- Generation Time: Nov 11, 2022 at 03:28 PM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Banco de dados: `db_hospital`
+-- Database: `db_hospital`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `pessoa`
+-- Table structure for table `pessoa`
 --
 
 CREATE TABLE `pessoa` (
@@ -34,35 +34,37 @@ CREATE TABLE `pessoa` (
   `senha` varchar(6) NOT NULL,
   `data_nascimento` date NOT NULL,
   `sexo` varchar(1) NOT NULL,
+  `doutor` tinyint(1) NOT NULL,
   `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Extraindo dados da tabela `pessoa`
+-- Dumping data for table `pessoa`
 --
 
-INSERT INTO `pessoa` (`id`, `nome`, `cpf`, `senha`, `data_nascimento`, `sexo`, `status`) VALUES
-(1, 'Admin', '00000000000', '123456', '2022-11-09', 'M', 0);
+INSERT INTO `pessoa` (`id`, `nome`, `cpf`, `senha`, `data_nascimento`, `sexo`, `doutor`, `status`) VALUES
+(1, 'Admin', '00000000000', '123456', '2022-11-09', 'M', 0, 0),
+(2, 'Andrey Naligatski Dias', '47663435818', '123456', '2000-02-17', 'M', 0, 0);
 
 --
--- Índices para tabelas despejadas
+-- Indexes for dumped tables
 --
 
 --
--- Índices para tabela `pessoa`
+-- Indexes for table `pessoa`
 --
 ALTER TABLE `pessoa`
   ADD PRIMARY KEY (`id`) USING BTREE;
 
 --
--- AUTO_INCREMENT de tabelas despejadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de tabela `pessoa`
+-- AUTO_INCREMENT for table `pessoa`
 --
 ALTER TABLE `pessoa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

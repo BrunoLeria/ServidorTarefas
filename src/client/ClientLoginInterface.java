@@ -5,17 +5,15 @@
 package client;
 
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Map;
+import java.util.Scanner;
+
 import javax.swing.JOptionPane;
 
-import model.Person;
-
 import com.google.gson.Gson;
-
-import java.io.IOException;
-import java.util.Map;
 
 /**
  *
@@ -215,14 +213,11 @@ public class ClientLoginInterface extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (loginButton.isEnabled()) {
             try {
-                String inputClient;
-                String serverMessage;
                 Gson gson = new Gson();
 
                 out = new PrintWriter(clientSocket.getOutputStream(), true); // instance the output
                 String cpf = jFormattedcpfField.getText().replace("-", "").replace(".", ""); // get cpf from interface
-                String password = senhaField.getText(); // get password from interface
-                Person person = new Person(cpf, password);
+                String password = senhaField.getPassword().toString(); // get password from interface
 
                 if (cpf.equalsIgnoreCase("") || password.equalsIgnoreCase("")) {
                     JOptionPane.showMessageDialog(this, "Insert your login and password.");
@@ -230,24 +225,36 @@ public class ClientLoginInterface extends javax.swing.JFrame {
                     String jsonString = "{ \"code\": 3,"
                             + " \"cpf\": \"" + cpf + "\","
                             + " \"password\": \"" + password + "\" }";
+
+                    Thread threadRecebeResposta = new Thread(() -> {
+                        try {
+                            Scanner resportaServidor = new Scanner(clientSocket.getInputStream());
+                            while (resportaServidor.hasNextLine()) {
+                                String serverResponse = resportaServidor.nextLine();
+                                System.out.println("Recebido: " + serverResponse);
+                                Map map = gson.fromJson(serverResponse, Map.class); // parse from json to string
+
+                                System.out.println("JSON from server: " + map);
+
+                                if (map.get("status").toString().equals("true")) { // check the server response
+                                    JOptionPane.showMessageDialog(this, "Successfully logged in!");
+                                    logoutButton.setEnabled(true);
+                                    loginButton.setEnabled(false);
+                                    break;
+                                } else { // check the server response
+                                    JOptionPane.showMessageDialog(this, "This CPF/password isn't registred.");
+                                    break;
+                                }
+                            }
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+
+                    threadRecebeResposta.start();
+
                     out.println(jsonString); // send to the server
                     System.out.println("JSON to server: " + jsonString);
-
-                    in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                    String serverResponse = in.readLine(); // get the response from server
-                    Map map = gson.fromJson(serverResponse, Map.class); // parse from json to string
-
-                    System.out.println("JSON from server: " + map);
-
-                    if (map.get("status").toString().equals("true")) { // check the server response
-                        JOptionPane.showMessageDialog(this, "Successfully logged in!");
-                        logoutButton.setEnabled(true);
-                        loginButton.setEnabled(false);
-                    }
-
-                    else { // check the server response
-                        JOptionPane.showMessageDialog(this, "This CPF/password isn't registred.");
-                    }
                 }
 
             } catch (Exception e) {

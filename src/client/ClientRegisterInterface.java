@@ -4,15 +4,17 @@
  */
 package client;
 
-import com.google.gson.Gson;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.text.SimpleDateFormat;
 import java.util.Map;
+import java.util.Scanner;
 
 import javax.swing.JOptionPane;
+
+import com.google.gson.Gson;
 
 /**
  *
@@ -316,6 +318,7 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
 
         private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//
                 try {
+
                         out = new PrintWriter(clientSocket.getOutputStream(), true); // instance the output
                         BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                         Gson gson = new Gson();
@@ -346,18 +349,35 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
                                         + "\", \"sex\": \"" + sexo
                                         + "\", \"doctor\": \"" + doctor
                                         + "\" }";
+                        Thread threadRecebeResposta = new Thread(() -> {
+                                try {
+                                        Scanner resportaServidor = new Scanner(clientSocket.getInputStream());
+                                        while (resportaServidor.hasNextLine()) {
+                                                String serverResponse = resportaServidor.nextLine();
+                                                System.out.println("Recebido: " + serverResponse);
+                                                Map map = gson.fromJson(serverResponse, Map.class);
+                                                if (map.get("success").toString().equals("true")) {
+                                                        JOptionPane.showMessageDialog(null,
+                                                                        "Cadastro realizado com sucesso!");
+                                                        clientLoginInterface.setVisible(true);
+                                                        this.setVisible(false);// parse from string to json
+                                                        break;
+                                                } else {
+                                                        JOptionPane.showMessageDialog(null,
+                                                                        "Falha ao realizar cadastro.");
+                                                        break;
+                                                }
+                                        }
+                                } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                }
+                        });
+
+                        threadRecebeResposta.start();
+
                         out.println(jsonString);
                         System.out.println("Enviado: " + jsonString);
-                        String serverResponse = in.readLine();
-                        System.out.println("Recebido: " + serverResponse);
-                        Map map = gson.fromJson(serverResponse, Map.class);
-                        if (map.get("sucess").toString().equals("true")) {
-                                JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!");
-                                clientLoginInterface.setVisible(true);
-                                this.setVisible(false);// parse from string to json
-                        } else {
-                                JOptionPane.showMessageDialog(null, "Falha ao realizar cadastro.");
-                        }
+
                 } catch (Exception e) {
                         JOptionPane.showMessageDialog(this, "Error: " + e.toString());
                 }

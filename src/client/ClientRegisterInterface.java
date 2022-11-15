@@ -95,13 +95,11 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
         });
 
         jRadioButtonMasculino.setText("Masculino");
-        jRadioButtonMasculino.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonMasculinoActionPerformed(evt);
-            }
-        });
 
         jRadioButtonFeminino.setText("Feminino");
+
+        buttonGroup.add(jRadioButtonMasculino);
+        buttonGroup.add(jRadioButtonFeminino);
 
         jLabel1.setText("Doutor:");
 
@@ -257,10 +255,6 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jRadioButtonMasculinoActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButtonMasculinoActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jRadioButtonMasculinoActionPerformed
 
     private void jFormattedTextFieldCPFActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jFormattedTextFieldCPFActionPerformed
         // TODO add your handling code here:

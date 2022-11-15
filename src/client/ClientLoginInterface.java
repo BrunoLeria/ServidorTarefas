@@ -217,7 +217,7 @@ public class ClientLoginInterface extends javax.swing.JFrame {
 
                 out = new PrintWriter(clientSocket.getOutputStream(), true); // instance the output
                 String cpf = jFormattedcpfField.getText().replace("-", "").replace(".", ""); // get cpf from interface
-                String password = senhaField.getPassword().toString(); // get password from interface
+                String password = senhaField.getText(); // get password from interface
 
                 if (cpf.equalsIgnoreCase("") || password.equalsIgnoreCase("")) {
                     JOptionPane.showMessageDialog(this, "Insert your login and password.");

@@ -3,11 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Bruno/Documents/NetBeansProjects/ServidorTarefas/src/client/ClientRegisterInterface.java</file>
-            <file>file:/C:/Users/Bruno/Documents/NetBeansProjects/ServidorTarefas/src/server/MySQLConnection.java</file>
-            <file>file:/C:/Users/Bruno/Documents/NetBeansProjects/ServidorTarefas/src/server/Main.java</file>
-            <file>file:/C:/Users/Bruno/Documents/NetBeansProjects/ServidorTarefas/src/server/Operations.java</file>
-            <file>file:/C:/Users/Bruno/Documents/NetBeansProjects/ServidorTarefas/src/server/ServerInterface.java</file>
+            <file>file:/C:/Users/Drey/Desktop/git/ServidorTarefas/src/server2/ServerInterface.java</file>
+            <file>file:/C:/Users/Drey/Desktop/git/ServidorTarefas/src/client2/ClientLoginInterface.java</file>
         </group>
     </open-files>
 </project-private>

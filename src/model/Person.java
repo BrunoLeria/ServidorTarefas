@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.net.Socket;
+
 /**
  *
  * @author Drey
@@ -18,6 +20,7 @@ public class Person {
     private String sexo;
     private Boolean doutor;
     private Boolean status;
+    private Socket socket;
 
     public Person() {
 
@@ -42,6 +45,17 @@ public class Person {
         this.status = status;
     }
 
+    public Person(String nome, String cpf, String senha, String data, String sexo, Boolean doutor, Boolean status, Socket socket) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.senha = senha;
+        this.data = data;
+        this.sexo = sexo;
+        this.doutor = doutor;
+        this.status = status;
+        this.socket = socket;
+    }
+    
     public Person(String cpf, String senha) {
         this.cpf = cpf;
         this.senha = senha;
@@ -49,6 +63,14 @@ public class Person {
 
     public String getNome() {
         return nome;
+    }
+
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public void setSocket(Socket socket) {
+        this.socket = socket;
     }
 
     public void setNome(String nome) {

@@ -259,6 +259,19 @@ public class ClientLoginInterface extends javax.swing.JFrame {
                                         logoutButton.setEnabled(true);
                                         loginButton.setEnabled(false);
                                         registerButton1.setEnabled(false);
+                                        
+                                        Map userMap = (Map) map.get("user");
+                                        
+                                        if (userMap.get("doctor").toString().equals("true")) {
+                                            new DoctorInterface(clientSocket, map).setVisible(true);
+                                            this.dispose();
+                                        }
+
+                                        else {
+                                            new PacientInterface(clientSocket, map).setVisible(true);
+                                            this.dispose();
+                                        }
+                                        
                                         break;
                                     } else { // check the server response
                                         JOptionPane.showMessageDialog(this, "This CPF/password isn't registred.");

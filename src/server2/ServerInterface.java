@@ -31,7 +31,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
 
     private ServerSocket serverSocket;
     private Socket clientSocket;
-    private static ArrayList<Socket> clients = new ArrayList<>();
+    private static ArrayList<Person> clients = new ArrayList<>();
 
     /**
      * Creates new form ServerInterface
@@ -249,7 +249,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
             clientSocket = serverSocket.accept(); // accept connection from a new client
             logArea.append("A new login from Client#" + clientSocket.getPort() + ".\n");
 
-            clients.add(clientSocket); // new client added to the ArrayList
+            LoginSession.SOCKET = clientSocket;
             ClientThread ct = new ClientThread(clientSocket, this); // Create a thread for a new client
             ct.start(); // client thread started
 
@@ -261,10 +261,10 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
     public void closeServer() { // close all the sockets and buffers to stop the server
         try {
             serverSocket.close();
-
-            for (Socket socket : clients) { // loop to disconnect all client threads
-                logArea.append("Client#" + socket.getPort() + " disconnected. \n");
-                socket.close();
+            
+            for (Person client : clients) { // loop to disconnect all client threads
+                logArea.append("Client#" +  client.getSocket().getPort() + " disconnected. \n");
+                client.getSocket().close();
             }
             clients.removeAll(clients); // clear the client list
 
@@ -351,6 +351,9 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                         person.setSexo(LoginSession.SEX);
                                         person.setDoutor(LoginSession.DOCTOR);
                                         person.setStatus(LoginSession.STATUS);
+                                        person.setSocket(LoginSession.SOCKET);
+                                        
+                                        clients.add(person); // new client added to the ArrayList
 
                                         String jsonString = "{ \"code\": 103,"
                                                 + " \"status\": \"" + person.getStatus() + "\","

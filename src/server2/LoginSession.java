@@ -5,6 +5,7 @@
 
 package server2;
 
+import java.net.Socket;
 import server.*;
 
 /**
@@ -20,6 +21,7 @@ public class LoginSession {
     public static String SEX;
     public static boolean DOCTOR;
     public static boolean STATUS;
+    public static Socket SOCKET;
     public static boolean isLoggedIn = false;
 
 }

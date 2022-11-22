@@ -5,6 +5,8 @@
 
 package model;
 
+import java.net.Socket;
+
 /**
  *
  * @author Drey

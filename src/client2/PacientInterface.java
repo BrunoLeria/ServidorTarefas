@@ -219,7 +219,7 @@ public class PacientInterface extends javax.swing.JFrame {
             if (jDisconnectButton.isEnabled()) {
                 // TODO add your handling code here:
                 out = new PrintWriter(clientSocket.getOutputStream(), true);
-                out.println("14.0");
+                out.println("14");
 
                 clientSocket.close(); // close all the sockets from client
                 out.close();

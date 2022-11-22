@@ -302,7 +302,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                         JSONObject jsonObject = (JSONObject) parser.parse(clientInput);
                         JSONObject serverResponse = new JSONObject();
                         
-                        Person person;
+                        Person person = new Person();
                         Map map = jsonObject; // parse from json to string
                         System.out.println("JSON input: " + jsonObject);
                         
@@ -313,11 +313,13 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                             switch (map.get("code").toString()) {
                                 case "1":
                                     System.out.println("Client#" + clientSocket.getPort() + ": Starting register.\n");
-                                    
-                                    person = new Person(map.get("name").toString(), map.get("cpf").toString(),
-                                            map.get("password").toString(), map.get("birthday").toString(),
-                                            map.get("sex").toString(),
-                                            Boolean.valueOf(map.get("doctor").toString()), true);
+
+                                    person.setNome(map.get("name").toString());
+                                    person.setCpf(map.get("cpf").toString());
+                                    person.setSenha(map.get("password").toString());
+                                    person.setData(map.get("birthday").toString());
+                                    person.setSexo(map.get("sex").toString());
+                                    person.setDoutor(Boolean.valueOf(map.get("doctor").toString()));
                                     
                                     System.out.println("Client#" + clientSocket.getPort() + ": Creating new person.\n");
                                     
@@ -340,7 +342,8 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     System.out.println("JSON to client: " + serverResponse);
                                     break;
                                 case "3":
-                                    person = new Person(map.get("cpf").toString(), map.get("password").toString());
+                                    person.setCpf(map.get("cpf").toString());
+                                    person.setSenha(map.get("password").toString());
 
                                     if (Operations.isLogin(person.getCpf(), person.getSenha(), frame)) {
                                         LoginSession.STATUS = true;
@@ -352,8 +355,6 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                         person.setDoutor(LoginSession.DOCTOR);
                                         person.setStatus(LoginSession.STATUS);
                                         person.setSocket(LoginSession.SOCKET);
-                                        
-                                        clients.add(person); // new client added to the ArrayList
 
                                         String jsonString = "{ \"code\": 103,"
                                                 + " \"status\": \"" + person.getStatus() + "\","
@@ -376,14 +377,18 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                         out.println(serverResponse);
                                     }
                                     break;
-
+                                    
+                                case "9":
+                                    clients.add(person); // new client added to the ArrayList
+                                    break;
+                                    
                                 case "14": // responsável por fechar a conexão do cliente
                                     logArea.append("Client#" + clientSocket.getPort() + " disconnected. \n");
                                     clientSocket.close(); // Close client connection
                                     clients.remove(clientSocket); // remove the client socket from ArrayList
                                     in.close();
                                     break;
-
+                                 
                                 default:
                             }
                         }

@@ -52,7 +52,7 @@ public class ClientLoginInterface extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         clientLabel = new javax.swing.JLabel();
@@ -60,7 +60,6 @@ public class ClientLoginInterface extends javax.swing.JFrame {
         senhaLabel = new javax.swing.JLabel();
         registerButton1 = new javax.swing.JButton();
         loginButton = new javax.swing.JButton();
-        logoutButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         senhaField = new javax.swing.JPasswordField();
         jFormattedcpfField = new javax.swing.JFormattedTextField();
@@ -96,20 +95,6 @@ public class ClientLoginInterface extends javax.swing.JFrame {
             }
         });
 
-        logoutButton.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
-        logoutButton.setText("Disconnect");
-        logoutButton.setEnabled(false);
-        logoutButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                logoutButtonMouseClicked(evt);
-            }
-        });
-        logoutButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                logoutButtonActionPerformed(evt);
-            }
-        });
-
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 11)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("First login? ");
@@ -122,8 +107,7 @@ public class ClientLoginInterface extends javax.swing.JFrame {
         });
 
         try {
-            jFormattedcpfField.setFormatterFactory(
-                    new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
+            jFormattedcpfField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
@@ -136,69 +120,58 @@ public class ClientLoginInterface extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addContainerGap()
-                                                .addComponent(clientLabel, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGap(34, 34, 34)
-                                                .addGroup(layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(senhaLabel)
-                                                        .addComponent(cpfLabel))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addGroup(layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
-                                                                false)
-                                                        .addComponent(senhaField, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                190, Short.MAX_VALUE)
-                                                        .addComponent(jFormattedcpfField))
-                                                .addGap(0, 0, Short.MAX_VALUE)))
-                                .addContainerGap())
-                        .addGroup(layout.createSequentialGroup()
-                                .addGap(58, 58, 58)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 68,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(registerButton1))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(30, 30, 30)
-                                                .addComponent(logoutButton)))
-                                .addContainerGap(57, Short.MAX_VALUE)));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(clientLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(senhaLabel)
+                            .addComponent(cpfLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(senhaField, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                            .addComponent(jFormattedcpfField))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(80, 80, 80)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(registerButton1)
+                .addContainerGap(57, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(116, 116, 116))
+        );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(clientLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35,
-                                        Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(cpfLabel)
-                                        .addComponent(jFormattedcpfField, javax.swing.GroupLayout.PREFERRED_SIZE, 27,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGap(31, 31, 31)
-                                                .addComponent(senhaLabel))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGap(18, 18, 18)
-                                                .addComponent(senhaField)))
-                                .addGap(22, 22, 22)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel1)
-                                        .addComponent(registerButton1))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(loginButton)
-                                        .addComponent(logoutButton))
-                                .addGap(20, 20, 20)));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(clientLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cpfLabel)
+                    .addComponent(jFormattedcpfField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(senhaLabel))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(senhaField)))
+                .addGap(22, 22, 22)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(registerButton1))
+                .addGap(18, 18, 18)
+                .addComponent(loginButton)
+                .addGap(20, 20, 20))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -256,7 +229,6 @@ public class ClientLoginInterface extends javax.swing.JFrame {
 
                                     if (map.get("status").toString().equals("true")) { // check the server response
                                         JOptionPane.showMessageDialog(this, "Successfully logged in!");
-                                        logoutButton.setEnabled(true);
                                         loginButton.setEnabled(false);
                                         registerButton1.setEnabled(false);
                                         
@@ -303,30 +275,6 @@ public class ClientLoginInterface extends javax.swing.JFrame {
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_logoutButtonActionPerformed
         // TODO add your handling code here:
     }// GEN-LAST:event_logoutButtonActionPerformed
-
-    private void logoutButtonMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_logoutButtonMouseClicked
-        try {
-            if (logoutButton.isEnabled()) {
-                // TODO add your handling code here:
-                out = new PrintWriter(clientSocket.getOutputStream(), true);
-                out.println("14");
-
-                clientSocket.close(); // close all the sockets from client
-                out.close();
-                if (in != null) {
-                    in.close();
-                }
-
-                JOptionPane.showMessageDialog(this, "Disconnected from server.");
-                new ClientConnectionInterface().setVisible(true); // go back to connection page
-                this.dispose(); // dispose this interface
-            } else {
-                JOptionPane.showMessageDialog(this, "You aren't connected on any server.");
-            }
-        } catch (IOException ex) {
-            System.out.println(ex.toString());
-        }
-    }// GEN-LAST:event_logoutButtonMouseClicked
 
     private void senhaFieldActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_senhaFieldActionPerformed
         // TODO add your handling code here:
@@ -382,7 +330,6 @@ public class ClientLoginInterface extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField jFormattedcpfField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JButton loginButton;
-    private javax.swing.JButton logoutButton;
     private javax.swing.JButton registerButton1;
     private javax.swing.JPasswordField senhaField;
     private javax.swing.JLabel senhaLabel;

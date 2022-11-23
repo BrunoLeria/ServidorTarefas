@@ -9,7 +9,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -33,10 +39,10 @@ public class PacientInterface extends javax.swing.JFrame {
         this.clientSocket = clientSocket; // bind the socket client from the other interface
         
         map = (Map) map.get("user");
-        jLabelPacientName.setText("Doctor: " + map.get("name") + "\n");
-        jLabelCpf.setText("Cpf: " + map.get("cpf") + "\n");
-        jLabelBirthday.setText("Birthday: " + map.get("birthday") + "\n");
-        jLabelSex.setText("Sex: " + map.get("sex") + "\n");
+        jLabelPacientName.setText(map.get("name").toString());
+        jLabelCpf.setText(map.get("cpf").toString());
+        jLabelBirthday.setText(map.get("birthday").toString());
+        jLabelSex.setText(map.get("sex").toString());
     }
 
     /**
@@ -55,12 +61,16 @@ public class PacientInterface extends javax.swing.JFrame {
         jLabelCpf = new javax.swing.JLabel();
         jLabelBirthday = new javax.swing.JLabel();
         jLabelSex = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         jPanelPacientForm = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        jTextAreaDescription = new javax.swing.JTextArea();
+        jComboBoxPriorityLevel = new javax.swing.JComboBox<>();
+        jLabelPriorityLevel = new javax.swing.JLabel();
+        jButtonSendForm = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -99,6 +109,14 @@ public class PacientInterface extends javax.swing.JFrame {
         jLabelSex.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         jLabelSex.setText("Sex");
 
+        jLabel1.setText("Name:");
+
+        jLabel2.setText("CPF:");
+
+        jLabel3.setText("Data:");
+
+        jLabel4.setText("Sex:");
+
         javax.swing.GroupLayout jPanelPacientProfileLayout = new javax.swing.GroupLayout(jPanelPacientProfile);
         jPanelPacientProfile.setLayout(jPanelPacientProfileLayout);
         jPanelPacientProfileLayout.setHorizontalGroup(
@@ -108,10 +126,16 @@ public class PacientInterface extends javax.swing.JFrame {
                 .addComponent(jPanelProfilePic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelPacientProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelPacientName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabelCpf, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabelBirthday, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
-                    .addComponent(jLabelSex, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelPacientProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelBirthday, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelCpf, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelSex, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelPacientName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jDisconnectButton)
                 .addContainerGap())
@@ -125,13 +149,21 @@ public class PacientInterface extends javax.swing.JFrame {
                     .addComponent(jPanelProfilePic, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelPacientProfileLayout.createSequentialGroup()
                         .addGap(0, 18, Short.MAX_VALUE)
-                        .addComponent(jLabelPacientName)
+                        .addGroup(jPanelPacientProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelPacientName)
+                            .addComponent(jLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelCpf)
+                        .addGroup(jPanelPacientProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelCpf)
+                            .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelBirthday)
+                        .addGroup(jPanelPacientProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelBirthday)
+                            .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelSex)
+                        .addGroup(jPanelPacientProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelSex)
+                            .addComponent(jLabel4))
                         .addGap(17, 17, 17)))
                 .addContainerGap())
         );
@@ -141,22 +173,27 @@ public class PacientInterface extends javax.swing.JFrame {
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Pacient symptoms:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 11))); // NOI18N
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        jTextAreaDescription.setColumns(20);
+        jTextAreaDescription.setRows(5);
+        jScrollPane1.setViewportView(jTextAreaDescription);
 
-        jComboBox1.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        jComboBoxPriorityLevel.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jComboBoxPriorityLevel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5" }));
+        jComboBoxPriorityLevel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                jComboBoxPriorityLevelActionPerformed(evt);
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
-        jLabel1.setText("Priority level:");
+        jLabelPriorityLevel.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabelPriorityLevel.setText("Priority level:");
 
-        jButton1.setText("Send formulary");
+        jButtonSendForm.setText("Send formulary");
+        jButtonSendForm.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonSendFormMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelPacientFormLayout = new javax.swing.GroupLayout(jPanelPacientForm);
         jPanelPacientForm.setLayout(jPanelPacientFormLayout);
@@ -168,13 +205,13 @@ public class PacientInterface extends javax.swing.JFrame {
                     .addComponent(jScrollPane1)
                     .addGroup(jPanelPacientFormLayout.createSequentialGroup()
                         .addGroup(jPanelPacientFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
+                            .addComponent(jComboBoxPriorityLevel, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelPriorityLevel))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelPacientFormLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addContainerGap(178, Short.MAX_VALUE)
+                .addComponent(jButtonSendForm)
                 .addGap(174, 174, 174))
         );
         jPanelPacientFormLayout.setVerticalGroup(
@@ -183,11 +220,11 @@ public class PacientInterface extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel1)
+                .addComponent(jLabelPriorityLevel)
                 .addGap(1, 1, 1)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jComboBoxPriorityLevel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
+                .addComponent(jButtonSendForm)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -238,9 +275,75 @@ public class PacientInterface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jDisconnectButtonMouseClicked
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void jComboBoxPriorityLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxPriorityLevelActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_jComboBoxPriorityLevelActionPerformed
+
+    private void jButtonSendFormMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonSendFormMouseClicked
+        // TODO add your handling code here:
+        try {
+            JSONObject obj = new JSONObject();
+            out = new PrintWriter(clientSocket.getOutputStream(), true); // instance the output
+            
+            if (jTextAreaDescription.getText().equalsIgnoreCase("")) {
+                    JOptionPane.showMessageDialog(this, "Please, type a description of your symptoms.");
+            }
+            else {
+                if (jButtonSendForm.isEnabled()) {
+                    String cpf = jLabelCpf.getText();
+                    String description = jTextAreaDescription.getText();
+                    int priority = Integer.parseInt(jComboBoxPriorityLevel.getSelectedItem().toString());
+
+                    obj.put("code", 9);
+                    obj.put("cpf", cpf);
+                    obj.put("description", description);
+                    obj.put("priority", priority);
+
+                    Thread threadRecebeResposta = new Thread(() -> {
+                        try {
+                            Scanner resportaServidor = new Scanner(clientSocket.getInputStream());
+
+                            while (resportaServidor.hasNextLine()) {
+                                JSONParser parser = new JSONParser();
+                                String serverResponse = resportaServidor.nextLine();
+
+                                try {
+                                    JSONObject jsonObject = (JSONObject) parser.parse(serverResponse);
+
+                                    Map map = jsonObject; // parse from json to string
+
+                                    System.out.println("JSON from server: " + map);
+
+                                    if (map.get("success").toString().equals("true")) { // check the server response
+                                        JOptionPane.showMessageDialog(this, "Form sent successfully! Please wait...");
+                                        jButtonSendForm.setEnabled(false);
+                                        break;
+                                    } else { // check the server response
+                                        JOptionPane.showMessageDialog(this, "Form error.");
+                                        break;
+                                    }
+                                } catch (ParseException ex) {
+                                    Logger.getLogger(ClientLoginInterface.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+
+                    threadRecebeResposta.start();
+
+                    out.println(obj); // send to the server
+                    System.out.println("JSON to server: " + obj);
+                }  
+                else {
+                    JOptionPane.showMessageDialog(this, "Form already sent.");
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(PacientInterface.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonSendFormMouseClicked
 
     /**
      * @param args the command line arguments
@@ -278,18 +381,22 @@ public class PacientInterface extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton jButtonSendForm;
+    private javax.swing.JComboBox<String> jComboBoxPriorityLevel;
     private javax.swing.JButton jDisconnectButton;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabelBirthday;
     private javax.swing.JLabel jLabelCpf;
     private javax.swing.JLabel jLabelPacientName;
+    private javax.swing.JLabel jLabelPriorityLevel;
     private javax.swing.JLabel jLabelSex;
     private javax.swing.JPanel jPanelPacientForm;
     private javax.swing.JPanel jPanelPacientProfile;
     private javax.swing.JPanel jPanelProfilePic;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextAreaDescription;
     // End of variables declaration//GEN-END:variables
 }

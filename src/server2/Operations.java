@@ -71,5 +71,26 @@ public class Operations {
         }
 
     }
-
+    
+    public static boolean findPatient(String cpf, JFrame frame) throws Exception {
+        Connection myConn = MySQLConnection.getConnection();
+        String mySqlQuery = "SELECT id, nome, cpf, data_nascimento, sexo, doutor, status FROM pessoa WHERE cpf = '" + cpf + "'";
+        PreparedStatement preparedStatement = myConn.prepareStatement(mySqlQuery);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        boolean find = false;
+        
+        while (resultSet.next()) {
+            LoginSession.UID = resultSet.getInt("id");
+            LoginSession.NAME = resultSet.getString("nome");
+            LoginSession.CPF = resultSet.getString("cpf");
+            LoginSession.DATE = resultSet.getString("data_nascimento");
+            LoginSession.SEX = resultSet.getString("sexo");
+            LoginSession.DOCTOR = resultSet.getBoolean("doutor");
+            LoginSession.STATUS = resultSet.getBoolean("status");
+            
+            find = true;
+        }
+        
+        return find;
+    }
 }

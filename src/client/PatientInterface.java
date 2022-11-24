@@ -21,28 +21,29 @@ import org.json.simple.parser.ParseException;
  *
  * @author Drey
  */
-public class PacientInterface extends javax.swing.JFrame {
+public class PatientInterface extends javax.swing.JFrame {
     Socket clientSocket;
     PrintWriter out;
     BufferedReader in;
+    Map userMap;
     
     /**
      * Creates new form PacientInterface
      */
-    public PacientInterface() {
+    public PatientInterface() {
         initComponents();
     }
     
-    public PacientInterface(Socket clientSocket, Map map) {
+    public PatientInterface(Socket clientSocket, Map map) {
         initComponents();
         
         this.clientSocket = clientSocket; // bind the socket client from the other interface
         
-        map = (Map) map.get("user");
-        jLabelPacientName.setText(map.get("name").toString());
-        jLabelCpf.setText(map.get("cpf").toString());
-        jLabelBirthday.setText(map.get("birthday").toString());
-        jLabelSex.setText(map.get("sex").toString());
+        userMap = (Map) map.get("user");
+        jLabelPacientName.setText(userMap.get("name").toString());
+        jLabelCpf.setText(userMap.get("cpf").toString());
+        jLabelBirthday.setText(userMap.get("birthday").toString());
+        jLabelSex.setText(userMap.get("sex").toString());
     }
 
     /**
@@ -202,7 +203,7 @@ public class PacientInterface extends javax.swing.JFrame {
             .addGroup(jPanelPacientFormLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanelPacientFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
                     .addGroup(jPanelPacientFormLayout.createSequentialGroup()
                         .addGroup(jPanelPacientFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jComboBoxPriorityLevel, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -210,9 +211,9 @@ public class PacientInterface extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelPacientFormLayout.createSequentialGroup()
-                .addContainerGap(178, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButtonSendForm)
-                .addGap(174, 174, 174))
+                .addGap(170, 170, 170))
         );
         jPanelPacientFormLayout.setVerticalGroup(
             jPanelPacientFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -314,9 +315,10 @@ public class PacientInterface extends javax.swing.JFrame {
 
                                     System.out.println("JSON from server: " + map);
 
-                                    if (map.get("success").toString().equals("true")) { // check the server response
-                                        JOptionPane.showMessageDialog(this, "Form sent successfully! Please wait...");
+                                    if (map.get("success").toString().equals("true")) { // check the server response                                        
+                                        new PatientQueueInterface(clientSocket, userMap.get("name").toString()).setVisible(true); // change to another interface
                                         jButtonSendForm.setEnabled(false);
+                                        this.dispose();
                                         break;
                                     } else { // check the server response
                                         JOptionPane.showMessageDialog(this, "Form error.");
@@ -341,7 +343,7 @@ public class PacientInterface extends javax.swing.JFrame {
                 }
             }
         } catch (IOException ex) {
-            Logger.getLogger(PacientInterface.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PatientInterface.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButtonSendFormMouseClicked
 
@@ -362,20 +364,21 @@ public class PacientInterface extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PacientInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PatientInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PacientInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PatientInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PacientInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PatientInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PacientInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PatientInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PacientInterface().setVisible(true);
+                new PatientInterface().setVisible(true);
             }
         });
     }

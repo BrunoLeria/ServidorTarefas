@@ -238,7 +238,7 @@ public class ClientLoginInterface extends javax.swing.JFrame {
                                         }
 
                                         else {
-                                            new PacientInterface(clientSocket, map).setVisible(true);
+                                            new PatientInterface(clientSocket, map).setVisible(true);
                                             this.dispose();
                                         }
                                         

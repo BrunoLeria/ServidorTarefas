@@ -3,10 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Drey/Desktop/git/ServidorTarefas/src/client2/DoctorInterface.java</file>
-            <file>file:/C:/Users/Drey/Desktop/git/ServidorTarefas/src/client2/PacientInterface.java</file>
-            <file>file:/C:/Users/Drey/Desktop/git/ServidorTarefas/src/model/Patient.java</file>
-            <file>file:/C:/Users/Drey/Desktop/git/ServidorTarefas/src/server2/ServerInterface.java</file>
+            <file>file:/C:/Users/Drey/Desktop/git/ServidorTarefas/src/client/PatientInterface.java</file>
+            <file>file:/C:/Users/Drey/Desktop/git/ServidorTarefas/src/server/ServerInterface.java</file>
+            <file>file:/C:/Users/Drey/Desktop/git/ServidorTarefas/src/client/PatientQueueInterface.java</file>
         </group>
     </open-files>
 </project-private>

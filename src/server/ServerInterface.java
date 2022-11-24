@@ -15,6 +15,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Scanner;
 import javax.swing.DefaultListModel;
@@ -76,7 +77,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
         ipLabel.setText("IP address:");
 
         ipField.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
-        ipField.setText("10.20.8.189");
+        ipField.setText("127.0.0.1");
         ipField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ipFieldActionPerformed(evt);
@@ -87,7 +88,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
         portLabel.setText("Port:");
 
         portField.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
-        portField.setText("22000");
+        portField.setText("8000");
         portField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 portFieldActionPerformed(evt);
@@ -312,6 +313,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
             try { // buffer to read 231rom client
                 Scanner in = new Scanner(clientSocket.getInputStream());
                 Person person = new Person();
+                
                 try {
                     while (in.hasNextLine()) { // print input from client
                         JSONParser parser = new JSONParser();
@@ -393,9 +395,10 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     } else {
                                         person.setStatus(false);
                                         serverResponse.put("code", "103");
-                                        serverResponse.put("success", false);
+                                        serverResponse.put("status", false);
 
                                         out.println(serverResponse);
+                                        System.out.println("JSON to client: " + serverResponse);
                                     }
                                     break;
 
@@ -407,6 +410,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     patient.setPriority(Integer.parseInt(map.get("priority").toString()));
 
                                     patients.add(patient);
+
                                     patients.sort((Patient p1, Patient p2) -> {
                                         return p1.getPriority() - p2.getPriority();
                                     });
@@ -414,8 +418,6 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     jListPatients.setModel(mod);
 
                                     if (Operations.findPatient(patient.getCpf(), frame)) {
-                                        LoginSession.STATUS = true;
-
                                         person.setStatus(LoginSession.STATUS);
                                         person.setNome(LoginSession.NAME);
                                         person.setData(LoginSession.DATE);
@@ -431,18 +433,77 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     serverResponse.put("success", true);
 
                                     out.println(serverResponse);
-
+                                    System.out.println("JSON to client: " + serverResponse);
                                     break;
 
+                                case "10":
+                                    int position = -1;
+                                    
+                                    while (position != 0) {
+                                        serverResponse.put("code", 110);
+
+                                        for (int i = 0; i < patients.size(); i++) {
+                                            if (patients.get(i).getCpf().equals(person.getCpf())) {
+                                                position = i;
+                                            }
+                                        }
+                                        serverResponse.put("position", position);
+
+                                        out.println(serverResponse);
+                                        System.out.println("JSON to client: " + serverResponse);
+                                    }
+                                    break;
+                                    
                                 case "14": // responsável por fechar a conexão do cliente
                                     logArea.append("Client#" + clientSocket.getPort() + " disconnected. \n");
                                     clientSocket.close(); // Close client connection
-                                    clients.remove(clientSocket); // remove the client socket from ArrayList
-                                    patients.remove(person.getCpf());
-                                    mod.removeElement(person.getNome());
-                                    in.close();
-                                    break;
 
+                                    patients.removeIf(p -> p.getCpf().equals(person.getCpf()));
+                                    mod.removeElement(person.getNome());
+
+                                    System.out.println(Arrays.toString(patients.toArray()));
+
+                                    clients.remove(clientSocket); // remove the client socket from ArrayList
+                                    in.close();
+                                break;
+                                
+                                case "18":
+                                    if (!patients.isEmpty()) {
+                                        patient = patients.get(0);
+
+                                        if (Operations.findPatient(patient.getCpf(), frame)) {
+                                            person.setStatus(LoginSession.STATUS);
+                                            person.setNome(LoginSession.NAME);
+                                            person.setData(LoginSession.DATE);
+                                            person.setSexo(LoginSession.SEX);
+                                            person.setDoutor(LoginSession.DOCTOR);
+                                            person.setStatus(LoginSession.STATUS);
+                                            person.setSocket(LoginSession.SOCKET);
+                                        }
+                                        
+                                        String jsonString = "{ \"code\": 118,"
+                                                + " \"success\": " + true + ","
+                                                + " \"user\": {"
+                                                + " \"name\": \"" + person.getNome() + "\","
+                                                + " \"cpf\": \"" + person.getCpf() + "\","
+                                                + " \"birthday\": \"" + person.getData() + "\", "
+                                                + " \"sex\": \"" + person.getSexo() + "\",  "
+                                                + " \"description\": \"" + patient.getDescription() + "\", "
+                                                + " \"priority\": " + patient.getPriority() + " }"
+                                                + " }";
+                                        
+                                        String serverResponseString = jsonString;
+                                        out.println(serverResponseString);
+                                        System.out.println("JSON to client: " + serverResponseString);
+                                    }
+                                    else {
+                                        serverResponse.put("code", 118);
+                                        serverResponse.put("success", false);
+                                        out.println(serverResponse);
+                                        System.out.println("JSON to client: " + serverResponse);
+                                    }
+                                break;
+                                    
                                 default:
                             }
                         }
@@ -452,8 +513,10 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                     logArea.append("Client#" + clientSocket.getPort() + " disconnected. \n");
                     clientSocket.close(); // Close client connection
 
-                    patients.remove(person.getCpf());
+                    patients.removeIf(p -> p.getCpf().equals(person.getCpf()));
                     mod.removeElement(person.getNome());
+                    
+                    System.out.println(Arrays.toString(patients.toArray()));
 
                     clients.remove(clientSocket); // remove the client socket from ArrayList
                     in.close();

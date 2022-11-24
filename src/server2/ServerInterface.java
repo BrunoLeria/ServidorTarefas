@@ -306,6 +306,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
             try { // buffer to read 231rom client
                 Scanner in = new Scanner(clientSocket.getInputStream());
                 Person person = new Person();
+                Patient patient = new Patient();
                 try {
                     while (in.hasNextLine()) { // print input from client
                         JSONParser parser = new JSONParser();
@@ -394,8 +395,6 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     break;
                                     
                                 case "9":
-                                    Patient patient = new Patient();
-                                    
                                     patient.setCpf(map.get("cpf").toString());
                                     patient.setDescription(map.get("description").toString());
                                     patient.setPriority(Integer.parseInt(map.get("priority").toString()));
@@ -433,6 +432,18 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     in.close();
                                     break;
                                  
+                                case "18":
+                                    serverResponse.put("cpf", person.getCpf());
+                                    serverResponse.put("birthday", person.getData());
+                                    serverResponse.put("sex", person.getSexo());
+                                    serverResponse.put("description", patient.getDescription());
+                                    serverResponse.put("priority", patient.getPriority());
+                                    serverResponse.put("code", "118");
+                                    serverResponse.put("success", true);
+                                    
+                                    out.println(serverResponse);
+                                    break;
+                                    
                                 default:
                             }
                         }

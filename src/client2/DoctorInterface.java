@@ -9,7 +9,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -57,7 +63,21 @@ public class DoctorInterface extends javax.swing.JFrame {
         jLabelBirthday = new javax.swing.JLabel();
         jLabelSex = new javax.swing.JLabel();
         jPanelPacientForm = new javax.swing.JPanel();
-        jNexPacientButton = new javax.swing.JButton();
+        jNexPatientButton = new javax.swing.JButton();
+        jPanelPacientProfile = new javax.swing.JPanel();
+        jPanelProfilePic1 = new javax.swing.JPanel();
+        jLabelPacientName = new javax.swing.JLabel();
+        jLabelCpf1 = new javax.swing.JLabel();
+        jLabelBirthday1 = new javax.swing.JLabel();
+        jLabelSex1 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabelPriority = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -107,7 +127,7 @@ public class DoctorInterface extends javax.swing.JFrame {
                 .addGroup(jPanelDoctorProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelDoctorName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabelCpf, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabelBirthday, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+                    .addComponent(jLabelBirthday, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabelSex, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jDisconnectButton)
@@ -137,9 +157,7 @@ public class DoctorInterface extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanelDoctorProfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jPanelDoctorProfile, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -151,7 +169,117 @@ public class DoctorInterface extends javax.swing.JFrame {
         jPanelPacientForm.setBackground(new java.awt.Color(255, 255, 255));
         jPanelPacientForm.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jNexPacientButton.setText("Next Pacient");
+        jNexPatientButton.setText("Next Patient");
+        jNexPatientButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jNexPatientButtonMouseClicked(evt);
+            }
+        });
+
+        jPanelPacientProfile.setBackground(new java.awt.Color(255, 255, 255));
+        jPanelPacientProfile.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jPanelProfilePic1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        javax.swing.GroupLayout jPanelProfilePic1Layout = new javax.swing.GroupLayout(jPanelProfilePic1);
+        jPanelProfilePic1.setLayout(jPanelProfilePic1Layout);
+        jPanelProfilePic1Layout.setHorizontalGroup(
+            jPanelProfilePic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 106, Short.MAX_VALUE)
+        );
+        jPanelProfilePic1Layout.setVerticalGroup(
+            jPanelProfilePic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 108, Short.MAX_VALUE)
+        );
+
+        jLabelPacientName.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabelPacientName.setText("Name");
+
+        jLabelCpf1.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabelCpf1.setText("CPF");
+
+        jLabelBirthday1.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabelBirthday1.setText("Birthday");
+
+        jLabelSex1.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabelSex1.setText("Sex");
+
+        jLabel1.setText("Name:");
+
+        jLabel2.setText("CPF:");
+
+        jLabel3.setText("Data:");
+
+        jLabel4.setText("Sex:");
+
+        jLabel5.setText("Priority:");
+
+        jLabelPriority.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabelPriority.setText("Priority");
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setBorder(javax.swing.BorderFactory.createTitledBorder("Description"));
+        jScrollPane1.setViewportView(jTextArea1);
+
+        javax.swing.GroupLayout jPanelPacientProfileLayout = new javax.swing.GroupLayout(jPanelPacientProfile);
+        jPanelPacientProfile.setLayout(jPanelPacientProfileLayout);
+        jPanelPacientProfileLayout.setHorizontalGroup(
+            jPanelPacientProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelPacientProfileLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelPacientProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelPacientProfileLayout.createSequentialGroup()
+                        .addComponent(jPanelProfilePic1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanelPacientProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanelPacientProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelBirthday1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                            .addComponent(jLabelCpf1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabelSex1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabelPacientName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabelPriority, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(112, 112, 112))
+                    .addGroup(jPanelPacientProfileLayout.createSequentialGroup()
+                        .addComponent(jScrollPane1)
+                        .addContainerGap())))
+        );
+        jPanelPacientProfileLayout.setVerticalGroup(
+            jPanelPacientProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelPacientProfileLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanelPacientProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanelProfilePic1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelPacientProfileLayout.createSequentialGroup()
+                        .addGroup(jPanelPacientProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelPacientName)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanelPacientProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelCpf1)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanelPacientProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelBirthday1)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanelPacientProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelSex1)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanelPacientProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabelPriority))))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout jPanelPacientFormLayout = new javax.swing.GroupLayout(jPanelPacientForm);
         jPanelPacientForm.setLayout(jPanelPacientFormLayout);
@@ -159,14 +287,16 @@ public class DoctorInterface extends javax.swing.JFrame {
             jPanelPacientFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelPacientFormLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jNexPacientButton, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jNexPatientButton, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(172, 172, 172))
+            .addComponent(jPanelPacientProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanelPacientFormLayout.setVerticalGroup(
             jPanelPacientFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelPacientFormLayout.createSequentialGroup()
-                .addContainerGap(222, Short.MAX_VALUE)
-                .addComponent(jNexPacientButton)
+                .addComponent(jPanelPacientProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jNexPatientButton)
                 .addContainerGap())
         );
 
@@ -217,6 +347,60 @@ public class DoctorInterface extends javax.swing.JFrame {
         }        
     }//GEN-LAST:event_jDisconnectButtonMouseClicked
 
+    private void jNexPatientButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jNexPatientButtonMouseClicked
+        // TODO add your handling code here:
+        try {
+            JSONObject obj = new JSONObject();
+            out = new PrintWriter(clientSocket.getOutputStream(), true); // instance the output
+
+            obj.put("code", 18);
+
+            Thread threadRecebeResposta = new Thread(() -> {
+                try {
+                    Scanner resportaServidor = new Scanner(clientSocket.getInputStream());
+
+                    while (resportaServidor.hasNextLine()) {
+                        JSONParser parser = new JSONParser();
+                        String serverResponse = resportaServidor.nextLine();
+
+                        try {
+                            JSONObject jsonObject = (JSONObject) parser.parse(serverResponse);
+
+                            Map map = jsonObject; // parse from json to string
+
+                            System.out.println("JSON from server: " + map);
+
+                            if (map.get("success").toString().equals("true")) { // check the server response
+                                jLabelPacientName.setText(map.get("name").toString());
+                                jLabelCpf1.setText(map.get("cpf").toString());
+                                jLabelBirthday1.setText(map.get("data").toString());
+                                jLabelSex1.setText(map.get("sex").toString());
+                                jTextArea1.setText(map.get("description").toString());
+                                jLabelPriority.setText(map.get("priority").toString());
+                                break;
+                            } else { // check the server response
+                                JOptionPane.showMessageDialog(this, "Form error.");
+                                break;
+                            }
+                        } catch (ParseException ex) {
+                            Logger.getLogger(ClientLoginInterface.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+            threadRecebeResposta.start();
+
+            out.println(obj); // send to the server
+            System.out.println("JSON to server: " + obj);  
+            
+        } catch (IOException ex) {
+            Logger.getLogger(PacientInterface.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jNexPatientButtonMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -257,14 +441,28 @@ public class DoctorInterface extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jDisconnectButton;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabelBirthday;
+    private javax.swing.JLabel jLabelBirthday1;
     private javax.swing.JLabel jLabelCpf;
+    private javax.swing.JLabel jLabelCpf1;
     private javax.swing.JLabel jLabelDoctorName;
+    private javax.swing.JLabel jLabelPacientName;
+    private javax.swing.JLabel jLabelPriority;
     private javax.swing.JLabel jLabelSex;
-    private javax.swing.JButton jNexPacientButton;
+    private javax.swing.JLabel jLabelSex1;
+    private javax.swing.JButton jNexPatientButton;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelDoctorProfile;
     private javax.swing.JPanel jPanelPacientForm;
+    private javax.swing.JPanel jPanelPacientProfile;
     private javax.swing.JPanel jPanelProfilePic;
+    private javax.swing.JPanel jPanelProfilePic1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }

@@ -492,6 +492,9 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                                 + " \"priority\": " + patient.getPriority() + " }"
                                                 + " }";
                                         
+                                        patients.remove(0);
+                                        mod.removeElement(person.getNome());
+                                        
                                         String serverResponseString = jsonString;
                                         out.println(serverResponseString);
                                         System.out.println("JSON to client: " + serverResponseString);

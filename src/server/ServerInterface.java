@@ -21,6 +21,8 @@ import java.util.Scanner;
 import javax.swing.DefaultListModel;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import model.Patient;
 
 /**
@@ -384,10 +386,16 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                                         + ": Fields are valid.\n");
                                         System.out.println("Client#" + clientSocket.getPort()
                                                 + ": Registering user on database.\n");
-                                        operations.isRegister(person, frame);
-
-                                        serverResponse.put("code", "101");
-                                        serverResponse.put("success", true);
+                                        try {
+                                            operations.isRegister(person, frame);
+                                            serverResponse.put("code", "101");
+                                            serverResponse.put("success", true);
+                                        } catch (Exception e) {
+                                            serverResponse.put("code", "101");
+                                            serverResponse.put("success", false);
+                                            JOptionPane.showMessageDialog(frame,
+                                                    "Erro ao cadastrar usuário" + e.getMessage());
+                                        }
                                     } else {
                                         serverResponse.put("code", "101");
                                         serverResponse.put("success", false);

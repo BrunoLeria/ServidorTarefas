@@ -58,7 +58,7 @@ public class ClientConnectionInterface extends javax.swing.JFrame {
         portLabel.setText("Port:");
 
         ipField.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
-        ipField.setText("10.20.8.189");
+        ipField.setText("127.0.0.1");
         ipField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ipFieldActionPerformed(evt);

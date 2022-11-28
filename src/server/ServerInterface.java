@@ -52,7 +52,8 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         serverLabel = new javax.swing.JLabel();
@@ -77,7 +78,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
         ipLabel.setText("IP address:");
 
         ipField.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
-        ipField.setText("127.0.0.1");
+        ipField.setText("10.20.8.189");
         ipField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ipFieldActionPerformed(evt);
@@ -88,7 +89,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
         portLabel.setText("Port:");
 
         portField.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
-        portField.setText("8000");
+        portField.setText("22000");
         portField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 portFieldActionPerformed(evt);
@@ -120,82 +121,114 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
         logArea.setColumns(20);
         logArea.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         logArea.setRows(5);
-        logArea.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Server log:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 11))); // NOI18N
+        logArea.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Server log:",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                new java.awt.Font("Segoe UI", 0, 11))); // NOI18N
         logArea.setDragEnabled(true);
         jScrollPane1.setViewportView(logArea);
 
-        jListPatients.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Patients list:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 11))); // NOI18N
+        jListPatients.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Patients list:",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                new java.awt.Font("Segoe UI", 0, 11))); // NOI18N
         jListPatients.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         jScrollPane2.setViewportView(jListPatients);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(ipLabel)
-                                    .addComponent(portLabel))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(ipField, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
-                                    .addComponent(portField))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(stopButton, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(startButton, javax.swing.GroupLayout.Alignment.TRAILING))
-                                .addGap(19, 19, 19))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(serverLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(19, 19, 19)))
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addContainerGap()
+                                                .addGroup(layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addGroup(layout.createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(ipLabel)
+                                                                        .addComponent(portLabel))
+                                                                .addPreferredGap(
+                                                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(layout.createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.LEADING,
+                                                                        false)
+                                                                        .addComponent(ipField,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                165, Short.MAX_VALUE)
+                                                                        .addComponent(portField))
+                                                                .addPreferredGap(
+                                                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                        Short.MAX_VALUE)
+                                                                .addGroup(layout.createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(stopButton,
+                                                                                javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                        .addComponent(startButton,
+                                                                                javax.swing.GroupLayout.Alignment.TRAILING))
+                                                                .addGap(19, 19, 19))
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(jScrollPane1,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 322,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(18, 18, 18))))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(serverLabel, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addGap(19, 19, 19)))
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 127,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap()));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(serverLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ipLabel)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(ipField)
-                                .addComponent(startButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(portLabel)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(portField)
-                                .addComponent(stopButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2))
-                .addContainerGap())
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(serverLabel)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addGroup(layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(ipLabel)
+                                                        .addGroup(layout
+                                                                .createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                .addComponent(ipField)
+                                                                .addComponent(startButton,
+                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                        Short.MAX_VALUE)))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(portLabel)
+                                                                .addGap(0, 0, Short.MAX_VALUE))
+                                                        .addGroup(layout
+                                                                .createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                .addComponent(portField)
+                                                                .addComponent(stopButton,
+                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                        Short.MAX_VALUE)))
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 239,
+                                                        Short.MAX_VALUE))
+                                        .addComponent(jScrollPane2))
+                                .addContainerGap()));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
+    private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_stopButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_stopButtonActionPerformed
+    }// GEN-LAST:event_stopButtonActionPerformed
 
-    private void portFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_portFieldActionPerformed
+    private void portFieldActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_portFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_portFieldActionPerformed
+    }// GEN-LAST:event_portFieldActionPerformed
 
     private void startButtonMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_startButtonMouseClicked
         // TODO add your handling code here:
@@ -313,7 +346,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
             try { // buffer to read 231rom client
                 Scanner in = new Scanner(clientSocket.getInputStream());
                 Person person = new Person();
-                
+
                 try {
                     while (in.hasNextLine()) { // print input from client
                         JSONParser parser = new JSONParser();
@@ -438,7 +471,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
 
                                 case "10":
                                     int position = -1;
-                                    
+
                                     while (position != 0) {
                                         serverResponse.put("code", 110);
 
@@ -453,7 +486,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                         System.out.println("JSON to client: " + serverResponse);
                                     }
                                     break;
-                                    
+
                                 case "14": // responsável por fechar a conexão do cliente
                                     logArea.append("Client#" + clientSocket.getPort() + " disconnected. \n");
                                     clientSocket.close(); // Close client connection
@@ -465,8 +498,8 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
 
                                     clients.remove(clientSocket); // remove the client socket from ArrayList
                                     in.close();
-                                break;
-                                
+                                    break;
+
                                 case "18":
                                     if (!patients.isEmpty()) {
                                         patient = patients.get(0);
@@ -480,7 +513,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                             person.setStatus(LoginSession.STATUS);
                                             person.setSocket(LoginSession.SOCKET);
                                         }
-                                        
+
                                         String jsonString = "{ \"code\": 118,"
                                                 + " \"success\": " + true + ","
                                                 + " \"user\": {"
@@ -491,22 +524,21 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                                 + " \"description\": \"" + patient.getDescription() + "\", "
                                                 + " \"priority\": " + patient.getPriority() + " }"
                                                 + " }";
-                                        
+
                                         patients.remove(0);
                                         mod.removeElement(person.getNome());
-                                        
+
                                         String serverResponseString = jsonString;
                                         out.println(serverResponseString);
                                         System.out.println("JSON to client: " + serverResponseString);
-                                    }
-                                    else {
+                                    } else {
                                         serverResponse.put("code", 118);
                                         serverResponse.put("success", false);
                                         out.println(serverResponse);
                                         System.out.println("JSON to client: " + serverResponse);
                                     }
-                                break;
-                                    
+                                    break;
+
                                 default:
                             }
                         }
@@ -518,7 +550,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
 
                     patients.removeIf(p -> p.getCpf().equals(person.getCpf()));
                     mod.removeElement(person.getNome());
-                    
+
                     System.out.println(Arrays.toString(patients.toArray()));
 
                     clients.remove(clientSocket); // remove the client socket from ArrayList

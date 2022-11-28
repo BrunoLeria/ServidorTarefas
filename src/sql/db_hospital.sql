@@ -1,8 +1,8 @@
-CREATE DATABASE db_hospital;
+CREATE DATABASE IF NOT EXISTS db_hospital;
 
 USE db_hospital;
 
-CREATE TABLE `pessoa` (
+CREATE TABLE IF NOT EXISTS `pessoa` (
   `id` int(11) NOT NULL,
   `nome` varchar(255) NOT NULL,
   `cpf` varchar(11) NOT NULL,
@@ -44,6 +44,16 @@ VALUES
     'M',
     0,
     0
+  ),
+  (
+    3,
+    'Bruno Leria',
+    '12312312311',
+    '123456',
+    '1997-05-17',
+    'M',
+    1,
+    0
   );
 
 ALTER TABLE
@@ -56,5 +66,3 @@ ALTER TABLE
 MODIFY
   `id` int(11) NOT NULL AUTO_INCREMENT,
   AUTO_INCREMENT = 3;
-
-COMMIT;

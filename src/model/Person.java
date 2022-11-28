@@ -45,7 +45,8 @@ public class Person {
         this.status = status;
     }
 
-    public Person(String nome, String cpf, String senha, String data, String sexo, Boolean doutor, Boolean status, Socket socket) {
+    public Person(String nome, String cpf, String senha, String data, String sexo, Boolean doutor, Boolean status,
+            Socket socket) {
         this.nome = nome;
         this.cpf = cpf;
         this.senha = senha;
@@ -55,7 +56,7 @@ public class Person {
         this.status = status;
         this.socket = socket;
     }
-    
+
     public Person(String cpf, String senha) {
         this.cpf = cpf;
         this.senha = senha;
@@ -135,8 +136,7 @@ public class Person {
                 || this.data == null
                 || this.data.equals("")
                 || this.sexo == null
-                || this.sexo.equals("")
-                || this.status == null);
+                || this.sexo.equals(""));
     }
 
     public void convertDateToMySql() throws Exception {

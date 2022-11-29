@@ -64,26 +64,22 @@ public class Operations {
 
     }
 
-    public static boolean findPatient(String cpf, JFrame frame) throws Exception {
+    public static Person findPatient(String cpf, JFrame frame) throws Exception {
         Connection myConn = MySQLConnection.getConnection();
         String mySqlQuery = "SELECT id, nome, cpf, data_nascimento, sexo, doutor, status FROM pessoa WHERE cpf = '"
                 + cpf + "'";
         PreparedStatement preparedStatement = myConn.prepareStatement(mySqlQuery);
         ResultSet resultSet = preparedStatement.executeQuery();
-        boolean find = false;
 
+        Person pessoa = new Person();
         while (resultSet.next()) {
-            LoginSession.UID = resultSet.getInt("id");
-            LoginSession.NAME = resultSet.getString("nome");
-            LoginSession.CPF = resultSet.getString("cpf");
-            LoginSession.DATE = resultSet.getString("data_nascimento");
-            LoginSession.SEX = resultSet.getString("sexo");
-            LoginSession.DOCTOR = resultSet.getBoolean("doutor");
-            LoginSession.STATUS = resultSet.getBoolean("status");
-
-            find = true;
+            pessoa.setNome(resultSet.getString("nome"));
+            pessoa.setCpf(resultSet.getString("cpf"));
+            pessoa.setData(resultSet.getString("data_nascimento"));
+            pessoa.setSexo(resultSet.getString("sexo"));
+            pessoa.setDoutor(resultSet.getBoolean("doutor"));
+            pessoa.setStatus(resultSet.getBoolean("status"));
         }
-
-        return find;
+        return pessoa;
     }
 }

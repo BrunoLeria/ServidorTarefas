@@ -264,6 +264,12 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
         }
     }
 
+    private void orderArray() {
+        patients.sort((Patient p1, Patient p2) -> {
+            return p1.getPriority() - p2.getPriority();
+        });
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField ipField;
     private javax.swing.JLabel ipLabel;
@@ -446,29 +452,25 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                 case "9":
                                     Patient patient = new Patient();
 
+                                    System.out.println("Client#" + clientSocket.getPort() + ": Iniciando triagem.\n");
+
                                     patient.setCpf(map.get("cpf").toString());
                                     patient.setDescription(map.get("description").toString());
                                     patient.setPriority(Integer.parseInt(map.get("priority").toString()));
 
                                     patients.add(patient);
 
-                                    patients.sort((Patient p1, Patient p2) -> {
-                                        return p1.getPriority() - p2.getPriority();
-                                    });
+                                    orderArray();
+                                    mod.removeAllElements();
+
+                                    for (Patient p : patients) {
+                                        p.getCpf();
+                                        Person p1 = Operations.findPatient(p.getCpf(), frame);
+                                        System.out.println("Patient: " + p1.getNome());
+                                        mod.addElement(p1.getNome());
+                                    }
 
                                     jListPatients.setModel(mod);
-
-                                    if (Operations.findPatient(patient.getCpf(), frame)) {
-                                        person.setStatus(LoginSession.STATUS);
-                                        person.setNome(LoginSession.NAME);
-                                        person.setData(LoginSession.DATE);
-                                        person.setSexo(LoginSession.SEX);
-                                        person.setDoutor(LoginSession.DOCTOR);
-                                        person.setStatus(LoginSession.STATUS);
-                                        person.setSocket(LoginSession.SOCKET);
-
-                                        mod.addElement(person.getNome());
-                                    }
 
                                     serverResponse.put("code", 109);
                                     serverResponse.put("success", true);
@@ -510,32 +512,24 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
 
                                 case "18":
                                     if (!patients.isEmpty()) {
+                                        orderArray();
                                         patient = patients.get(0);
-
-                                        if (Operations.findPatient(patient.getCpf(), frame)) {
-                                            person.setStatus(LoginSession.STATUS);
-                                            person.setNome(LoginSession.NAME);
-                                            person.setData(LoginSession.DATE);
-                                            person.setSexo(LoginSession.SEX);
-                                            person.setDoutor(LoginSession.DOCTOR);
-                                            person.setStatus(LoginSession.STATUS);
-                                            person.setSocket(LoginSession.SOCKET);
-                                        }
-
+                                        System.out.println("Patient: " + patient.getCpf());
+                                        Person p = Operations.findPatient(patient.getCpf(), frame);
+                                        System.out.println("Person: " + p.getCpf());
                                         String jsonString = "{ \"code\": 118,"
                                                 + " \"success\": " + true + ","
                                                 + " \"user\": {"
-                                                + " \"name\": \"" + person.getNome() + "\","
-                                                + " \"cpf\": \"" + person.getCpf() + "\","
-                                                + " \"birthday\": \"" + person.getData() + "\", "
-                                                + " \"sex\": \"" + person.getSexo() + "\",  "
+                                                + " \"name\": \"" + p.getNome() + "\","
+                                                + " \"cpf\": \"" + p.getCpf() + "\","
+                                                + " \"birthday\": \"" + p.getData() + "\", "
+                                                + " \"sex\": \"" + p.getSexo() + "\",  "
                                                 + " \"description\": \"" + patient.getDescription() + "\", "
                                                 + " \"priority\": " + patient.getPriority() + " }"
                                                 + " }";
 
                                         patients.remove(0);
-                                        mod.removeElement(person.getNome());
-
+                                        mod.removeElement(p.getNome());
                                         String serverResponseString = jsonString;
                                         out.println(serverResponseString);
                                         System.out.println("JSON to client: " + serverResponseString);
@@ -574,4 +568,5 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
 
     boolean isOnline = false;
     private boolean isClosed = true;
+
 }

@@ -216,40 +216,44 @@ public class PatientQueueInterface extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void PatientQueue() throws IOException {
-        JSONObject obj = new JSONObject();
         out = new PrintStream(clientSocket.getOutputStream());
         
-        obj.put("code", 10);
-        obj.put("cpf", patientCpf);
-
         Scanner resportaServidor = new Scanner(clientSocket.getInputStream());
+        
+        Thread threadRecebeResposta = new Thread(() -> {           
+            do {
+                JSONObject obj = new JSONObject();
 
-        Thread threadRecebeResposta = new Thread(() -> {
-            while (resportaServidor.hasNextLine()) {
+                obj.put("code", 10);
+                obj.put("cpf", patientCpf);
+                
+                out.println(obj); // send to the server
+                System.out.println("JSON to server: " + obj);
+                
                 JSONParser parser = new JSONParser();
-                String serverResponse = resportaServidor.nextLine();
 
-                System.out.println(serverResponse);
+                if (resportaServidor.hasNextLine()) {
+                    String serverResponse = resportaServidor.nextLine();
+                    System.out.println(serverResponse);
+                    
+                    try {
+                        JSONObject jsonObject = (JSONObject) parser.parse(serverResponse);
 
-                try {
-                    JSONObject jsonObject = (JSONObject) parser.parse(serverResponse);
+                        Map map = jsonObject; // parse from json to string
 
-                    Map map = jsonObject; // parse from json to string
+                        System.out.println("JSON from server: " + map);
 
-                    System.out.println("JSON from server: " + map);
+                        jLabelQueuePosition.setText(map.get("position").toString());
 
-                    jLabelQueuePosition.setText(map.get("position").toString());
+                        pos = Integer.parseInt(map.get("position").toString());
 
-                    pos = Integer.parseInt(map.get("position").toString());
-
-                } catch (ParseException ex) {
-                    Logger.getLogger(ClientLoginInterface.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ParseException ex) {
+                        Logger.getLogger(ClientLoginInterface.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-            }
+            } while (pos >= 0);
         });
 
         threadRecebeResposta.start();
-        out.println(obj); // send to the server
-        System.out.println("JSON to server: " + obj);
     }
 }

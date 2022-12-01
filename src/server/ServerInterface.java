@@ -368,7 +368,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                         Map map = jsonObject; // parse from json to string
                         System.out.println("JSON input: " + jsonObject);
 
-                        logArea.append("Client#" + clientSocket.getPort() + ": " + clientInput + "\n");
+                        //logArea.append("Client#" + clientSocket.getPort() + ": " + jsonObject + "\n");
                         PrintStream out = new PrintStream(clientSocket.getOutputStream());
 
                         if (clientInput != null) {

@@ -482,19 +482,18 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                 case "10":
                                     int position = -1;
 
-                                    while (position != 0) {
-                                        serverResponse.put("code", 110);
-
-                                        for (int i = 0; i < patients.size(); i++) {
-                                            if (patients.get(i).getCpf().equals(person.getCpf())) {
-                                                position = i;
-                                            }
+                                    for (int i = 0; i < patients.size(); i++) {
+                                        if (patients.get(i).getCpf().equals(person.getCpf())) {
+                                            position = i+1;
                                         }
-                                        serverResponse.put("position", position);
-
-                                        out.println(serverResponse);
-                                        System.out.println("JSON to client: " + serverResponse);
                                     }
+                                    
+                                    serverResponse.put("code", 110);
+                                    serverResponse.put("position", position);
+
+                                    out.println(serverResponse);
+                                    System.out.println("JSON to client: " + serverResponse);
+                                    
                                     break;
 
                                 case "14": // responsável por fechar a conexão do cliente

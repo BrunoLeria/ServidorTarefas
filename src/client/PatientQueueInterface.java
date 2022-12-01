@@ -25,6 +25,8 @@ public class PatientQueueInterface extends javax.swing.JFrame {
     Socket clientSocket;
     PrintStream out;
     String patientName;
+    String patientCpf;
+    static int pos = 0;
     
     /**
      * Creates new form PatientQueueInterface
@@ -33,11 +35,12 @@ public class PatientQueueInterface extends javax.swing.JFrame {
         initComponents();
     }
     
-    public PatientQueueInterface(Socket clientSocket, String patientName) throws IOException {
+    public PatientQueueInterface(Socket clientSocket, String patientName, String patientCpf) throws IOException {
         initComponents();
         
         this.clientSocket = clientSocket; // bind the socket client from the other interface
         this.patientName = patientName;
+        this.patientCpf = patientCpf;
         
         jLabelPatientName.setText("Please, " + patientName + ", wait...");
         
@@ -217,39 +220,34 @@ public class PatientQueueInterface extends javax.swing.JFrame {
         out = new PrintStream(clientSocket.getOutputStream());
         
         obj.put("code", 10);
-        
+        obj.put("cpf", patientCpf);
+
+        Scanner resportaServidor = new Scanner(clientSocket.getInputStream());
+
         Thread threadRecebeResposta = new Thread(() -> {
-            try {
-                Scanner resportaServidor = new Scanner(clientSocket.getInputStream());
-          
-                while (resportaServidor.hasNextLine()) {
-                    JSONParser parser = new JSONParser();
-                    String serverResponse = resportaServidor.nextLine();
-                    
-                    System.out.println(serverResponse);
+            while (resportaServidor.hasNextLine()) {
+                JSONParser parser = new JSONParser();
+                String serverResponse = resportaServidor.nextLine();
 
-                    try {
-                        JSONObject jsonObject = (JSONObject) parser.parse(serverResponse);
+                System.out.println(serverResponse);
 
-                        Map map = jsonObject; // parse from json to string
+                try {
+                    JSONObject jsonObject = (JSONObject) parser.parse(serverResponse);
 
-                        System.out.println("JSON from server: " + map);
+                    Map map = jsonObject; // parse from json to string
 
-                        if (map.get("position").toString().equals("0")) { // check the server response
-                            jLabelQueuePosition.setText("You're the next! open the chat window.");
-                            break;
-                        } else { // check the server response
-                            jLabelQueuePosition.setText(map.get("position").toString());
-                        }
-                    } catch (ParseException ex) {
-                        Logger.getLogger(ClientLoginInterface.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    System.out.println("JSON from server: " + map);
+
+                    jLabelQueuePosition.setText(map.get("position").toString());
+
+                    pos = Integer.parseInt(map.get("position").toString());
+
+                } catch (ParseException ex) {
+                    Logger.getLogger(ClientLoginInterface.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
             }
         });
-        
+
         threadRecebeResposta.start();
         out.println(obj); // send to the server
         System.out.println("JSON to server: " + obj);

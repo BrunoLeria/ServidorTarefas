@@ -316,7 +316,7 @@ public class PatientInterface extends javax.swing.JFrame {
                                     System.out.println("JSON from server: " + map);
 
                                     if (map.get("success").toString().equals("true")) { // check the server response                                        
-                                        new PatientQueueInterface(clientSocket, userMap.get("name").toString()).setVisible(true); // change to another interface
+                                        new PatientQueueInterface(clientSocket, userMap.get("name").toString(), userMap.get("cpf").toString()).setVisible(true); // change to another interface
                                         jButtonSendForm.setEnabled(false);
                                         this.dispose();
                                         break;

@@ -39,11 +39,11 @@ public class PatientInterface extends javax.swing.JFrame {
         
         this.clientSocket = clientSocket; // bind the socket client from the other interface
         
-        userMap = (Map) map.get("user");
-        jLabelPacientName.setText(userMap.get("name").toString());
-        jLabelCpf.setText(userMap.get("cpf").toString());
-        jLabelBirthday.setText(userMap.get("birthday").toString());
-        jLabelSex.setText(userMap.get("sex").toString());
+        this.userMap = (Map) map.get("user");
+        jLabelPacientName.setText(this.userMap.get("name").toString());
+        jLabelCpf.setText(this.userMap.get("cpf").toString());
+        jLabelBirthday.setText(this.userMap.get("birthday").toString());
+        jLabelSex.setText(this.userMap.get("sex").toString());
     }
 
     /**
@@ -316,7 +316,7 @@ public class PatientInterface extends javax.swing.JFrame {
                                     System.out.println("JSON from server: " + map);
 
                                     if (map.get("success").toString().equals("true")) { // check the server response                                        
-                                        new PatientQueueInterface(clientSocket, userMap.get("name").toString(), userMap.get("cpf").toString()).setVisible(true); // change to another interface
+                                        new PatientQueueInterface(clientSocket, userMap).setVisible(true); // change to another interface
                                         jButtonSendForm.setEnabled(false);
                                         this.dispose();
                                         break;

@@ -484,6 +484,7 @@ public class DoctorInterface extends javax.swing.JFrame {
                             if (Boolean.valueOf(map.get("success").toString())) {
                                 new ChatInterface(clientSocket, mapDoc).setVisible(true);
                                 this.dispose();
+                                break;
                             }
                             else {
                                 JOptionPane.showMessageDialog(this, "Error: Can't receive data from server.");

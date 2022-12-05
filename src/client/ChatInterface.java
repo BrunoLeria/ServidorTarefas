@@ -4,8 +4,18 @@
  */
 package client;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 /**
  *
@@ -13,6 +23,7 @@ import java.util.Map;
  */
 public class ChatInterface extends javax.swing.JFrame {
 
+    PrintWriter out;
     Socket clientSocket;
     Map map;
     
@@ -35,6 +46,8 @@ public class ChatInterface extends javax.swing.JFrame {
         jLabelCPFText.setText(map.get("cpf").toString());
         jLabelSexText.setText(map.get("sex").toString());
         jLabelDataText.setText(map.get("birthday").toString());
+        
+        tResposta();
     }
 
     /**
@@ -46,7 +59,6 @@ public class ChatInterface extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanelMessageLog = new javax.swing.JPanel();
         jButtonSend = new javax.swing.JToggleButton();
         jButtonDisconnect = new javax.swing.JToggleButton();
         jProfilePic = new javax.swing.JPanel();
@@ -60,26 +72,19 @@ public class ChatInterface extends javax.swing.JFrame {
         jLabelDataText = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextAreaMessage = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextAreaMessageLog = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jPanelMessageLog.setBackground(new java.awt.Color(255, 255, 255));
-        jPanelMessageLog.setBorder(javax.swing.BorderFactory.createTitledBorder("Message log:"));
-
-        javax.swing.GroupLayout jPanelMessageLogLayout = new javax.swing.GroupLayout(jPanelMessageLog);
-        jPanelMessageLog.setLayout(jPanelMessageLogLayout);
-        jPanelMessageLogLayout.setHorizontalGroup(
-            jPanelMessageLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanelMessageLogLayout.setVerticalGroup(
-            jPanelMessageLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 202, Short.MAX_VALUE)
-        );
 
         jButtonSend.setText("Send");
 
         jButtonDisconnect.setText("Disconnect");
+        jButtonDisconnect.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonDisconnectMouseClicked(evt);
+            }
+        });
         jButtonDisconnect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDisconnectActionPerformed(evt);
@@ -120,6 +125,11 @@ public class ChatInterface extends javax.swing.JFrame {
         jTextAreaMessage.setRows(5);
         jScrollPane1.setViewportView(jTextAreaMessage);
 
+        jTextAreaMessageLog.setColumns(20);
+        jTextAreaMessageLog.setRows(5);
+        jTextAreaMessageLog.setBorder(javax.swing.BorderFactory.createTitledBorder("Message log:"));
+        jScrollPane2.setViewportView(jTextAreaMessageLog);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -127,7 +137,7 @@ public class ChatInterface extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanelMessageLog, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -183,8 +193,8 @@ public class ChatInterface extends javax.swing.JFrame {
                                     .addComponent(jLabelData)
                                     .addComponent(jLabelDataText))))
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(18, 18, 18)
-                .addComponent(jPanelMessageLog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1)
@@ -199,6 +209,92 @@ public class ChatInterface extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonDisconnectActionPerformed
 
+    private void jButtonDisconnectMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDisconnectMouseClicked
+        // TODO add your handling code here:
+        try {
+            JSONObject obj = new JSONObject();
+            
+            out = new PrintWriter(clientSocket.getOutputStream(), true); // instance the output
+            
+            String cpf = jLabelCPFText.getText();
+        
+            obj.put("code", 8);
+            obj.put("cpf", cpf);
+            
+            out.println(obj); // send to the server
+            System.out.println("JSON to server: " + obj);
+
+            Thread threadRecebeResposta = new Thread(() -> {
+                try {
+                    Scanner resportaServidor = new Scanner(clientSocket.getInputStream());
+
+                    while (resportaServidor.hasNextLine()) {
+                        JSONParser parser = new JSONParser();
+                        String serverResponse = resportaServidor.nextLine();
+
+                        try {
+                            JSONObject jsonObject = (JSONObject) parser.parse(serverResponse);
+
+                            Map map = jsonObject; // parse from json to string
+                            
+                            System.out.println("JSON from server: " + map);
+                            
+                            if (Integer.parseInt(map.get("code").toString()) == 108) {
+                                JOptionPane.showMessageDialog(this, "Disconnected from server.");
+
+                                new ClientConnectionInterface().setVisible(true); // go back to connection page
+                                this.dispose(); // dispose this interface
+
+                                clientSocket.close(); // close all the sockets from client
+                                break;
+                            }    
+                        } catch (Exception ex) {
+                            System.out.println(ex.toString());
+                        }
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+            threadRecebeResposta.start();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(ChatInterface.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonDisconnectMouseClicked
+
+    public void tResposta() {
+        Thread tRecebeResposta = new Thread(() -> {
+            try {
+                Scanner resportaServidor = new Scanner(clientSocket.getInputStream());
+
+                while (resportaServidor.hasNextLine()) {
+                    JSONParser parser = new JSONParser();
+                    String serverResponse = resportaServidor.nextLine();
+
+                    try {
+                        JSONObject jsonObject = (JSONObject) parser.parse(serverResponse);
+
+                        Map map = jsonObject; // parse from json to string
+
+                        System.out.println("JSON from server: " + map);
+
+                        if (Integer.parseInt(map.get("position").toString()) == 1) {
+                            jTextAreaMessageLog.append("Client disconnected.\n");
+                            break;
+                        }    
+                    } catch (Exception ex) {
+                        System.out.println(ex.toString());
+                    }
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        tRecebeResposta.start();
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -245,9 +341,10 @@ public class ChatInterface extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelNameText;
     private javax.swing.JLabel jLabelSex;
     private javax.swing.JLabel jLabelSexText;
-    private javax.swing.JPanel jPanelMessageLog;
     private javax.swing.JPanel jProfilePic;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextAreaMessage;
+    private javax.swing.JTextArea jTextAreaMessageLog;
     // End of variables declaration//GEN-END:variables
 }

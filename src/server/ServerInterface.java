@@ -469,6 +469,31 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     } 
                                     break;
                                     
+                                case "8":
+                                    logArea.append("Client#" + clientSocket.getPort() + " disconnected. \n");
+
+                                    serverResponse.put("code", 108);
+                                    serverResponse.put("position", 1);
+                                    
+                                    if (!(clients.isEmpty())) {
+                                        for (Person p : clients) {
+                                            if (p.getSocket().isConnected()) {
+                                                PrintStream outPatient = new PrintStream(p.getSocket().getOutputStream());
+
+                                                outPatient.println(serverResponse);
+                                                System.out.println("JSON to Client#" +  p.getSocket().getPort() + ": " + serverResponse);
+                                            }
+                                        } 
+                                    }
+                                    
+                                    out.println(serverResponse);
+                                    System.out.println("JSON to Client#" + clientSocket.getPort() + ": " + serverResponse);
+                                    
+                                    clients.remove(clientSocket); // remove the client socket from ArrayList
+                                    clientSocket.close(); // Close client connection
+
+                                    break;
+                                    
                                 case "9":
                                     Patient patient = new Patient();
 
@@ -533,7 +558,6 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     System.out.println(Arrays.toString(patients.toArray()));
 
                                     clients.remove(clientSocket); // remove the client socket from ArrayList
-                                    in.close();
                                     break;
 
                                 case "18":
@@ -582,7 +606,6 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                     System.out.println(Arrays.toString(patients.toArray()));
 
                     clients.remove(clientSocket); // remove the client socket from ArrayList
-                    in.close();
                 }
 
             } catch (Exception e) {

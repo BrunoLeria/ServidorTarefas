@@ -24,8 +24,7 @@ import org.json.simple.parser.ParseException;
 public class PatientQueueInterface extends javax.swing.JFrame {
     Socket clientSocket;
     PrintStream out;
-    String patientName;
-    String patientCpf;
+    Map userMap;
     static int pos = 0;
     
     /**
@@ -35,14 +34,13 @@ public class PatientQueueInterface extends javax.swing.JFrame {
         initComponents();
     }
     
-    public PatientQueueInterface(Socket clientSocket, String patientName, String patientCpf) throws IOException {
+    public PatientQueueInterface(Socket clientSocket, Map map) throws IOException {
         initComponents();
         
         this.clientSocket = clientSocket; // bind the socket client from the other interface
-        this.patientName = patientName;
-        this.patientCpf = patientCpf;
+        this.userMap = map;
         
-        jLabelPatientName.setText("Please, " + patientName + ", wait...");
+        jLabelPatientName.setText("Please, " + this.userMap.get("name").toString() + ", wait...");
         
         PatientQueue();
     }
@@ -92,6 +90,11 @@ public class PatientQueueInterface extends javax.swing.JFrame {
 
         jButtonOpenChat.setText("Open chat");
         jButtonOpenChat.setEnabled(false);
+        jButtonOpenChat.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonOpenChatMouseClicked(evt);
+            }
+        });
         jButtonOpenChat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOpenChatActionPerformed(evt);
@@ -171,6 +174,17 @@ public class PatientQueueInterface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonCloseMouseClicked
 
+    private void jButtonOpenChatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonOpenChatMouseClicked
+        // TODO add your handling code here:
+        if (jButtonOpenChat.isEnabled()) {
+            new ChatInterface(clientSocket, userMap).setVisible(true); // go back to connection page
+            this.dispose(); // dispose this interface
+        }
+        else {
+            JOptionPane.showMessageDialog(this, "Can't open the chat yet.");
+        }
+    }//GEN-LAST:event_jButtonOpenChatMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -225,7 +239,7 @@ public class PatientQueueInterface extends javax.swing.JFrame {
                 JSONObject obj = new JSONObject();
 
                 obj.put("code", 10);
-                obj.put("cpf", patientCpf);
+                obj.put("cpf", userMap.get("cpf").toString());
                 
                 out.println(obj); // send to the server
                 System.out.println("JSON to server: " + obj);
@@ -271,11 +285,14 @@ public class PatientQueueInterface extends javax.swing.JFrame {
 
                     if (Integer.parseInt(map.get("code").toString()) == 1005) {
                         obj.put("code", 12);
-                        obj.put("cpf", patientCpf);
+                        obj.put("cpf", this.userMap.get("cpf"));
                          
                         out.println(obj); // send to the server
                         System.out.println("JSON to server: " + obj);
                         jButtonOpenChat.setEnabled(true);
+                    }
+                    
+                    if (Integer.parseInt(map.get("code").toString()) == 112) {
                         break;
                     }
                 } catch (ParseException ex) {

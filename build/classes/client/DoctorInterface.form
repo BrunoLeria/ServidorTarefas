@@ -460,6 +460,9 @@
                 <Property name="text" type="java.lang.String" value="Open chat"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButtonOpenChatMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

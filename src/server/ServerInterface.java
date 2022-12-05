@@ -394,16 +394,16 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                                 + ": Registering user on database.\n");
                                         try {
                                             operations.isRegister(person, frame);
-                                            serverResponse.put("code", "101");
+                                            serverResponse.put("code", 101);
                                             serverResponse.put("success", true);
                                         } catch (Exception e) {
-                                            serverResponse.put("code", "101");
+                                            serverResponse.put("code", 101);
                                             serverResponse.put("success", false);
                                             JOptionPane.showMessageDialog(frame,
                                                     "Erro ao cadastrar usuário" + e.getMessage());
                                         }
                                     } else {
-                                        serverResponse.put("code", "101");
+                                        serverResponse.put("code", 101);
                                         serverResponse.put("success", false);
                                     }
                                     out.println(serverResponse);
@@ -441,14 +441,34 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                         System.out.println("JSON to client: " + serverResponseString);
                                     } else {
                                         person.setStatus(false);
-                                        serverResponse.put("code", "103");
+                                        serverResponse.put("code", 103);
                                         serverResponse.put("status", false);
 
                                         out.println(serverResponse);
                                         System.out.println("JSON to client: " + serverResponse);
                                     }
                                     break;
+                                
+                                case "5":
+                                    for (Person p : clients) {
+                                        if (p.getCpf().equals(map.get("toCpf").toString())) {
+                                            PrintStream outPatient = new PrintStream(p.getSocket().getOutputStream());
+                                            
+                                            serverResponse.put("code", 105);
+                                            serverResponse.put("success", true);
 
+                                            out.println(serverResponse);
+                                            System.out.println("JSON to Doctor: " + serverResponse);
+                                            
+                                            serverResponse.put("code", 1005);
+                                            serverResponse.put("success", true);
+                                            
+                                            outPatient.println(serverResponse);
+                                            System.out.println("JSON to Patient: " + serverResponse);
+                                        }
+                                    } 
+                                    break;
+                                    
                                 case "9":
                                     Patient patient = new Patient();
 

@@ -289,6 +289,11 @@ public class DoctorInterface extends javax.swing.JFrame {
 
         jButtonOpenChat.setText("Open chat");
         jButtonOpenChat.setEnabled(false);
+        jButtonOpenChat.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonOpenChatMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelPacientFormLayout = new javax.swing.GroupLayout(jPanelPacientForm);
         jPanelPacientForm.setLayout(jPanelPacientFormLayout);
@@ -437,6 +442,61 @@ public class DoctorInterface extends javax.swing.JFrame {
             System.out.println(ex.toString());
         }
     }//GEN-LAST:event_jNextPatientButtonMouseClicked
+
+    private void jButtonOpenChatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonOpenChatMouseClicked
+        // TODO add your handling code here:
+        try {
+            JSONObject obj = new JSONObject();
+            out = new PrintWriter(clientSocket.getOutputStream(), true); // instance the output
+            
+            String toCpf = jLabelCpf.getText();
+            String fromCpf = jLabelDocCpf.getText();
+                    
+            obj.put("code", 5);
+            obj.put("toCpf", toCpf);
+            obj.put("fromCpf", fromCpf);
+            
+            Thread threadRecebeResposta = new Thread(() -> {
+                try {
+                    Scanner resportaServidor = new Scanner(clientSocket.getInputStream());
+
+                    while (resportaServidor.hasNextLine()) {
+                        JSONParser parser = new JSONParser();
+                        String serverResponse = resportaServidor.nextLine();
+
+                        try {
+                            JSONObject jsonObject = (JSONObject) parser.parse(serverResponse);
+
+                            Map map = jsonObject; // parse from json to string
+
+                            System.out.println("JSON from server: " + map);
+
+                            if (Boolean.valueOf(map.get("success").toString())) {
+                                new ChatInterface(clientSocket);
+                                this.dispose();
+                            }
+                            else {
+                                JOptionPane.showMessageDialog(this, "Error: Can't receive data from server.");
+                            }
+                            
+                        } catch (Exception ex) {
+                            System.out.println(ex.toString());
+                        }
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+            threadRecebeResposta.start();
+            
+            out.println(obj); // send to the server
+            System.out.println("JSON to server: " + obj);
+            
+        } catch(IOException ex) {
+            System.out.println(ex.toString());
+        }
+    }//GEN-LAST:event_jButtonOpenChatMouseClicked
 
     /**
      * @param args the command line arguments

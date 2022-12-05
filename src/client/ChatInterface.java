@@ -78,6 +78,11 @@ public class ChatInterface extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jButtonSend.setText("Send");
+        jButtonSend.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonSendMouseClicked(evt);
+            }
+        });
 
         jButtonDisconnect.setText("Disconnect");
         jButtonDisconnect.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -219,7 +224,6 @@ public class ChatInterface extends javax.swing.JFrame {
             String cpf = jLabelCPFText.getText();
         
             obj.put("code", 8);
-            obj.put("cpf", cpf);
             
             out.println(obj); // send to the server
             System.out.println("JSON to server: " + obj);
@@ -264,6 +268,29 @@ public class ChatInterface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonDisconnectMouseClicked
 
+    private void jButtonSendMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonSendMouseClicked
+        // TODO add your handling code here:
+        try {
+            JSONObject obj = new JSONObject();
+            
+            out = new PrintWriter(clientSocket.getOutputStream(), true); // instance the output
+            
+            String cpf = jLabelCPFText.getText();
+            String message = jTextAreaMessage.getText();
+
+            obj.put("code", 6);
+            obj.put("cpf", cpf);
+            obj.put("message", message);
+
+            out.println(obj); // send to the server
+            System.out.println("JSON to server: " + obj);
+            
+            jTextAreaMessage.setText("");
+        } catch (IOException ex) {
+            Logger.getLogger(ChatInterface.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonSendMouseClicked
+
     public void tResposta() {
         Thread tRecebeResposta = new Thread(() -> {
             try {
@@ -279,8 +306,12 @@ public class ChatInterface extends javax.swing.JFrame {
                         Map map = jsonObject; // parse from json to string
 
                         System.out.println("JSON from server: " + map);
-
-                        if (Integer.parseInt(map.get("position").toString()) == 1) {
+                        
+                        if (Integer.parseInt(map.get("code").toString()) == 106) {
+                            jTextAreaMessageLog.append(map.get("message").toString() + "\n");
+                        }
+                        
+                        if (Integer.parseInt(map.get("code").toString()) == 108) {
                             jTextAreaMessageLog.append("Client disconnected.\n");
                             break;
                         }    

@@ -456,6 +456,8 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                             
                                             serverResponse.put("code", 105);
                                             serverResponse.put("success", true);
+                                            
+                                            person.setChat(true);
 
                                             out.println(serverResponse);
                                             System.out.println("JSON to Doctor: " + serverResponse);
@@ -463,10 +465,27 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                             serverResponse.put("code", 1005);
                                             serverResponse.put("success", true);
                                             
+                                            p.setChat(true);
+                                            
                                             outPatient.println(serverResponse);
                                             System.out.println("JSON to Patient: " + serverResponse);
                                         }
                                     } 
+                                    break;
+                                    
+                                case "6":
+                                    for (Person p : clients) {
+                                        if (p.getChat() == true) {
+                                            PrintStream outPatient = new PrintStream(p.getSocket().getOutputStream());
+                                            
+                                            serverResponse.put("code", 106);
+                                            serverResponse.put("position", 1);
+                                            serverResponse.put("message", map.get("message").toString());                                         
+                                            
+                                            outPatient.println(serverResponse);
+                                            System.out.println("JSON to Client: " + serverResponse);
+                                        }
+                                    }                                   
                                     break;
                                     
                                 case "8":

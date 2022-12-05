@@ -21,6 +21,7 @@ public class Person {
     private Boolean doutor;
     private Boolean status;
     private Socket socket;
+    private Boolean chat = false;
 
     public Person() {
 
@@ -33,6 +34,14 @@ public class Person {
         this.data = data;
         this.sexo = sexo;
         this.status = status;
+    }
+
+    public Boolean getChat() {
+        return chat;
+    }
+
+    public void setChat(Boolean chat) {
+        this.chat = chat;
     }
 
     public Person(String nome, String cpf, String senha, String data, String sexo, Boolean doutor, Boolean status) {
@@ -57,6 +66,20 @@ public class Person {
         this.socket = socket;
     }
 
+    public Person(String nome, String cpf, String senha, String data, String sexo, Boolean doutor, Boolean status,
+            Socket socket, Boolean chat) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.senha = senha;
+        this.data = data;
+        this.sexo = sexo;
+        this.doutor = doutor;
+        this.status = status;
+        this.socket = socket;
+        this.chat = chat;
+    }
+
+    
     public Person(String cpf, String senha) {
         this.cpf = cpf;
         this.senha = senha;

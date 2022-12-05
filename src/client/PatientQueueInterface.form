@@ -51,7 +51,7 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="jLabelPatientName" alignment="0" max="32767" attributes="0"/>
-              <Component id="jLabel2" alignment="0" max="32767" attributes="0"/>
+              <Component id="jLabelQueue" alignment="0" max="32767" attributes="0"/>
               <Component id="jLabelQueuePosition" alignment="0" max="32767" attributes="0"/>
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace pref="92" max="32767" attributes="0"/>
@@ -68,7 +68,7 @@
                   <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                   <Component id="jLabelPatientName" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabelQueue" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jLabelQueuePosition" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -91,7 +91,7 @@
             <Property name="text" type="java.lang.String" value="Please, wait..."/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel2">
+        <Component class="javax.swing.JLabel" name="jLabelQueue">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value="Queue position:"/>

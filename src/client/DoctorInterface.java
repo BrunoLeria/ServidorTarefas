@@ -26,6 +26,7 @@ public class DoctorInterface extends javax.swing.JFrame {
     Socket clientSocket;
     PrintWriter out;
     BufferedReader in;
+    Map mapDoc;
 
     /**
      * Creates new form DoctorInterace2
@@ -39,11 +40,11 @@ public class DoctorInterface extends javax.swing.JFrame {
 
         this.clientSocket = clientSocket; // bind the socket client from the other interface
 
-        map = (Map) map.get("user");
-        jLabelDocName.setText("Doctor: " + map.get("name") + "\n");
-        jLabelDocCpf.setText("Cpf: " + map.get("cpf") + "\n");
-        jLabelDocBirthday.setText("Birthday: " + map.get("birthday") + "\n");
-        jLabelDocSex.setText("Sex: " + map.get("sex") + "\n");
+        this.mapDoc = (Map) map.get("user");
+        jLabelDocName.setText("Doctor: " + this.mapDoc.get("name") + "\n");
+        jLabelDocCpfText.setText(this.mapDoc.get("cpf").toString());
+        jLabelDocBirthday.setText("Birthday: " + this.mapDoc.get("birthday") + "\n");
+        jLabelDocSex.setText("Sex: " + this.mapDoc.get("sex") + "\n");
     }
 
     /**
@@ -63,6 +64,7 @@ public class DoctorInterface extends javax.swing.JFrame {
         jLabelDocCpf = new javax.swing.JLabel();
         jLabelDocBirthday = new javax.swing.JLabel();
         jLabelDocSex = new javax.swing.JLabel();
+        jLabelDocCpfText = new javax.swing.JLabel();
         jPanelPatientForm = new javax.swing.JPanel();
         jPanelPacientForm = new javax.swing.JPanel();
         jNextPatientButton = new javax.swing.JButton();
@@ -111,13 +113,16 @@ public class DoctorInterface extends javax.swing.JFrame {
         jLabelDocName.setText("Name");
 
         jLabelDocCpf.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
-        jLabelDocCpf.setText("CPF");
+        jLabelDocCpf.setText("CPF:");
 
         jLabelDocBirthday.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         jLabelDocBirthday.setText("Birthday");
 
         jLabelDocSex.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         jLabelDocSex.setText("Sex");
+
+        jLabelDocCpfText.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabelDocCpfText.setText("CPF");
 
         javax.swing.GroupLayout jPanelDocProfileLayout = new javax.swing.GroupLayout(jPanelDocProfile);
         jPanelDocProfile.setLayout(jPanelDocProfileLayout);
@@ -129,9 +134,12 @@ public class DoctorInterface extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelDocProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelDocName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabelDocCpf, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabelDocBirthday, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabelDocSex, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabelDocBirthday, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+                    .addComponent(jLabelDocSex, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanelDocProfileLayout.createSequentialGroup()
+                        .addComponent(jLabelDocCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabelDocCpfText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jDisconnectButton)
                 .addContainerGap())
@@ -147,7 +155,9 @@ public class DoctorInterface extends javax.swing.JFrame {
                         .addGap(0, 18, Short.MAX_VALUE)
                         .addComponent(jLabelDocName)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelDocCpf)
+                        .addGroup(jPanelDocProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelDocCpf)
+                            .addComponent(jLabelDocCpfText))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabelDocBirthday)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -450,7 +460,7 @@ public class DoctorInterface extends javax.swing.JFrame {
             out = new PrintWriter(clientSocket.getOutputStream(), true); // instance the output
             
             String toCpf = jLabelCpf.getText();
-            String fromCpf = jLabelDocCpf.getText();
+            String fromCpf = jLabelDocCpfText.getText();
                     
             obj.put("code", 5);
             obj.put("toCpf", toCpf);
@@ -472,7 +482,7 @@ public class DoctorInterface extends javax.swing.JFrame {
                             System.out.println("JSON from server: " + map);
 
                             if (Boolean.valueOf(map.get("success").toString())) {
-                                new ChatInterface(clientSocket);
+                                new ChatInterface(clientSocket, mapDoc).setVisible(true);
                                 this.dispose();
                             }
                             else {
@@ -548,6 +558,7 @@ public class DoctorInterface extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelCpf;
     private javax.swing.JLabel jLabelDocBirthday;
     private javax.swing.JLabel jLabelDocCpf;
+    private javax.swing.JLabel jLabelDocCpfText;
     private javax.swing.JLabel jLabelDocName;
     private javax.swing.JLabel jLabelDocSex;
     private javax.swing.JLabel jLabelPatientName;

@@ -513,7 +513,14 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
 
                                     out.println(serverResponse);
                                     System.out.println("JSON to client: " + serverResponse);
+                                    break;
+                                
+                                case "12":
+                                    serverResponse.put("code", 112);
+                                    serverResponse.put("position", 1);
                                     
+                                    out.println(serverResponse);
+                                    System.out.println("JSON to client: " + serverResponse);
                                     break;
 
                                 case "14": // responsável por fechar a conexão do cliente

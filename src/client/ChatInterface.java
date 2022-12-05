@@ -5,6 +5,7 @@
 package client;
 
 import java.net.Socket;
+import java.util.Map;
 
 /**
  *
@@ -13,6 +14,7 @@ import java.net.Socket;
 public class ChatInterface extends javax.swing.JFrame {
 
     Socket clientSocket;
+    Map map;
     
     /**
      * Creates new form ChatInterface
@@ -21,10 +23,18 @@ public class ChatInterface extends javax.swing.JFrame {
         initComponents();
     }
     
-        public ChatInterface(Socket clientSocket) {
+    public ChatInterface(Socket clientSocket, Map map) {
         initComponents();
         
+        this.map = map;
         this.clientSocket = clientSocket;
+        
+        System.out.println(map);
+        
+        jLabelNameText.setText(map.get("name").toString());
+        jLabelCPFText.setText(map.get("cpf").toString());
+        jLabelSexText.setText(map.get("sex").toString());
+        jLabelDataText.setText(map.get("birthday").toString());
     }
 
     /**
@@ -36,21 +46,158 @@ public class ChatInterface extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanelMessageLog = new javax.swing.JPanel();
+        jButtonSend = new javax.swing.JToggleButton();
+        jButtonDisconnect = new javax.swing.JToggleButton();
+        jProfilePic = new javax.swing.JPanel();
+        jLabelName = new javax.swing.JLabel();
+        jLabelCPF = new javax.swing.JLabel();
+        jLabelSex = new javax.swing.JLabel();
+        jLabelData = new javax.swing.JLabel();
+        jLabelNameText = new javax.swing.JLabel();
+        jLabelCPFText = new javax.swing.JLabel();
+        jLabelSexText = new javax.swing.JLabel();
+        jLabelDataText = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextAreaMessage = new javax.swing.JTextArea();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanelMessageLog.setBackground(new java.awt.Color(255, 255, 255));
+        jPanelMessageLog.setBorder(javax.swing.BorderFactory.createTitledBorder("Message log:"));
+
+        javax.swing.GroupLayout jPanelMessageLogLayout = new javax.swing.GroupLayout(jPanelMessageLog);
+        jPanelMessageLog.setLayout(jPanelMessageLogLayout);
+        jPanelMessageLogLayout.setHorizontalGroup(
+            jPanelMessageLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanelMessageLogLayout.setVerticalGroup(
+            jPanelMessageLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 202, Short.MAX_VALUE)
+        );
+
+        jButtonSend.setText("Send");
+
+        jButtonDisconnect.setText("Disconnect");
+        jButtonDisconnect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDisconnectActionPerformed(evt);
+            }
+        });
+
+        jProfilePic.setBackground(new java.awt.Color(255, 255, 255));
+        jProfilePic.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        javax.swing.GroupLayout jProfilePicLayout = new javax.swing.GroupLayout(jProfilePic);
+        jProfilePic.setLayout(jProfilePicLayout);
+        jProfilePicLayout.setHorizontalGroup(
+            jProfilePicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jProfilePicLayout.setVerticalGroup(
+            jProfilePicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        jLabelName.setText("Name:");
+
+        jLabelCPF.setText("CPF:");
+
+        jLabelSex.setText("Sex:");
+
+        jLabelData.setText("Data:");
+
+        jLabelNameText.setText("Name");
+
+        jLabelCPFText.setText("CPF");
+
+        jLabelSexText.setText("Sex");
+
+        jLabelDataText.setText("Data");
+
+        jTextAreaMessage.setColumns(20);
+        jTextAreaMessage.setRows(5);
+        jScrollPane1.setViewportView(jTextAreaMessage);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanelMessageLog, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButtonSend, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jProfilePic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelName)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelNameText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelCPF)
+                                .addGap(14, 14, 14)
+                                .addComponent(jLabelCPFText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelData)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabelDataText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelSex)
+                                .addGap(14, 14, 14)
+                                .addComponent(jLabelSexText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonDisconnect, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonDisconnect, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jProfilePic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabelName)
+                                    .addComponent(jLabelNameText))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabelCPF)
+                                    .addComponent(jLabelCPFText))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabelSex)
+                                    .addComponent(jLabelSexText))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabelData)
+                                    .addComponent(jLabelDataText))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(18, 18, 18)
+                .addComponent(jPanelMessageLog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jButtonSend, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButtonDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDisconnectActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonDisconnectActionPerformed
 
     /**
      * @param args the command line arguments
@@ -88,5 +235,19 @@ public class ChatInterface extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton jButtonDisconnect;
+    private javax.swing.JToggleButton jButtonSend;
+    private javax.swing.JLabel jLabelCPF;
+    private javax.swing.JLabel jLabelCPFText;
+    private javax.swing.JLabel jLabelData;
+    private javax.swing.JLabel jLabelDataText;
+    private javax.swing.JLabel jLabelName;
+    private javax.swing.JLabel jLabelNameText;
+    private javax.swing.JLabel jLabelSex;
+    private javax.swing.JLabel jLabelSexText;
+    private javax.swing.JPanel jPanelMessageLog;
+    private javax.swing.JPanel jProfilePic;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextAreaMessage;
     // End of variables declaration//GEN-END:variables
 }

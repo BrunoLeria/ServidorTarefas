@@ -77,9 +77,13 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabelDocName" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jLabelDocCpf" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jLabelDocBirthday" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jLabelDocBirthday" alignment="0" pref="254" max="32767" attributes="0"/>
                           <Component id="jLabelDocSex" alignment="0" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabelDocCpf" min="-2" pref="30" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jLabelDocCpfText" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jDisconnectButton" min="-2" max="-2" attributes="0"/>
@@ -98,7 +102,10 @@
                               <EmptySpace min="0" pref="18" max="32767" attributes="0"/>
                               <Component id="jLabelDocName" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jLabelDocCpf" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="jLabelDocCpf" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabelDocCpfText" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabelDocBirthday" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
@@ -155,7 +162,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="11" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="CPF"/>
+                <Property name="text" type="java.lang.String" value="CPF:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabelDocBirthday">
@@ -172,6 +179,14 @@
                   <Font name="Segoe UI" size="11" style="0"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Sex"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabelDocCpfText">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="11" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="CPF"/>
               </Properties>
             </Component>
           </SubComponents>

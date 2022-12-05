@@ -58,7 +58,7 @@ public class PatientQueueInterface extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabelPatientName = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jLabelQueue = new javax.swing.JLabel();
         jLabelQueuePosition = new javax.swing.JLabel();
         jButtonClose = new javax.swing.JButton();
         jButtonOpenChat = new javax.swing.JButton();
@@ -72,8 +72,8 @@ public class PatientQueueInterface extends javax.swing.JFrame {
         jLabelPatientName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelPatientName.setText("Please, wait...");
 
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Queue position:");
+        jLabelQueue.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelQueue.setText("Queue position:");
 
         jLabelQueuePosition.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelQueuePosition.setText("Position");
@@ -103,7 +103,7 @@ public class PatientQueueInterface extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabelPatientName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabelQueue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabelQueuePosition, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(92, Short.MAX_VALUE)
@@ -118,7 +118,7 @@ public class PatientQueueInterface extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addComponent(jLabelPatientName)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
+                .addComponent(jLabelQueue)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabelQueuePosition)
                 .addGap(18, 18, 18)
@@ -209,8 +209,8 @@ public class PatientQueueInterface extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonClose;
     private javax.swing.JButton jButtonOpenChat;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelPatientName;
+    private javax.swing.JLabel jLabelQueue;
     private javax.swing.JLabel jLabelQueuePosition;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
@@ -242,7 +242,7 @@ public class PatientQueueInterface extends javax.swing.JFrame {
                         Map map = jsonObject; // parse from json to string
 
                         System.out.println("JSON from server: " + map);
-
+                        
                         jLabelQueuePosition.setText(map.get("position").toString());
 
                         pos = Integer.parseInt(map.get("position").toString());
@@ -252,7 +252,37 @@ public class PatientQueueInterface extends javax.swing.JFrame {
                     }
                 }
             } while (pos >= 0);
-        });
+            
+            jLabelQueue.setText("You're next!");
+            jLabelQueuePosition.setText("Wait until the doctor becomes avaliable...");
+            
+            while (resportaServidor.hasNextLine()) {    
+                JSONObject obj = new JSONObject();
+                JSONParser parser = new JSONParser();
+                
+                String serverResponse = resportaServidor.nextLine();
+                
+                try {
+                    JSONObject jsonObject = (JSONObject) parser.parse(serverResponse);
+
+                    Map map = jsonObject; // parse from json to string
+
+                    System.out.println("JSON from server: " + map);
+
+                    if (Integer.parseInt(map.get("code").toString()) == 1005) {
+                        obj.put("code", 12);
+                        obj.put("cpf", patientCpf);
+                         
+                        out.println(obj); // send to the server
+                        System.out.println("JSON to server: " + obj);
+                        jButtonOpenChat.setEnabled(true);
+                        break;
+                    }
+                } catch (ParseException ex) {
+                    Logger.getLogger(PatientQueueInterface.class.getName()).log(Level.SEVERE, null, ex);
+                }    
+            }
+        });        
 
         threadRecebeResposta.start();
     }

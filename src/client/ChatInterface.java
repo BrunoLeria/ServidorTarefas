@@ -308,7 +308,7 @@ public class ChatInterface extends javax.swing.JFrame {
                         System.out.println("JSON from server: " + map);
                         
                         if (Integer.parseInt(map.get("code").toString()) == 106) {
-                            jTextAreaMessageLog.append(map.get("message").toString() + "\n");
+                            jTextAreaMessageLog.append(map.get("name").toString() + ": " + map.get("message").toString() + "\n");
                         }
                         
                         if (Integer.parseInt(map.get("code").toString()) == 108) {

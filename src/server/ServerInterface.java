@@ -450,27 +450,13 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     break;
                                 
                                 case "5":
-                                    for (Person p : clients) {
-                                        if (p.getCpf().equals(map.get("toCpf").toString())) {
-                                            PrintStream outPatient = new PrintStream(p.getSocket().getOutputStream());
-                                            
-                                            serverResponse.put("code", 105);
-                                            serverResponse.put("success", true);
-                                            
-                                            person.setChat(true);
+                                        serverResponse.put("code", 105);
+                                        serverResponse.put("success", true);
 
-                                            out.println(serverResponse);
-                                            System.out.println("JSON to Doctor: " + serverResponse);
-                                            
-                                            serverResponse.put("code", 1005);
-                                            serverResponse.put("success", true);
-                                            
-                                            p.setChat(true);
-                                            
-                                            outPatient.println(serverResponse);
-                                            System.out.println("JSON to Patient: " + serverResponse);
-                                        }
-                                    } 
+                                        person.setChat(true);
+
+                                        out.println(serverResponse);
+                                        System.out.println("JSON to Doctor: " + serverResponse);
                                     break;
                                     
                                 case "6":
@@ -617,7 +603,22 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                         System.out.println("JSON to client: " + serverResponse);
                                     }
                                     break;
-
+                                
+                                case "25":
+                                    for (Person p : clients) {
+                                        if (p.getCpf().equals(map.get("toCpf").toString())) {
+                                            PrintStream outPatient = new PrintStream(p.getSocket().getOutputStream());
+                                            
+                                            serverResponse.put("code", 250);
+                                            serverResponse.put("success", true);
+                                            
+                                            p.setChat(true);
+                                            
+                                            outPatient.println(serverResponse);
+                                            System.out.println("JSON to Patient: " + serverResponse);
+                                        }
+                                    } 
+                                    break;
                                 default:
                             }
                         }

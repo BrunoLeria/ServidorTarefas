@@ -283,7 +283,7 @@ public class PatientQueueInterface extends javax.swing.JFrame {
 
                     System.out.println("JSON from server: " + map);
 
-                    if (Integer.parseInt(map.get("code").toString()) == 1005) {
+                    if (Integer.parseInt(map.get("code").toString()) == 250) {
                         obj.put("code", 12);
                         obj.put("cpf", this.userMap.get("cpf"));
                          

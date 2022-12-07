@@ -483,6 +483,7 @@ public class DoctorInterface extends javax.swing.JFrame {
 
                             if (Boolean.valueOf(map.get("success").toString())) {
                                 new ChatInterface(clientSocket, mapDoc).setVisible(true);
+                                this.dispose();
                                 
                                 obj.put("code", 25);
                                 obj.put("toCpf", toCpf);

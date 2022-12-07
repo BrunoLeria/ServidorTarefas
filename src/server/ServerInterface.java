@@ -16,7 +16,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Scanner;
 import javax.swing.DefaultListModel;
@@ -269,7 +268,6 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
         patients.sort((Patient p1, Patient p2) -> {
             return p1.getPriority() - p2.getPriority();
         });
-        Collections.reverse(patients);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

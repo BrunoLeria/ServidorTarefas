@@ -88,7 +88,7 @@ public class PatientQueueInterface extends javax.swing.JFrame {
             }
         });
 
-        jButtonOpenChat.setText("Open chat");
+        jButtonOpenChat.setText("Accept Chat");
         jButtonOpenChat.setEnabled(false);
         jButtonOpenChat.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -109,7 +109,7 @@ public class PatientQueueInterface extends javax.swing.JFrame {
             .addComponent(jLabelQueue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabelQueuePosition, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(92, Short.MAX_VALUE)
+                .addContainerGap(82, Short.MAX_VALUE)
                 .addComponent(jButtonClose)
                 .addGap(36, 36, 36)
                 .addComponent(jButtonOpenChat)
@@ -177,8 +177,47 @@ public class PatientQueueInterface extends javax.swing.JFrame {
     private void jButtonOpenChatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonOpenChatMouseClicked
         // TODO add your handling code here:
         if (jButtonOpenChat.isEnabled()) {
-            new ChatInterface(clientSocket, userMap).setVisible(true); // go back to connection page
-            this.dispose(); // dispose this interface
+            try {
+                JSONObject obj = new JSONObject();
+                Scanner resportaServidor = new Scanner(clientSocket.getInputStream());
+
+                obj.put("code", 12);
+                obj.put("cpf", this.userMap.get("cpf"));
+
+                Thread threadRecebeResposta = new Thread(() -> {
+                    while (resportaServidor.hasNextLine()) {    
+                        JSONParser parser = new JSONParser();
+
+                        String serverResponse = resportaServidor.nextLine();
+
+                        try {
+                            JSONObject jsonObject = (JSONObject) parser.parse(serverResponse);
+
+                            Map map = jsonObject; // parse from json to string
+
+                            System.out.println("JSON from server: " + map);
+
+                            if (Boolean.valueOf(map.get("success").toString())) {
+                                new ChatInterface(clientSocket, userMap).setVisible(true); // go back to connection page
+                                this.dispose(); // dispose this interface
+                                break;
+                            }
+                            else {
+                                JOptionPane.showMessageDialog(this, "Error: Can't open chat.");
+                            }
+                        } catch (ParseException ex) {
+                            Logger.getLogger(PatientQueueInterface.class.getName()).log(Level.SEVERE, null, ex);
+                        }    
+                    }
+                });        
+
+                threadRecebeResposta.start(); 
+                
+                out.println(obj); // send to the server
+                System.out.println("JSON to server: " + obj);
+            } catch (IOException e) {
+                System.out.println(e.toString());
+            }    
         }
         else {
             JOptionPane.showMessageDialog(this, "Can't open the chat yet.");
@@ -264,6 +303,11 @@ public class PatientQueueInterface extends javax.swing.JFrame {
                     } catch (ParseException ex) {
                         Logger.getLogger(ClientLoginInterface.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(WaitingPatient.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             } while (pos >= 0);
             
@@ -283,23 +327,15 @@ public class PatientQueueInterface extends javax.swing.JFrame {
 
                     System.out.println("JSON from server: " + map);
 
-                    if (Integer.parseInt(map.get("code").toString()) == 250) {
-                        obj.put("code", 12);
-                        obj.put("cpf", this.userMap.get("cpf"));
-                         
-                        out.println(obj); // send to the server
-                        System.out.println("JSON to server: " + obj);
+                    if (Integer.parseInt(map.get("code").toString()) == 155) {
                         jButtonOpenChat.setEnabled(true);
-                    }
-                    
-                    if (Integer.parseInt(map.get("code").toString()) == 112) {
                         break;
                     }
                 } catch (ParseException ex) {
                     Logger.getLogger(PatientQueueInterface.class.getName()).log(Level.SEVERE, null, ex);
                 }    
             }
-        });        
+        });    
 
         threadRecebeResposta.start();
     }

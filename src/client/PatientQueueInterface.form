@@ -54,7 +54,7 @@
               <Component id="jLabelQueue" alignment="0" max="32767" attributes="0"/>
               <Component id="jLabelQueuePosition" alignment="0" max="32767" attributes="0"/>
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="92" max="32767" attributes="0"/>
+                  <EmptySpace pref="82" max="32767" attributes="0"/>
                   <Component id="jButtonClose" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
                   <Component id="jButtonOpenChat" min="-2" max="-2" attributes="0"/>
@@ -114,7 +114,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="jButtonOpenChat">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Open chat"/>
+            <Property name="text" type="java.lang.String" value="Accept Chat"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>

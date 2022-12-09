@@ -5,8 +5,8 @@
         <group>
             <file>file:/C:/Users/Drey/Desktop/git/ServidorTarefas/src/server/ServerInterface.java</file>
             <file>file:/C:/Users/Drey/Desktop/git/ServidorTarefas/src/client/DoctorInterface.java</file>
-            <file>file:/C:/Users/Drey/Desktop/git/ServidorTarefas/src/model/Person.java</file>
             <file>file:/C:/Users/Drey/Desktop/git/ServidorTarefas/src/client/PatientQueueInterface.java</file>
+            <file>file:/C:/Users/Drey/Desktop/git/ServidorTarefas/src/client/WaitingPatient.java</file>
             <file>file:/C:/Users/Drey/Desktop/git/ServidorTarefas/src/client/ChatInterface.java</file>
         </group>
     </open-files>

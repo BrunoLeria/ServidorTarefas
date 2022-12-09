@@ -223,19 +223,16 @@ public class ChatInterface extends javax.swing.JFrame {
             
             String cpf = jLabelCPFText.getText();
         
-            obj.put("code", 8);
-            
-            out.println(obj); // send to the server
-            System.out.println("JSON to server: " + obj);
+            obj.put("code", 8); 
 
-            Thread threadRecebeResposta = new Thread(() -> {
+            Thread threadRecebeResposta = new Thread(() -> {                   
                 try {
                     Scanner resportaServidor = new Scanner(clientSocket.getInputStream());
 
                     while (resportaServidor.hasNextLine()) {
                         JSONParser parser = new JSONParser();
                         String serverResponse = resportaServidor.nextLine();
-
+                        System.out.println(serverResponse);
                         try {
                             JSONObject jsonObject = (JSONObject) parser.parse(serverResponse);
 
@@ -261,6 +258,9 @@ public class ChatInterface extends javax.swing.JFrame {
                 }
             });
 
+            out.println(obj); // send to the server
+            System.out.println("JSON to server: " + obj);
+            
             threadRecebeResposta.start();
             
         } catch (IOException ex) {
@@ -305,7 +305,7 @@ public class ChatInterface extends javax.swing.JFrame {
 
                         Map map = jsonObject; // parse from json to string
 
-                        System.out.println("JSON from server: " + map);
+                       System.out.println("JSON from server: " + map);
                         
                         if (Integer.parseInt(map.get("code").toString()) == 106) {
                             jTextAreaMessageLog.append(map.get("name").toString() + ": " + map.get("message").toString() + "\n");
@@ -314,7 +314,7 @@ public class ChatInterface extends javax.swing.JFrame {
                         if (Integer.parseInt(map.get("code").toString()) == 108) {
                             jTextAreaMessageLog.append("Client disconnected.\n");
                             break;
-                        }    
+                        }
                     } catch (Exception ex) {
                         System.out.println(ex.toString());
                     }

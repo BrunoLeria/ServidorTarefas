@@ -297,7 +297,7 @@ public class DoctorInterface extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jButtonOpenChat.setText("Open chat");
+        jButtonOpenChat.setText("Request Chat");
         jButtonOpenChat.setEnabled(false);
         jButtonOpenChat.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -310,12 +310,12 @@ public class DoctorInterface extends javax.swing.JFrame {
         jPanelPacientFormLayout.setHorizontalGroup(
             jPanelPacientFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanelPacientProfile6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanelPacientFormLayout.createSequentialGroup()
-                .addGap(127, 127, 127)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelPacientFormLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jNextPatientButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButtonOpenChat, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jButtonOpenChat, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(116, 116, 116))
         );
         jPanelPacientFormLayout.setVerticalGroup(
             jPanelPacientFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -482,16 +482,8 @@ public class DoctorInterface extends javax.swing.JFrame {
                             System.out.println("JSON from server: " + map);
 
                             if (Boolean.valueOf(map.get("success").toString())) {
-                                new ChatInterface(clientSocket, mapDoc).setVisible(true);
+                                new WaitingPatient(clientSocket, mapDoc).setVisible(true);
                                 this.dispose();
-                                
-                                obj.put("code", 25);
-                                obj.put("toCpf", toCpf);
-                                obj.put("fromCpf", fromCpf);
-                                
-                                out.println(obj); // send to the server
-                                System.out.println("JSON to server: " + obj);
-
                                 break;
                             }
                             else {

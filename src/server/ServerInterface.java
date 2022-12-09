@@ -450,13 +450,26 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     break;
                                 
                                 case "5":
-                                        serverResponse.put("code", 105);
-                                        serverResponse.put("success", true);
+                                    for (Person p : clients) {
+                                        if (p.getCpf().equals(map.get("toCpf").toString())) {
+                                            PrintStream outPatient = new PrintStream(p.getSocket().getOutputStream());
+                                            p.setChat(true);
 
-                                        person.setChat(true);
+                                            serverResponse.put("code", 155);
+                                            serverResponse.put("success", true);                                      
 
-                                        out.println(serverResponse);
-                                        System.out.println("JSON to Doctor: " + serverResponse);
+                                            outPatient.println(serverResponse);
+                                            System.out.println("JSON to Patient: " + serverResponse);
+                                        }
+                                    }
+                                    
+                                    serverResponse.put("code", 105);
+                                    serverResponse.put("success", true);
+
+                                    person.setChat(true);
+
+                                    out.println(serverResponse);
+                                    System.out.println("JSON to Doctor: " + serverResponse);
                                     break;
                                     
                                 case "6":
@@ -487,13 +500,13 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     serverResponse.put("position", 1);
                                     
                                     for (Person p : clients) {
-                                        if (p.getSocket().isConnected()) {
+                                        if (p.getChat() == true) {
                                             PrintStream outPatient = new PrintStream(p.getSocket().getOutputStream());
 
                                             outPatient.println(serverResponse);
                                             System.out.println("JSON to Client#" +  p.getSocket().getPort() + ": " + serverResponse);
                                         }
-                                    } 
+                                    }
                                     
                                     out.println(serverResponse);
                                     System.out.println("JSON to Client#" + clientSocket.getPort() + ": " + serverResponse);
@@ -504,7 +517,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                             clientSocket.close(); // Close client connection
                                             break;
                                         }
-                                    } 
+                                    }
                                     break;
                                     
                                 case "9":
@@ -554,11 +567,26 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     break;
                                 
                                 case "12":
-                                    serverResponse.put("code", 112);
-                                    serverResponse.put("position", 1);
-                                    
-                                    out.println(serverResponse);
-                                    System.out.println("JSON to client: " + serverResponse);
+                                    for (Person p : clients) {
+                                        if (p.getChat() == true) {
+                                            PrintStream outPatient = new PrintStream(p.getSocket().getOutputStream());
+
+                                            if (p.getCpf() == map.get("cpf").toString()) {
+                                                serverResponse.put("code", 112);
+                                                serverResponse.put("success", true);
+                                                
+                                                outPatient.println(serverResponse);
+                                                System.out.println("JSON to Patient: " + serverResponse);
+                                            }
+                                            else {
+                                                serverResponse.put("code", 212);
+                                                serverResponse.put("success", true);
+                                                
+                                                outPatient.println(serverResponse);
+                                                System.out.println("JSON to Doctor: " + serverResponse);
+                                            }                                     
+                                        }
+                                    }
                                     break;
 
                                 case "14": // responsável por fechar a conexão do cliente
@@ -602,22 +630,6 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                         out.println(serverResponse);
                                         System.out.println("JSON to client: " + serverResponse);
                                     }
-                                    break;
-                                
-                                case "25":
-                                    for (Person p : clients) {
-                                        if (p.getCpf().equals(map.get("toCpf").toString())) {
-                                            PrintStream outPatient = new PrintStream(p.getSocket().getOutputStream());
-                                            
-                                            serverResponse.put("code", 250);
-                                            serverResponse.put("success", true);
-                                            
-                                            p.setChat(true);
-                                            
-                                            outPatient.println(serverResponse);
-                                            System.out.println("JSON to Patient: " + serverResponse);
-                                        }
-                                    } 
                                     break;
                                 default:
                             }

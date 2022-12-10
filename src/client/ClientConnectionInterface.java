@@ -4,6 +4,10 @@
  */
 package client;
 
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+
 import java.net.*;
 import javax.swing.JOptionPane;
 
@@ -20,6 +24,7 @@ public class ClientConnectionInterface extends javax.swing.JFrame {
      */
     public ClientConnectionInterface() {
         initComponents();
+        setLocationOfFrame();
     }
 
     /**
@@ -151,13 +156,23 @@ public class ClientConnectionInterface extends javax.swing.JFrame {
             System.out.println(clientSocket.toString());
             System.out.println("Connected to server");
             JOptionPane.showMessageDialog(this, "Connected to server!");
-            new ClientLoginInterface(clientSocket).setVisible(true); // change to another interface
+            new ClientLoginInterface(clientSocket, getLocation()).setVisible(true); // change to another interface
             this.dispose(); // dispose this interface
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Failed to connect to server.");
             System.out.println("Failed to connect to server.");
         }
     }// GEN-LAST:event_connectButtonMouseClicked
+
+    private void setLocationOfFrame(){
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice defaultScreen = ge.getDefaultScreenDevice();
+        Rectangle rect = defaultScreen.getDefaultConfiguration().getBounds();
+        int x = ((int) rect.getMaxX() / 2) - this.getWidth();
+        int y = ((int) rect.getMaxY() / 2) - this.getHeight();
+        this.setLocation(x, y);
+        this.setVisible(true);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel clientLabel;

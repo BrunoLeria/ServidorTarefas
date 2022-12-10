@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 import javax.swing.JOptionPane;
+import java.awt.Point;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,8 +39,9 @@ public class ClientRegisterInterface extends javax.swing.JFrame {
         initComponents();
     }
 
-    public ClientRegisterInterface(Socket clientSocket, ClientLoginInterface clientLoginInterface) {
+    public ClientRegisterInterface(Socket clientSocket, ClientLoginInterface clientLoginInterface, Point position) {
         initComponents();
+        this.setLocation(position);
         this.clientSocket = clientSocket; // bind the socket client from the other interface
         this.clientLoginInterface = clientLoginInterface; // bind the login interface from the other interface
     }

@@ -9,10 +9,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import java.awt.Point;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -34,8 +36,9 @@ public class PatientInterface extends javax.swing.JFrame {
         initComponents();
     }
     
-    public PatientInterface(Socket clientSocket, Map map) {
+    public PatientInterface(Socket clientSocket, Map map, Point position) {
         initComponents();
+        this.setLocation(position);
         
         this.clientSocket = clientSocket; // bind the socket client from the other interface
         
@@ -44,6 +47,10 @@ public class PatientInterface extends javax.swing.JFrame {
         jLabelCpf.setText(this.userMap.get("cpf").toString());
         jLabelBirthday.setText(this.userMap.get("birthday").toString());
         jLabelSex.setText(this.userMap.get("sex").toString());
+
+        Random rand = new Random(); //instance of random class
+        jTextAreaDescription.setText("Description: " + rand.nextInt(100));
+        jComboBoxPriorityLevel.setSelectedIndex(rand.nextInt(4));
     }
 
     /**
@@ -316,7 +323,7 @@ public class PatientInterface extends javax.swing.JFrame {
                                     System.out.println("JSON from server: " + map);
 
                                     if (map.get("success").toString().equals("true")) { // check the server response                                        
-                                        new PatientQueueInterface(clientSocket, userMap).setVisible(true); // change to another interface
+                                        new PatientQueueInterface(clientSocket, userMap, getLocation()).setVisible(true); // change to another interface
                                         jButtonSendForm.setEnabled(false);
                                         this.dispose();
                                         break;

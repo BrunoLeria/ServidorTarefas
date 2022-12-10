@@ -4,6 +4,7 @@
      // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
      "version": "0.2.0",
      "configurations": [
+
           {
                "type": "java",
                "name": "Launch Current File",
@@ -50,6 +51,12 @@
           {
                "name": "Beebug All",
                "configurations": ["Server", "Client 1", "Client 2", "Client 3", "Client 4"],
+               "stopAll": true
+          }
+          ,
+          {
+               "name": "Beebug One of Each",
+               "configurations": ["Server", "Client 1"],
                "stopAll": true
           }
      ]

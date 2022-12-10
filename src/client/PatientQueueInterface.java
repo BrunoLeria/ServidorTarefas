@@ -13,6 +13,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import java.awt.Point;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -34,9 +35,10 @@ public class PatientQueueInterface extends javax.swing.JFrame {
         initComponents();
     }
     
-    public PatientQueueInterface(Socket clientSocket, Map map) throws IOException {
+    public PatientQueueInterface(Socket clientSocket, Map map, Point position) throws IOException {
         initComponents();
-        
+        this.setLocation(position);
+
         this.clientSocket = clientSocket; // bind the socket client from the other interface
         this.userMap = map;
         
@@ -198,7 +200,7 @@ public class PatientQueueInterface extends javax.swing.JFrame {
                             System.out.println("JSON from server: " + map);
 
                             if (Boolean.valueOf(map.get("success").toString())) {
-                                new ChatInterface(clientSocket, userMap).setVisible(true); // go back to connection page
+                                new ChatInterface(clientSocket, userMap, getLocation()).setVisible(true); // go back to connection page
                                 this.dispose(); // dispose this interface
                                 break;
                             }

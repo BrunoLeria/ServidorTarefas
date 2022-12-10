@@ -6,6 +6,10 @@ package server;
 
 import model.Person;
 
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -42,6 +46,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
      */
     public ServerInterface() {
         initComponents();
+        setLocationOfFrame();
         this.setVisible(true);
         this.isClosed = false;
     }
@@ -337,6 +342,16 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
         } catch (IOException e) {
             logArea.append(e.toString());
         }
+    }
+
+    private void setLocationOfFrame(){
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice defaultScreen = ge.getDefaultScreenDevice();
+        Rectangle rect = defaultScreen.getDefaultConfiguration().getBounds();
+        int x = (int) rect.getMaxX() - this.getWidth();
+        int y = (int) rect.getMaxY() - this.getHeight();
+        this.setLocation(x, y);
+        this.setVisible(true);
     }
 
     public class ClientThread extends Thread {

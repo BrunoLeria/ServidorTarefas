@@ -4,9 +4,7 @@
  */
 package client;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Map;
@@ -14,6 +12,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import java.awt.Point;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -34,8 +33,9 @@ public class ChatInterface extends javax.swing.JFrame {
         initComponents();
     }
     
-    public ChatInterface(Socket clientSocket, Map map) {
+    public ChatInterface(Socket clientSocket, Map map, Point position) {
         initComponents();
+        this.setLocation(position);
         
         this.map = map;
         this.clientSocket = clientSocket;

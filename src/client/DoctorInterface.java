@@ -7,13 +7,11 @@ package client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.System.Logger;
-import java.lang.System.Logger.Level;
 import java.net.Socket;
-import java.text.ParseException;
 import java.util.Map;
 import java.util.Scanner;
 import javax.swing.JOptionPane;
+import java.awt.Point;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -35,8 +33,9 @@ public class DoctorInterface extends javax.swing.JFrame {
         initComponents();
     }
 
-    public DoctorInterface(Socket clientSocket, Map map) {
+    public DoctorInterface(Socket clientSocket, Map map, Point position) {
         initComponents();
+        this.setLocation(position);
 
         this.clientSocket = clientSocket; // bind the socket client from the other interface
 
@@ -45,6 +44,7 @@ public class DoctorInterface extends javax.swing.JFrame {
         jLabelDocCpfText.setText(this.mapDoc.get("cpf").toString());
         jLabelDocBirthday.setText("Birthday: " + this.mapDoc.get("birthday") + "\n");
         jLabelDocSex.setText("Sex: " + this.mapDoc.get("sex") + "\n");
+
     }
 
     /**
@@ -482,7 +482,7 @@ public class DoctorInterface extends javax.swing.JFrame {
                             System.out.println("JSON from server: " + map);
 
                             if (Boolean.valueOf(map.get("success").toString())) {
-                                new WaitingPatient(clientSocket, mapDoc).setVisible(true);
+                                new WaitingPatient(clientSocket, mapDoc, getLocation()).setVisible(true);
                                 this.dispose();
                                 break;
                             }

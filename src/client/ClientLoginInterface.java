@@ -4,17 +4,18 @@
  */
 package client;
 
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
-
-import javax.swing.JOptionPane;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.JOptionPane;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -36,9 +37,16 @@ public class ClientLoginInterface extends javax.swing.JFrame {
         initComponents();
     }
 
-    public ClientLoginInterface(Socket clientSocket) {
+    public ClientLoginInterface(Socket clientSocket, Point position) {
         initComponents();
+        this.setLocation(position);
         this.clientSocket = clientSocket; // bind the socket client from the other interface
+
+        Random rand = new Random();
+        int randNum = rand.nextInt(6) + 1;
+
+        jFormattedcpfField.setText("000.000.000-0" + randNum);
+        senhaField.setText("123456");
     }
 
     /**
@@ -180,7 +188,7 @@ public class ClientLoginInterface extends javax.swing.JFrame {
 
     private void registerButton1MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_registerButton1MouseClicked
         if (registerButton1.isEnabled()) {
-            new ClientRegisterInterface(clientSocket, this).setVisible(true); // change to another interface
+            new ClientRegisterInterface(clientSocket, this, getLocation()).setVisible(true); // change to another interface
             this.setVisible(false);
         }
         else {
@@ -233,12 +241,12 @@ public class ClientLoginInterface extends javax.swing.JFrame {
                                         Map userMap = (Map) map.get("user");
                                         
                                         if (userMap.get("doctor").toString().equals("true")) {
-                                            new DoctorInterface(clientSocket, map).setVisible(true);
+                                            new DoctorInterface(clientSocket, map, getLocation()).setVisible(true);
                                             this.dispose();
                                         }
 
                                         else {
-                                            new PatientInterface(clientSocket, map).setVisible(true);
+                                            new PatientInterface(clientSocket, map, getLocation()).setVisible(true);
                                             this.dispose();
                                         }
                                         

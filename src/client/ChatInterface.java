@@ -25,7 +25,7 @@ public class ChatInterface extends javax.swing.JFrame {
 
     PrintWriter out;
     Socket clientSocket;
-    Map map;
+    Map userMap;
     
     /**
      * Creates new form ChatInterface
@@ -37,10 +37,8 @@ public class ChatInterface extends javax.swing.JFrame {
     public ChatInterface(Socket clientSocket, Map map) {
         initComponents();
         
-        this.map = map;
+        this.userMap = map;
         this.clientSocket = clientSocket;
-        
-        System.out.println(map);
         
         jLabelNameText.setText(map.get("name").toString());
         jLabelCPFText.setText(map.get("cpf").toString());
@@ -224,44 +222,12 @@ public class ChatInterface extends javax.swing.JFrame {
             String cpf = jLabelCPFText.getText();
         
             obj.put("code", 8); 
-
-            Thread threadRecebeResposta = new Thread(() -> {                   
-                try {
-                    Scanner resportaServidor = new Scanner(clientSocket.getInputStream());
-
-                    while (resportaServidor.hasNextLine()) {
-                        JSONParser parser = new JSONParser();
-                        String serverResponse = resportaServidor.nextLine();
-                        System.out.println(serverResponse);
-                        try {
-                            JSONObject jsonObject = (JSONObject) parser.parse(serverResponse);
-
-                            Map map = jsonObject; // parse from json to string
-                            
-                            System.out.println("JSON from server: " + map);
-                            
-                            if (Integer.parseInt(map.get("code").toString()) == 108) {
-                                JOptionPane.showMessageDialog(this, "Disconnected from server.");
-
-                                new ClientConnectionInterface().setVisible(true); // go back to connection page
-                                this.dispose(); // dispose this interface
-
-                                clientSocket.close(); // close all the sockets from client
-                                break;
-                            }    
-                        } catch (Exception ex) {
-                            System.out.println(ex.toString());
-                        }
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+            obj.put("cpf", userMap.get("cpf").toString());
 
             out.println(obj); // send to the server
             System.out.println("JSON to server: " + obj);
             
-            threadRecebeResposta.start();
+            //threadRecebeResposta.start();
             
         } catch (IOException ex) {
             Logger.getLogger(ChatInterface.class.getName()).log(Level.SEVERE, null, ex);
@@ -313,7 +279,15 @@ public class ChatInterface extends javax.swing.JFrame {
                         
                         if (Integer.parseInt(map.get("code").toString()) == 108) {
                             jTextAreaMessageLog.append("Client disconnected.\n");
-                            break;
+                            
+                            if (map.get("cpf").toString().equals(userMap.get("cpf"))) {
+                                JOptionPane.showMessageDialog(this, "Disconnected from server.");
+                                new ClientConnectionInterface().setVisible(true); // go back to connection page
+                                this.dispose(); // dispose this interface
+
+                                clientSocket.close(); // close all the sockets from client
+                                break;
+                            }
                         }
                     } catch (Exception ex) {
                         System.out.println(ex.toString());

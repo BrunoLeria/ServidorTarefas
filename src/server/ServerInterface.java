@@ -497,6 +497,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     logArea.append("Client#" + clientSocket.getPort() + " disconnected. \n");
 
                                     serverResponse.put("code", 108);
+                                    serverResponse.put("cpf", map.get("cpf").toString());
                                     serverResponse.put("position", 1);
                                     
                                     for (Person p : clients) {
@@ -507,9 +508,6 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                             System.out.println("JSON to Client#" +  p.getSocket().getPort() + ": " + serverResponse);
                                         }
                                     }
-                                    
-                                    out.println(serverResponse);
-                                    System.out.println("JSON to Client#" + clientSocket.getPort() + ": " + serverResponse);
                                     
                                     for (Person p : clients) {
                                         if (p.getSocket() == clientSocket) {

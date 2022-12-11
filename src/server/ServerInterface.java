@@ -344,7 +344,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
         }
     }
 
-    private void setLocationOfFrame(){
+    private void setLocationOfFrame() {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice defaultScreen = ge.getDefaultScreenDevice();
         Rectangle rect = defaultScreen.getDefaultConfiguration().getBounds();
@@ -383,7 +383,8 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                         Map map = jsonObject; // parse from json to string
                         System.out.println("JSON input: " + jsonObject);
 
-                        //logArea.append("Client#" + clientSocket.getPort() + ": " + jsonObject + "\n");
+                        // logArea.append("Client#" + clientSocket.getPort() + ": " + jsonObject +
+                        // "\n");
                         PrintStream out = new PrintStream(clientSocket.getOutputStream());
 
                         if (clientInput != null) {
@@ -463,67 +464,72 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                         System.out.println("JSON to client: " + serverResponse);
                                     }
                                     break;
-                                
+
                                 case "5":
+                                    System.out.println("Client#" + clientSocket.getPort() + ": Starting chat.\n");
+                                    System.out.println(map.get("toCpf").toString() + "\n");
+
                                     for (Person p : clients) {
                                         if (p.getCpf().equals(map.get("toCpf").toString())) {
                                             PrintStream outPatient = new PrintStream(p.getSocket().getOutputStream());
+                                            System.out.println(p.getSocket().getPort());
                                             p.setChat(true);
 
                                             serverResponse.put("code", 155);
-                                            serverResponse.put("success", true);                                      
+                                            serverResponse.put("success", true);
 
                                             outPatient.println(serverResponse);
                                             System.out.println("JSON to Patient: " + serverResponse);
                                         }
                                     }
-                                    
-                                    serverResponse.put("code", 105);
-                                    serverResponse.put("success", true);
+                                    // serverResponse = new JSONObject();
+                                    // serverResponse.put("code", 105);
+                                    // serverResponse.put("success", true);
 
-                                    person.setChat(true);
+                                    // person.setChat(true);
 
-                                    out.println(serverResponse);
+                                    // out.println(serverResponse);
                                     System.out.println("JSON to Doctor: " + serverResponse);
                                     break;
-                                    
+
                                 case "6":
                                     for (Person p : clients) {
                                         if (p.getCpf().equals(map.get("cpf").toString())) {
                                             serverResponse.put("name", p.getNome());
                                         }
                                     }
-                                    
+
                                     for (Person p : clients) {
                                         if (p.getChat() == true) {
                                             PrintStream outPatient = new PrintStream(p.getSocket().getOutputStream());
 
                                             serverResponse.put("code", 106);
                                             serverResponse.put("position", 1);
-                                            serverResponse.put("message", map.get("message").toString());                                         
+                                            serverResponse.put("message", map.get("message").toString());
 
                                             outPatient.println(serverResponse);
                                             System.out.println("JSON to Client: " + serverResponse);
-                                        } 
-                                    }    
+                                        }
+                                    }
                                     break;
-                                    
+
                                 case "8":
                                     logArea.append("Client#" + clientSocket.getPort() + " disconnected. \n");
 
                                     serverResponse.put("code", 108);
                                     serverResponse.put("cpf", map.get("cpf").toString());
                                     serverResponse.put("position", 1);
-                                    
+
                                     for (Person p : clients) {
                                         if (p.getChat() == true) {
                                             PrintStream outPatient = new PrintStream(p.getSocket().getOutputStream());
 
                                             outPatient.println(serverResponse);
-                                            System.out.println("JSON to Client#" +  p.getSocket().getPort() + ": " + serverResponse);
+                                            System.out.println("JSON to Client#" + p.getSocket().getPort() + ": "
+                                                    + serverResponse);
                                         }
                                     }
-                                    
+
                                     for (Person p : clients) {
                                         if (p.getSocket() == clientSocket) {
                                             clients.remove(p); // remove the client socket from ArrayList
@@ -532,7 +538,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                         }
                                     }
                                     break;
-                                    
+
                                 case "9":
                                     Patient patient = new Patient();
 
@@ -568,17 +574,17 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
 
                                     for (int i = 0; i < patients.size(); i++) {
                                         if (patients.get(i).getCpf().equals(person.getCpf())) {
-                                            position = i+1;
+                                            position = i + 1;
                                         }
                                     }
-                                    
+
                                     serverResponse.put("code", 110);
                                     serverResponse.put("position", position);
 
                                     out.println(serverResponse);
                                     System.out.println("JSON to client: " + serverResponse);
                                     break;
-                                
+
                                 case "12":
                                     for (Person p : clients) {
                                         if (p.getChat() == true) {
@@ -587,17 +593,16 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                             if (p.getCpf() == map.get("cpf").toString()) {
                                                 serverResponse.put("code", 112);
                                                 serverResponse.put("success", true);
-                                                
+
                                                 outPatient.println(serverResponse);
                                                 System.out.println("JSON to Patient: " + serverResponse);
-                                            }
-                                            else {
+                                            } else {
                                                 serverResponse.put("code", 212);
                                                 serverResponse.put("success", true);
-                                                
+
                                                 outPatient.println(serverResponse);
                                                 System.out.println("JSON to Doctor: " + serverResponse);
-                                            }                                     
+                                            }
                                         }
                                     }
                                     break;

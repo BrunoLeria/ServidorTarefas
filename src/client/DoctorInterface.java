@@ -7,13 +7,11 @@ package client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.System.Logger;
-import java.lang.System.Logger.Level;
 import java.net.Socket;
-import java.text.ParseException;
 import java.util.Map;
 import java.util.Scanner;
 import javax.swing.JOptionPane;
+import java.awt.Point;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -35,8 +33,9 @@ public class DoctorInterface extends javax.swing.JFrame {
         initComponents();
     }
 
-    public DoctorInterface(Socket clientSocket, Map map) {
+    public DoctorInterface(Socket clientSocket, Map map, Point position) {
         initComponents();
+        this.setLocation(position);
 
         this.clientSocket = clientSocket; // bind the socket client from the other interface
 
@@ -45,6 +44,7 @@ public class DoctorInterface extends javax.swing.JFrame {
         jLabelDocCpfText.setText(this.mapDoc.get("cpf").toString());
         jLabelDocBirthday.setText("Birthday: " + this.mapDoc.get("birthday") + "\n");
         jLabelDocSex.setText("Sex: " + this.mapDoc.get("sex") + "\n");
+
     }
 
     /**
@@ -482,7 +482,7 @@ public class DoctorInterface extends javax.swing.JFrame {
                             System.out.println("JSON from server: " + map);
 
                             if (Boolean.valueOf(map.get("success").toString())) {
-                                new WaitingPatient(clientSocket, mapDoc).setVisible(true);
+                                new WaitingPatient(clientSocket, mapDoc, getLocation()).setVisible(true);
                                 this.dispose();
                                 break;
                             }
@@ -508,44 +508,6 @@ public class DoctorInterface extends javax.swing.JFrame {
             System.out.println(ex.toString());
         }
     }//GEN-LAST:event_jButtonOpenChatMouseClicked
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DoctorInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DoctorInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DoctorInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DoctorInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new DoctorInterface().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonOpenChat;

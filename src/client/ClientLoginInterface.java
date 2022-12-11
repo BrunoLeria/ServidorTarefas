@@ -4,17 +4,18 @@
  */
 package client;
 
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
-
-import javax.swing.JOptionPane;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.JOptionPane;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -36,9 +37,16 @@ public class ClientLoginInterface extends javax.swing.JFrame {
         initComponents();
     }
 
-    public ClientLoginInterface(Socket clientSocket) {
+    public ClientLoginInterface(Socket clientSocket, Point position) {
         initComponents();
+        this.setLocation(position);
         this.clientSocket = clientSocket; // bind the socket client from the other interface
+
+        Random rand = new Random();
+        int randNum = rand.nextInt(6) + 1;
+
+        jFormattedcpfField.setText("000.000.000-0" + randNum);
+        senhaField.setText("123456");
     }
 
     /**
@@ -180,7 +188,7 @@ public class ClientLoginInterface extends javax.swing.JFrame {
 
     private void registerButton1MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_registerButton1MouseClicked
         if (registerButton1.isEnabled()) {
-            new ClientRegisterInterface(clientSocket, this).setVisible(true); // change to another interface
+            new ClientRegisterInterface(clientSocket, this, getLocation()).setVisible(true); // change to another interface
             this.setVisible(false);
         }
         else {
@@ -233,12 +241,12 @@ public class ClientLoginInterface extends javax.swing.JFrame {
                                         Map userMap = (Map) map.get("user");
                                         
                                         if (userMap.get("doctor").toString().equals("true")) {
-                                            new DoctorInterface(clientSocket, map).setVisible(true);
+                                            new DoctorInterface(clientSocket, map, getLocation()).setVisible(true);
                                             this.dispose();
                                         }
 
                                         else {
-                                            new PatientInterface(clientSocket, map).setVisible(true);
+                                            new PatientInterface(clientSocket, map, getLocation()).setVisible(true);
                                             this.dispose();
                                         }
                                         
@@ -277,50 +285,6 @@ public class ClientLoginInterface extends javax.swing.JFrame {
     private void senhaFieldActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_senhaFieldActionPerformed
         // TODO add your handling code here:
     }// GEN-LAST:event_senhaFieldActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        // <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
-        // (optional) ">
-        /*
-         * If Nimbus (introduced in Java SE 6) is not available, stay with the default
-         * look and feel.
-         * For details see
-         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ClientLoginInterface.class.getName()).log(java.util.logging.Level.SEVERE,
-                    null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ClientLoginInterface.class.getName()).log(java.util.logging.Level.SEVERE,
-                    null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ClientLoginInterface.class.getName()).log(java.util.logging.Level.SEVERE,
-                    null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ClientLoginInterface.class.getName()).log(java.util.logging.Level.SEVERE,
-                    null, ex);
-        }
-        // </editor-fold>
-        // </editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ClientLoginInterface().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel clientLabel;

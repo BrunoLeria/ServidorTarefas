@@ -4,6 +4,10 @@
  */
 package client;
 
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+
 import java.net.*;
 import javax.swing.JOptionPane;
 
@@ -20,6 +24,7 @@ public class ClientConnectionInterface extends javax.swing.JFrame {
      */
     public ClientConnectionInterface() {
         initComponents();
+        setLocationOfFrame();
     }
 
     /**
@@ -151,7 +156,7 @@ public class ClientConnectionInterface extends javax.swing.JFrame {
             System.out.println(clientSocket.toString());
             System.out.println("Connected to server");
             JOptionPane.showMessageDialog(this, "Connected to server!");
-            new ClientLoginInterface(clientSocket).setVisible(true); // change to another interface
+            new ClientLoginInterface(clientSocket, getLocation()).setVisible(true); // change to another interface
             this.dispose(); // dispose this interface
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Failed to connect to server.");
@@ -159,50 +164,14 @@ public class ClientConnectionInterface extends javax.swing.JFrame {
         }
     }// GEN-LAST:event_connectButtonMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        // <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
-        // (optional) ">
-        /*
-         * If Nimbus (introduced in Java SE 6) is not available, stay with the default
-         * look and feel.
-         * For details see
-         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ClientConnectionInterface.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ClientConnectionInterface.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ClientConnectionInterface.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ClientConnectionInterface.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        // </editor-fold>
-        // </editor-fold>
-        // </editor-fold>
-        // </editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ClientConnectionInterface().setVisible(true);
-            }
-        });
+    private void setLocationOfFrame(){
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice defaultScreen = ge.getDefaultScreenDevice();
+        Rectangle rect = defaultScreen.getDefaultConfiguration().getBounds();
+        int x = ((int) rect.getMaxX() / 2) - this.getWidth();
+        int y = ((int) rect.getMaxY() / 2) - this.getHeight();
+        this.setLocation(x, y);
+        this.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

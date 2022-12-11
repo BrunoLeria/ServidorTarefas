@@ -1,0 +1,63 @@
+{
+     // Use IntelliSense to learn about possible attributes.
+     // Hover to view descriptions of existing attributes.
+     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+     "version": "0.2.0",
+     "configurations": [
+
+          {
+               "type": "java",
+               "name": "Launch Current File",
+               "request": "launch",
+               "mainClass": "${file}"
+          },
+          {
+               "type": "java",
+               "name": "Server",
+               "request": "launch",
+               "mainClass": "server.Main",
+               "projectName": "ServidorTarefas_ee142134"
+          },          
+          {
+               "type": "java",
+               "name": "Client 1",
+               "request": "launch",
+               "mainClass": "client.Main",
+               "projectName": "ServidorTarefas_ee142134"
+          },
+          {
+               "type": "java",
+               "name": "Client 2",
+               "request": "launch",
+               "mainClass": "client.Main",
+               "projectName": "ServidorTarefas_ee142134"
+          },
+          {
+               "type": "java",
+               "name": "Client 3",
+               "request": "launch",
+               "mainClass": "client.Main",
+               "projectName": "ServidorTarefas_ee142134"
+          },
+          {
+               "type": "java",
+               "name": "Client 4",
+               "request": "launch",
+               "mainClass": "client.Main",
+               "projectName": "ServidorTarefas_ee142134"
+          },
+     ],
+     "compounds": [
+          {
+               "name": "Beebug All",
+               "configurations": ["Server", "Client 1", "Client 2", "Client 3", "Client 4"],
+               "stopAll": true
+          }
+          ,
+          {
+               "name": "Beebug One of Each",
+               "configurations": ["Server", "Client 1"],
+               "stopAll": true
+          }
+     ]
+}

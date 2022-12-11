@@ -482,13 +482,13 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                             System.out.println("JSON to Patient: " + serverResponse);
                                         }
                                     }
-                                    // serverResponse = new JSONObject();
-                                    // serverResponse.put("code", 105);
-                                    // serverResponse.put("success", true);
+                                    serverResponse = new JSONObject();
+                                    serverResponse.put("code", 105);
+                                    serverResponse.put("success", true);
 
-                                    // person.setChat(true);
+                                    person.setChat(true);
 
-                                    // out.println(serverResponse);
+                                    out.println(serverResponse);
                                     System.out.println("JSON to Doctor: " + serverResponse);
                                     break;
 

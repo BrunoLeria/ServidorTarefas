@@ -31,6 +31,8 @@ public class PatientQueueInterface extends javax.swing.JFrame {
     JSONParser parser;
     JSONObject jsonObject;
     Map map;
+    int positionInQueue = 1;
+    boolean myTurn = false;
 
     /**
      * Creates new form PatientQueueInterface
@@ -53,8 +55,10 @@ public class PatientQueueInterface extends javax.swing.JFrame {
 
         jLabelPatientName.setText("Please, " + this.userMap.get("name").toString() + ", wait...");
 
-        PatientQueue patientQueue = new PatientQueue();
-        patientQueue.start();
+        ServerListener listener = new ServerListener();
+        ServerQuestioner questioner = new ServerQuestioner();
+        listener.start();
+        questioner.start();
     }
 
     /**
@@ -214,9 +218,7 @@ public class PatientQueueInterface extends javax.swing.JFrame {
                             System.out.println("JSON from server: " + map);
 
                             if (Boolean.valueOf(map.get("success").toString())) {
-                                new ChatInterface(clientSocket, userMap, getLocation()).setVisible(true); // go back to
-                                                                                                          // connection
-                                                                                                          // page
+                                new ChatInterface(clientSocket, userMap, getLocation()).setVisible(true);
                                 this.dispose(); // dispose this interface
                                 break;
                             } else {
@@ -249,53 +251,51 @@ public class PatientQueueInterface extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 
-    private class PatientQueue extends Thread {
-        int positionInQueue = 1;
-        boolean myTurn = false;
-
-        PatientQueue() {
-
-        }
-
+    private class ServerListener extends Thread {
         public void run() {
-            while (positionInQueue > 0 && !myTurn) {
+            while (positionInQueue > 0 || !myTurn) {
                 try {
+                    String serverResponse = resportaServidor.nextLine();
+                    System.out.println(serverResponse);
+                    System.out.println(myTurn);
 
+                    jsonObject = (JSONObject) parser.parse(serverResponse);
+                    map = jsonObject; // parse from json to string
+
+                    System.out.println("JSON from server: " + map);
+
+                    if (Integer.parseInt(map.get("code").toString()) == 110) {
+                        jLabelQueuePosition.setText(map.get("position").toString());
+
+                        positionInQueue = Integer.parseInt(map.get("position").toString());
+
+                        jLabelQueue.setText("You're next!");
+                        jLabelQueuePosition.setText("Wait until the doctor becomes avaliable...");
+                    } else if (Integer.parseInt(map.get("code").toString()) == 155
+                            && map.get("success").toString().equals("true")) {
+                        myTurn = true;
+                        jButtonOpenChat.setEnabled(true);
+                    }
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private class ServerQuestioner extends Thread {
+        @Override
+        public void run() {
+            while (positionInQueue > 0) {
+                try {
                     obj.put("code", 10);
                     obj.put("cpf", userMap.get("cpf").toString());
 
                     out.println(obj); // send to the server
                     System.out.println("JSON to server: " + obj);
-
-                    if (resportaServidor.hasNextLine()) {
-                        String serverResponse = resportaServidor.nextLine();
-                        System.out.println(serverResponse);
-                        System.out.println(myTurn);
-
-                        jsonObject = (JSONObject) parser.parse(serverResponse);
-                        map = jsonObject; // parse from json to string
-
-                        System.out.println("JSON from server: " + map);
-
-                        if (Integer.parseInt(map.get("code").toString()) == 110) {
-                            jLabelQueuePosition.setText(map.get("position").toString());
-
-                            positionInQueue = Integer.parseInt(map.get("position").toString());
-
-                            jLabelQueue.setText("You're next!");
-                            jLabelQueuePosition.setText("Wait until the doctor becomes avaliable...");
-                        } else if (Integer.parseInt(map.get("code").toString()) == 155
-                                && map.get("success").toString().equals("true")) {
-                            myTurn = true;
-                            jButtonOpenChat.setEnabled(true);
-                        }
-                    }
-                    if (positionInQueue > 0) {
-                        this.sleep(5000);
-                    }
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }

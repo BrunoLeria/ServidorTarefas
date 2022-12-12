@@ -381,7 +381,9 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                         JSONObject serverResponse = new JSONObject();
 
                         Map map = jsonObject; // parse from json to string
-                        System.out.println("JSON input: " + jsonObject);
+                        if (map.get("code").toString() != "10") {
+                            System.out.println("JSON input: " + jsonObject);
+                        }
 
                         // logArea.append("Client#" + clientSocket.getPort() + ": " + jsonObject +
                         // "\n");
@@ -424,6 +426,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     }
                                     out.println(serverResponse);
                                     System.out.println("JSON to client: " + serverResponse);
+                                    out.flush();
                                     break;
                                 case "3":
                                     person.setCpf(map.get("cpf").toString());
@@ -463,23 +466,27 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                         out.println(serverResponse);
                                         System.out.println("JSON to client: " + serverResponse);
                                     }
+                                    out.flush();
                                     break;
-
                                 case "5":
-                                    System.out.println("Client#" + clientSocket.getPort() + ": Starting chat.\n");
+                                    System.out.println("Client# " + clientSocket + ": Starting chat.\n");
                                     System.out.println(map.get("toCpf").toString() + "\n");
 
                                     for (Person p : clients) {
                                         if (p.getCpf().equals(map.get("toCpf").toString())) {
                                             PrintStream outPatient = new PrintStream(p.getSocket().getOutputStream());
-                                            System.out.println(p.getSocket().getPort());
+                                            System.out.println(p.getSocket());
+                                            System.out.println(p.getCpf());
+                                            System.out.println(p.getNome());
                                             p.setChat(true);
 
                                             serverResponse.put("code", 155);
                                             serverResponse.put("success", true);
 
                                             outPatient.println(serverResponse);
-                                            System.out.println("JSON to Patient: " + serverResponse);
+                                            System.out.println("JSON to Patient " + p.getSocket().getPort() + ": "
+                                                    + serverResponse);
+                                            outPatient.flush();
                                         }
                                     }
                                     serverResponse = new JSONObject();
@@ -489,9 +496,11 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     person.setChat(true);
 
                                     out.println(serverResponse);
-                                    System.out.println("JSON to Doctor: " + serverResponse);
+                                    System.out
+                                            .println(
+                                                    "JSON to Doctor " + clientSocket.getPort() + ": " + serverResponse);
+                                    out.flush();
                                     break;
-
                                 case "6":
                                     for (Person p : clients) {
                                         if (p.getCpf().equals(map.get("cpf").toString())) {
@@ -509,10 +518,11 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
 
                                             outPatient.println(serverResponse);
                                             System.out.println("JSON to Client: " + serverResponse);
+                                            outPatient.flush();
                                         }
                                     }
+                                    out.flush();
                                     break;
-
                                 case "8":
                                     logArea.append("Client#" + clientSocket.getPort() + " disconnected. \n");
 
@@ -527,6 +537,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                             outPatient.println(serverResponse);
                                             System.out.println("JSON to Client#" + p.getSocket().getPort() + ": "
                                                     + serverResponse);
+                                            outPatient.flush();
                                         }
                                     }
 
@@ -537,8 +548,8 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                             break;
                                         }
                                     }
+                                    out.flush();
                                     break;
-
                                 case "9":
                                     Patient patient = new Patient();
 
@@ -567,8 +578,8 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
 
                                     out.println(serverResponse);
                                     System.out.println("JSON to client: " + serverResponse);
+                                    out.flush();
                                     break;
-
                                 case "10":
                                     int position = -1;
 
@@ -582,9 +593,9 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     serverResponse.put("position", position);
 
                                     out.println(serverResponse);
-                                    System.out.println("JSON to client: " + serverResponse);
+                                    // System.out.println("JSON to client: " + serverResponse);
+                                    out.flush();
                                     break;
-
                                 case "12":
                                     for (Person p : clients) {
                                         if (p.getChat() == true) {
@@ -603,10 +614,11 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                                 outPatient.println(serverResponse);
                                                 System.out.println("JSON to Doctor: " + serverResponse);
                                             }
+                                            outPatient.flush();
                                         }
                                     }
+                                    out.flush();
                                     break;
-
                                 case "14": // responsável por fechar a conexão do cliente
                                     logArea.append("Client#" + clientSocket.getPort() + " disconnected. \n");
                                     clientSocket.close(); // Close client connection
@@ -617,8 +629,8 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                     System.out.println(Arrays.toString(patients.toArray()));
 
                                     clients.remove(clientSocket); // remove the client socket from ArrayList
+                                    out.flush();
                                     break;
-
                                 case "18":
                                     if (!patients.isEmpty()) {
                                         orderArray();
@@ -648,6 +660,7 @@ public class ServerInterface extends javax.swing.JFrame implements Runnable {
                                         out.println(serverResponse);
                                         System.out.println("JSON to client: " + serverResponse);
                                     }
+                                    out.flush();
                                     break;
                                 default:
                             }

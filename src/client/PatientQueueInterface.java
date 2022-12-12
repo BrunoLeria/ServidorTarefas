@@ -254,31 +254,36 @@ public class PatientQueueInterface extends javax.swing.JFrame {
     private class ServerListener extends Thread {
         public void run() {
             while (positionInQueue > 0 || !myTurn) {
-                try {
-                    String serverResponse = resportaServidor.nextLine();
-                    System.out.println(serverResponse);
-                    System.out.println(myTurn);
+                if (resportaServidor.hasNextLine()) {
+                    try {
+                        String serverResponse = resportaServidor.nextLine();
+                        // System.out.println(serverResponse);
+                        System.out.println(myTurn);
 
-                    jsonObject = (JSONObject) parser.parse(serverResponse);
-                    map = jsonObject; // parse from json to string
+                        jsonObject = (JSONObject) parser.parse(serverResponse);
+                        map = jsonObject; // parse from json to string
 
-                    System.out.println("JSON from server: " + map);
+                        System.out.println("JSON from server: " + map);
 
-                    if (Integer.parseInt(map.get("code").toString()) == 110) {
-                        jLabelQueuePosition.setText(map.get("position").toString());
+                        if (Integer.parseInt(map.get("code").toString()) == 110) {
+                            positionInQueue = Integer.parseInt(map.get("position").toString());
 
-                        positionInQueue = Integer.parseInt(map.get("position").toString());
+                            if (positionInQueue > 0) {
+                                jLabelQueuePosition.setText(map.get("position").toString());
+                            } else {
+                                jLabelQueue.setText("You're next!");
+                                jLabelQueuePosition.setText("Wait until the doctor becomes avaliable...");
 
-                        jLabelQueue.setText("You're next!");
-                        jLabelQueuePosition.setText("Wait until the doctor becomes avaliable...");
-                    } else if (Integer.parseInt(map.get("code").toString()) == 155
-                            && map.get("success").toString().equals("true")) {
-                        myTurn = true;
-                        jButtonOpenChat.setEnabled(true);
+                            }
+                        } else if (Integer.parseInt(map.get("code").toString()) == 155
+                                && map.get("success").toString().equals("true")) {
+                            myTurn = true;
+                            jButtonOpenChat.setEnabled(true);
+                        }
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
                 }
             }
         }
@@ -293,7 +298,7 @@ public class PatientQueueInterface extends javax.swing.JFrame {
                     obj.put("cpf", userMap.get("cpf").toString());
 
                     out.println(obj); // send to the server
-                    System.out.println("JSON to server: " + obj);
+                    // System.out.println("JSON to server: " + obj);
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
